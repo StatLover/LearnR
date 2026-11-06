@@ -1,5 +1,5 @@
 /**
- * The R Code Error Checker's analysis engine.
+ * The R Error Detective's analysis engine.
  *
  * Input: the learner's code and what R really reported when the code was
  * parsed/run (message, the line range of the failing expression, warnings),

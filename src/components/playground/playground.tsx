@@ -92,7 +92,7 @@ export function Playground({ datasets }: { datasets: DatasetInfo[] }) {
                 }
                 router.push("/error-checker");
               }}
-              aria-label="Check this code in the Error Checker"
+              aria-label="Check this code with the Error Detective"
             >
               <Bug /> <span className="hidden md:inline">Check errors</span>
             </Button>

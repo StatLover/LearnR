@@ -37,7 +37,8 @@ export function PageHeader({
             {icon}
           </div>
         )}
-        <div className="min-w-0 flex-1">
+        {/* On phones the text takes the full width (icon above, actions below) instead of being squeezed. */}
+        <div className="min-w-0 flex-1 basis-full sm:basis-0">
           {eyebrow && <p className="font-display text-sm font-semibold uppercase tracking-wider" style={{ color: `var(--${color})` }}>{eyebrow}</p>}
           <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
           {description && <div className="mt-2 max-w-3xl text-[15px] font-semibold text-muted-foreground">{description}</div>}

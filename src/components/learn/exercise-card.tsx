@@ -148,7 +148,7 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
         <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-grape text-white shadow-[0_3px_0_var(--grape-shadow)]">
           <Target className="size-6" />
         </span>
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 basis-[11rem]">
           {eyebrow && <p className="font-display text-xs font-semibold uppercase tracking-wider text-grape">{eyebrow}</p>}
           <h3 className="font-display text-xl font-semibold leading-tight">{task.title}</h3>
         </div>

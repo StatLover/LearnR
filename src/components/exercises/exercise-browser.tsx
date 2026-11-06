@@ -129,8 +129,8 @@ function ExerciseTile({ e, world, solved, daily }: { e: ExerciseSummary; world: 
           </span>
         )}
         {solved && (
-          <span className="absolute -right-10 top-5 hidden w-36 rotate-45 items-center justify-center gap-1 bg-mint py-1 font-display text-xs font-semibold uppercase tracking-wider text-white shadow-[0_2px_0_var(--mint-shadow)] sm:flex">
-            <Check className="size-3.5" strokeWidth={3} aria-hidden /> Solved
+          <span className="absolute -right-10 top-9 hidden w-44 rotate-45 items-center justify-center gap-1 bg-mint py-1 font-display text-xs font-semibold uppercase tracking-wider text-white shadow-[0_2px_0_var(--mint-shadow)] sm:flex">
+            Solved
           </span>
         )}
         {solved && (

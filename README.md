@@ -15,13 +15,13 @@ The site is designed as a playful coding adventure ("Duolingo meets DataCamp"): 
 | **Gamification** | XP for lessons, challenges, correct answers, checkpoints, projects and the daily challenge; levels; a daily XP goal; streaks; 27 badges; level-up and badge celebrations. XP is *derived* from real progress (`src/lib/game/xp.ts`), so it can't be double-counted and needs no extra storage. |
 | **Curriculum** | 3 stages, 10 modules, **34 lessons**. Each lesson has objectives, a plain-English explanation, detailed sections, runnable examples with line-by-line notes and expected output, common mistakes, exercises, a quiz and a summary. Each module ends with a checkpoint. |
 | **Code editor** | CodeMirror 6 with R highlighting, line numbers, auto-indent, bracket and quote closing, autocomplete, search and RStudio-style shortcuts (`Alt+-` inserts `<-`, `Ctrl+Shift+M` inserts `|>`). Buttons: Run, Stop, Reset, Copy, Format, Download `.R`, Save, Clear. Output has Console, Plots (PNG export), Data viewer (`View(df)`) and Environment tabs. |
-| **Error Checker** | Paste code, then **Check My Code** (parse plus static checks), **Run and Analyze** (real run, exact failing line and call stack), **Explain My Error** (AI) or **Fix My Code**. It separates syntax errors, runtime errors, warnings and logic issues. Every location claim comes with a "How we know" note. Corrected code is only shown after R has run it, with a before/after diff, Apply Fix, Explain More Simply and Restore my original code. |
-| **AI tutor** | Six modes: beginner, step-by-step, debugging, practice, quiz and statistics. It knows which lesson you are on and has a `run_r_code` tool: when it wants to show what code prints, the code runs in your browser and the model sees the real output. Also: Send My Code, Explain This Lesson, Ask for a Hint, Clear Conversation. |
-| **Practice** | **68 exercises** (easy, medium, challenge) with automated R tests that check results rather than exact code text, so any correct solution passes. Each has progressive hints, a solution, an explanation and a compare-with-solution diff. |
-| **Projects** | **6 guided projects** (49 tested steps) on realistic datasets, ending with a capstone exploratory data analysis. |
-| **Reference** | Function reference with **167 entries** (searchable), **10 cheat sheets**, a glossary of **137 terms**, sample datasets and a Visualization Lab. |
-| **Progress** | Dashboard showing completion, current module, suggested next lesson, quiz scores, exercises, streak and activity calendar, recent items, saved code, bookmarks, notes, achievements, and suggested revision based on quiz mistakes. |
-| **Everything else** | Light and dark themes (follows the system, remembered), global search (`Ctrl+K`), onboarding, optional guided unlocking, notes, bookmarks, font size and other settings, and keyboard and screen-reader support. |
+| **R Error Detective** (`/error-checker`) | Paste code (or pick a classic beginner "case") and press **Find My Error**: the code runs in real R and the result is a case report with numbered clues – error type, R's exact message, where it happened (only when R or a deterministic check supports it, with a "How we know" note), what went wrong (with "Explain more simply"), how to fix it, the corrected code, why the correction works, and **Apply fix & test**. Corrected code is only shown after R has run it, with a before/after diff and R's real output. Also: **Check without running**, **Explain with AI** and **Fix it for me** (AI fixes are also run in R before they are shown), and Restore my original code. "Find my mistake" buttons elsewhere hand code over and start the check automatically. |
+| **AI tutor ("Hexy")** | Six modes: beginner, step-by-step, debugging, practice, quiz and statistics. One-tap actions: **Explain This Code, Make It Simpler, Give Me a Hint, Find My Mistake, Give Me Another Example, Quiz Me** (plus Explain This Lesson and Send My Code). It knows which lesson or exercise you are on and has a `run_r_code` tool: when it wants to show what code prints, the code runs in your browser and the model sees the real output. Docked in every lesson and exercise; `/tutor?q=…` pre-fills a question (`&mode=…` picks a mode). |
+| **Practice** | **68 exercises** (easy, medium, challenge) with automated R tests that check results rather than exact code text, so any correct solution passes. Each has progressive hints, a solution, an explanation and a compare-with-solution diff. The practice arena filters by world, difficulty and status. A **daily challenge** (`/challenge`) picks one exercise per day from the worlds you have reached, for +50 bonus XP. |
+| **Projects** | **6 guided projects** (49 tested steps) on realistic datasets, shown as quests (beginner, intermediate and a "boss level" capstone exploratory data analysis). |
+| **Reference** | Function reference with **167 entries** (searchable collectible cards, each with a runnable example), **10 printable cheat sheets**, a glossary of **137 terms** and sample datasets. **R Labs** (`/visualize`): a chart builder plus interactive normal-distribution, sampling/central-limit-theorem, correlation and regression labs whose sliders write and run real R code. |
+| **Progress** | Dashboard ("My adventure"): level and XP, streak, daily goal, continue learning, the daily challenge, XP this week, world progress, badges, quiz scores, activity calendar, recent items, saved code, bookmarks, notes, and suggested revision based on quiz mistakes. |
+| **Everything else** | Light and dark themes (both designed; follows the system, smooth toggle, remembered), global search (`Ctrl+K`), onboarding with a daily XP goal, optional guided unlocking, notes, bookmarks, font size, celebrations and reduced-motion settings, and keyboard and screen-reader support. |
 
 ## Quick start
 
@@ -49,7 +49,7 @@ npm start
 
 ## Configuration
 
-Everything is optional. Without any configuration, the lessons, the R environment, exercises, projects and the rule-based Error Checker all work. Copy `.env.example` to `.env.local` to configure the rest.
+Everything is optional. Without any configuration, the lessons, the R environment, exercises, projects and the rule-based Error Detective all work. Copy `.env.example` to `.env.local` to configure the rest.
 
 ### Still needed to switch on every feature
 
@@ -109,7 +109,7 @@ tests/                    Unit tests (node:test)
 - package start-up messages, shown dimmed
 - data frames, for the Data viewer
 
-Console output is formatted like the R console. Each part of the site runs in its own R environment (workspace), so variables don't leak between the playground, lessons and the Error Checker. Exercise tests are R expressions evaluated against the learner's variables, with helpers like `.out`, `.error`, `.plots` and `.has_geom()`.
+Console output is formatted like the R console. Each part of the site runs in its own R environment (workspace), so variables don't leak between the playground, lessons and the Error Detective. Exercise tests are R expressions evaluated against the learner's variables, with helpers like `.out`, `.error`, `.plots` and `.has_geom()`.
 
 ## Security
 

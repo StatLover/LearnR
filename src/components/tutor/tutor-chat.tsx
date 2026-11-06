@@ -164,7 +164,20 @@ function UserBubble({ text, compact }: { text: string; compact?: boolean }) {
 }
 
 function HexyRow({ mood = "happy", continued, compact, children, label = true }: { mood?: HexyMood; continued?: boolean; compact?: boolean; children: ReactNode; label?: boolean }) {
-  const size = compact ? 32 : 38;
+  // Narrow layout: Hexy's name sits above a full-width bubble, so code blocks get room.
+  if (compact && label)
+    return (
+      <div className={cn("animate-fade-up", continued && "-mt-2")}>
+        {!continued && (
+          <div className="mb-1.5 flex items-center gap-2">
+            <HexyAvatar size={28} mood={mood} className="rounded-xl shadow-[0_2px_0_var(--border)]" />
+            <p className="font-display text-xs font-semibold text-primary-strong dark:text-primary">Hexy</p>
+          </div>
+        )}
+        {children}
+      </div>
+    );
+  const size = compact ? 30 : 38;
   return (
     <div className={cn("flex items-start gap-2.5 animate-fade-up", continued && "-mt-2")}>
       {continued ? <span className="shrink-0" style={{ width: size }} aria-hidden /> : <HexyAvatar size={size} mood={mood} className="shadow-[0_2px_0_var(--border)]" />}
@@ -176,7 +189,12 @@ function HexyRow({ mood = "happy", continued, compact, children, label = true }:
   );
 }
 
-const bubble = (compact?: boolean) => cn("rounded-3xl rounded-tl-lg border-2 border-border bg-card shadow-[var(--shadow-card)]", compact ? "px-3.5 py-2.5 text-sm" : "px-4 py-3 text-[15px]");
+const bubble = (compact?: boolean) =>
+  cn(
+    "rounded-3xl rounded-tl-lg border-2 border-border bg-card shadow-[var(--shadow-card)]",
+    // In narrow bubbles, tighten the Run / Copy / Playground buttons of code blocks so they fit.
+    compact ? "px-3.5 py-2.5 text-sm [&_.not-prose_button]:px-2" : "px-4 py-3 text-[15px]",
+  );
 
 /** A row of chips. With `scroll`, it scrolls sideways and fades/arrows show that there is more. */
 function ChipStrip({ scroll, label, children }: { scroll?: boolean; label: string; children: ReactNode }) {

@@ -30,7 +30,7 @@ export function DailyBanner() {
     >
       <div className="blob -left-10 -top-16 size-56" style={{ background: "var(--sun)" }} />
       <FloatingHexes count={5} className="opacity-60" />
-      <div className="relative grid items-center gap-5 p-5 sm:p-6 md:grid-cols-[auto_minmax(0,1fr)_auto]">
+      <div className="relative grid grid-cols-1 items-center gap-5 p-5 sm:p-6 md:grid-cols-[auto_minmax(0,1fr)_auto]">
         <div className="hidden md:block">
           <Hexy mood={done ? "celebrate" : "point"} size={104} animate />
         </div>

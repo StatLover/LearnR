@@ -275,7 +275,7 @@ export function CodeRunner({
             <Square /> Stop
           </Button>
         )}
-        <div className="ml-auto flex items-center gap-0.5">
+        <div className="ml-auto flex flex-wrap items-center justify-end gap-0.5">
           {extraToolbar}
           <IconBtn label="Reset code" onClick={reset} icon={<RotateCcw />} />
           <IconBtn label={copied ? "Copied!" : "Copy code"} onClick={copy} icon={copied ? <Check className="text-success" /> : <Copy />} />
@@ -318,7 +318,7 @@ export function CodeRunner({
             </div>
           )}
           <div className="flex items-center gap-2 bg-surface-2/60 px-2 py-1.5">
-            <TabsList className="bg-transparent p-0">
+            <TabsList className="no-scrollbar min-w-0 max-w-full overflow-x-auto bg-transparent p-0">
               <TabsTrigger value="console">
                 <Terminal /> Console
               </TabsTrigger>
@@ -336,7 +336,7 @@ export function CodeRunner({
                 </>
               )}
             </TabsList>
-            <span className="ml-auto truncate text-xs font-semibold text-muted-foreground" aria-live="polite">
+            <span className="ml-auto min-w-0 truncate text-xs font-semibold text-muted-foreground" aria-live="polite">
               {loadingR ? session.message : running ? "" : session.status === "ready" ? "R is ready" : "R starts when you press Run"}
             </span>
           </div>

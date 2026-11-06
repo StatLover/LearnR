@@ -19,7 +19,7 @@ export function TutorHeroArt() {
   return (
     <div className="relative h-[200px] w-[280px]" aria-hidden>
       <FloatingHexes count={6} />
-      <div className="absolute left-0 top-3 max-w-[150px] rounded-2xl border-2 border-border bg-card px-3 py-2 font-display text-sm font-semibold leading-snug shadow-[var(--shadow-card)] animate-pop-in">
+      <div className="absolute left-0 top-3 z-10 max-w-[150px] rounded-2xl border-2 border-border bg-card px-3 py-2 font-display text-sm font-semibold leading-snug shadow-[var(--shadow-card)]">
         Ask me anything about R!
         <span className="absolute -bottom-2 right-6 size-3.5 rotate-45 border-b-2 border-r-2 border-border bg-card" />
       </div>

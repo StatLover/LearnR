@@ -134,7 +134,7 @@ export default async function ExercisePage({ params }: { params: Promise<{ id: s
       <ExercisePageClient exercise={ex} lessonId={lesson?.id} lessonTitle={lesson?.title} lessonThumb={lesson ? thumb : undefined} />
 
       <nav aria-label="More exercises" className="mt-10">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {prev ? <NeighbourCard ex={prev} dir="prev" /> : <span className="hidden sm:block" />}
           {next && <NeighbourCard ex={next} dir="next" />}
         </div>

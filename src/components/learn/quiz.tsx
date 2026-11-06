@@ -258,7 +258,7 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
             </div>
           </div>
 
-          <ol className="mt-7 grid gap-2 sm:grid-cols-2" aria-label="Your answers">
+          <ol className="mt-7 grid grid-cols-1 gap-2 sm:grid-cols-2" aria-label="Your answers">
             {questions.map((x, i) => {
               const ok = results[x.id];
               return (

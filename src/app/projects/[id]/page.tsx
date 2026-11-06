@@ -61,7 +61,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       >
         <div className="blob -left-14 -top-20 size-64" style={{ background: c.main }} />
         <FloatingHexes count={6} className="opacity-60" />
-        <div className="relative grid items-center gap-6 p-5 sm:p-8 md:grid-cols-[minmax(0,1fr)_280px] lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="relative grid grid-cols-1 items-center gap-6 p-5 sm:p-8 md:grid-cols-[minmax(0,1fr)_280px] lg:grid-cols-[minmax(0,1fr)_340px]">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <LevelBadge level={p.level} />
@@ -88,7 +88,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         </div>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="min-w-0 space-y-6">
           {/* mission brief */}
           <section aria-labelledby="brief-title" className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">

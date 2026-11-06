@@ -240,7 +240,7 @@ export function ExerciseBrowser({ exercises }: { exercises: ExerciseSummary[] })
   ];
 
   return (
-    <div className="grid gap-5 [grid-template-areas:'toolbar'_'filters'_'results'] lg:grid-cols-[17rem_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-8 lg:[grid-template-areas:'filters_toolbar'_'filters_results']">
+    <div className="grid grid-cols-1 gap-5 [grid-template-areas:'toolbar'_'filters'_'results'] lg:grid-cols-[17rem_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-8 lg:[grid-template-areas:'filters_toolbar'_'filters_results']">
       {/* toolbar */}
       <div className="space-y-3 [grid-area:toolbar]">
         <div className="flex flex-wrap items-center gap-3">
@@ -367,7 +367,7 @@ export function ExerciseBrowser({ exercises }: { exercises: ExerciseSummary[] })
             </Button>
           </div>
         ) : (
-          <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {list.map((e) => (
               <li key={e.id}>
                 <ExerciseTile e={e} world={getWorld(e.world) ?? worlds[0]} solved={passed(e.id)} daily={mounted && g.daily.exerciseId === e.id} />

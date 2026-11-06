@@ -35,7 +35,7 @@ export function ExercisePageClient({ exercise, lessonId, lessonTitle, lessonThum
     if (window.matchMedia("(max-width: 1023px)").matches) document.getElementById("tutor-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_420px]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_420px]">
       <div className="min-w-0 space-y-5">
         <ExerciseCard task={exercise} onAskTutor={askTutor} />
         {lessonId && (

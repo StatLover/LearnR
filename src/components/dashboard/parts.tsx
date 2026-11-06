@@ -105,6 +105,11 @@ export function WeekChart({ week, goal }: { week: { day: string; label: string; 
         <span className="absolute -left-9 w-7 translate-y-1/2 text-right font-mono text-[10px] font-semibold text-muted-foreground" style={{ bottom: `${goalPos}%` }} aria-hidden>
           {goal}
         </span>
+        {total === 0 && (
+          <p className="absolute inset-x-4 top-1/3 z-10 mx-auto max-w-xs rounded-2xl border-2 border-dashed border-border bg-card/90 px-4 py-2 text-center text-sm font-semibold text-muted-foreground" aria-hidden>
+            No XP yet this week – finish a lesson or a challenge to grow your first bar!
+          </p>
+        )}
         <div className="absolute inset-0 flex items-end gap-2 sm:gap-4" aria-hidden>
           {week.map((d) => {
             const isToday = d.day === today;

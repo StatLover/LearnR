@@ -66,9 +66,9 @@ export function ProjectsOverview({ projects }: { projects: { id: string; stepIds
     { icon: <Zap className="fill-current" />, tile: "bg-tangerine text-white [--edge:var(--tangerine-shadow)]", value: xp.toLocaleString(), label: `of ${xpAll.toLocaleString()} project XP` },
   ];
   return (
-    <ul className="grid gap-3 sm:grid-cols-3" aria-label="Your project progress">
+    <ul className="grid grid-cols-3 gap-2 sm:gap-3" aria-label="Your project progress">
       {tiles.map((t) => (
-        <li key={t.label} className="flex items-center gap-3 rounded-2xl border-2 border-border bg-card px-4 py-3 shadow-[var(--shadow-card)]">
+        <li key={t.label} className="flex flex-col items-center gap-2 rounded-2xl border-2 border-border bg-card px-2 py-3 text-center shadow-[var(--shadow-card)] sm:flex-row sm:gap-3 sm:px-4 sm:text-left">
           <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl shadow-[0_3px_0_var(--edge)] [&_svg]:size-5", t.tile)} aria-hidden>
             {t.icon}
           </span>

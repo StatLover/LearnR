@@ -100,7 +100,7 @@ export default async function ModulePage({ params }: { params: Promise<{ moduleI
         </div>
       </section>
 
-      <div className="mx-auto grid max-w-7xl gap-8 px-5 py-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-5 py-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_360px]">
         <section aria-labelledby="checkpoint-title" id="checkpoint" className="min-w-0 scroll-mt-24">
           <div className="mb-4 flex items-center gap-3">
             <span className="grid size-11 shrink-0 place-items-center rounded-2xl text-white shadow-[0_3px_0_var(--edge)]" style={{ background: world.color.main, ["--edge" as string]: world.color.shadow }} aria-hidden>

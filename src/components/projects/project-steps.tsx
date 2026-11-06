@@ -56,7 +56,7 @@ export function ProjectSteps({ project }: { project: Project }) {
         const passed = Boolean(s.projects[project.id]?.steps[step.id]?.passedAt);
         const state = passed ? "done" : step.id === st.next ? "current" : "todo";
         return (
-          <li key={step.id} id={`step-${step.id}`} className="relative grid scroll-mt-24 gap-5 pb-10 sm:grid-cols-[3rem_minmax(0,1fr)]">
+          <li key={step.id} id={`step-${step.id}`} className="relative grid scroll-mt-24 grid-cols-1 gap-5 pb-10 sm:grid-cols-[3rem_minmax(0,1fr)]">
             {/* connector to the next node (on phones the cards use the full width instead) */}
             <span aria-hidden className="absolute left-6 top-14 bottom-0 hidden w-1.5 -translate-x-1/2 rounded-full sm:block" style={{ background: passed ? "var(--mint)" : "var(--surface-3)" }} />
             <div className="hidden justify-center sm:flex">
@@ -94,7 +94,7 @@ export function ProjectSteps({ project }: { project: Project }) {
       })}
 
       {/* the finish: wrap-up */}
-      <li id="wrap-up" className="relative grid scroll-mt-24 gap-5 sm:grid-cols-[3rem_minmax(0,1fr)]">
+      <li id="wrap-up" className="relative grid scroll-mt-24 grid-cols-1 gap-5 sm:grid-cols-[3rem_minmax(0,1fr)]">
         <div className="hidden justify-center sm:flex">
           <span
             aria-hidden

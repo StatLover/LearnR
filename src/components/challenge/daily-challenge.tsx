@@ -65,11 +65,11 @@ function DayHex({ state, today }: { state: "won" | "missed" | "none"; today: boo
   const fill = state === "won" ? "var(--sun)" : "var(--surface-2)";
   const stroke = state === "won" ? "var(--sun-shadow)" : today ? "var(--primary)" : "var(--border-strong)";
   return (
-    <span className="relative grid size-10 place-items-center">
-      <svg viewBox="0 0 40 44" className="absolute inset-0 size-10" aria-hidden>
+    <span className="relative grid size-8 place-items-center sm:size-9">
+      <svg viewBox="0 0 40 44" className="absolute inset-0 size-full" aria-hidden>
         <path d="M20 3 L36 12 L36 32 L20 41 L4 32 L4 12 Z" fill={fill} stroke={stroke} strokeWidth={today ? 3 : 2.5} strokeLinejoin="round" strokeDasharray={state === "missed" ? "4 3" : undefined} />
       </svg>
-      {state === "won" && <Check className="relative size-5 text-[#3b2600]" strokeWidth={3} aria-hidden />}
+      {state === "won" && <Check className="relative size-4 text-[#3b2600]" strokeWidth={3} aria-hidden />}
     </span>
   );
 }
@@ -168,7 +168,7 @@ export function DailyChallenge() {
         </div>
       </section>
 
-      <div className="mx-auto grid max-w-7xl gap-8 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0 space-y-5">
           {newDay && (
             <div role="status" className="flex flex-wrap items-center gap-3 rounded-3xl border-2 border-sky bg-sky-soft p-4 animate-pop-in">
@@ -287,7 +287,7 @@ export function DailyChallenge() {
           </Panel>
 
           <Panel title="This week" icon={<CalendarDays />}>
-            <ol className="flex justify-between gap-1">
+            <ol className="flex justify-between">
               {week.map((d) => (
                 <li key={d.day} className="flex flex-col items-center gap-1">
                   <span className="sr-only">

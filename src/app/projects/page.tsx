@@ -37,15 +37,15 @@ export default function ProjectsPage() {
       <div className="mx-auto max-w-7xl space-y-10 px-5 py-8">
         <div className="space-y-4">
           <ProjectsOverview projects={projects.map((p) => ({ id: p.id, stepIds: p.steps.map((s) => s.id) }))} />
-          <ol className="grid gap-3 sm:grid-cols-3" aria-label="How a project works">
+          <ol className="grid grid-cols-3 gap-2 sm:gap-3" aria-label="How a project works">
             {HOW.map((h) => (
-              <li key={h.n} className="flex gap-3 rounded-2xl border-2 border-dashed border-border bg-card/60 px-4 py-3">
+              <li key={h.n} className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-border bg-card/60 px-2 py-3 text-center sm:flex-row sm:items-start sm:gap-3 sm:px-4 sm:text-left">
                 <span className="grid size-8 shrink-0 place-items-center rounded-full font-display text-sm font-bold text-white" style={{ background: h.color }} aria-hidden>
                   {h.n}
                 </span>
                 <span>
-                  <span className="block font-display font-semibold leading-tight">{h.title}</span>
-                  <span className="block text-xs font-semibold text-muted-foreground">{h.text}</span>
+                  <span className="block font-display text-sm font-semibold leading-tight sm:text-base">{h.title}</span>
+                  <span className="hidden text-xs font-semibold text-muted-foreground sm:block">{h.text}</span>
                 </span>
               </li>
             ))}
@@ -66,7 +66,7 @@ export default function ProjectsPage() {
               </div>
             </div>
             {level === "capstone" ? (
-              <ul className="grid gap-5">
+              <ul className="grid grid-cols-1 gap-5">
                 {list.map((p) => (
                   <li key={p.id}>
                     <BossProjectCard p={p} />
@@ -74,7 +74,7 @@ export default function ProjectsPage() {
                 ))}
               </ul>
             ) : (
-              <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {list.map((p) => (
                   <li key={p.id}>
                     <ProjectCard p={p} />

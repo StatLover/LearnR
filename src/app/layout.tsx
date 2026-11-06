@@ -1,25 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/inter";
+import "@fontsource-variable/nunito";
+import "@fontsource-variable/fredoka";
 import "@fontsource-variable/jetbrains-mono";
 import "./globals.css";
-import { Header } from "@/components/layout/header";
+import { Header, MobileNav } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Providers } from "@/components/layout/providers";
 import { themeBootScript } from "@/lib/store/theme-script";
 import { getOutline } from "@/content/outline";
 
 export const metadata: Metadata = {
-  title: { default: "R Academy – Learn R from Zero", template: "%s · R Academy" },
+  title: { default: "R Academy – Learn R. Write Code. Unlock Your Potential.", template: "%s · R Academy" },
   description:
-    "Learn R programming from absolute zero with interactive lessons, real R running in your browser, an R error checker, guided data projects and a personal AI tutor.",
+    "Learn R programming as an adventure: bite-sized interactive lessons, real R running in your browser, XP and levels, daily challenges, an Error Detective and a friendly AI tutor.",
   applicationName: "R Academy",
   icons: { icon: "/icon.svg" },
 };
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a1020" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f6ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c0f24" },
   ],
 };
 
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
           <Footer />
+          <MobileNav />
         </Providers>
       </body>
     </html>

@@ -12,7 +12,7 @@ export function DropdownMenuContent({ className, ...props }: ComponentProps<type
       <M.Content
         sideOffset={6}
         align="end"
-        className={cn("z-50 min-w-44 rounded-lg border border-border bg-card p-1 shadow-xl", className)}
+        className={cn("z-50 min-w-48 rounded-2xl border-2 border-border bg-surface p-1.5 shadow-[var(--shadow-pop)] animate-pop-in", className)}
         {...props}
       />
     </M.Portal>
@@ -23,7 +23,7 @@ export function DropdownMenuItem({ className, ...props }: ComponentProps<typeof 
   return (
     <M.Item
       className={cn(
-        "flex cursor-pointer select-none items-center gap-2 rounded-md px-2.5 py-1.5 text-sm outline-none data-[highlighted]:bg-surface-2 [&_svg]:size-4 [&_svg]:text-muted-foreground",
+        "flex cursor-pointer select-none items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-bold outline-none data-[highlighted]:bg-primary-soft [&_svg]:size-4 [&_svg]:text-muted-foreground",
         className,
       )}
       {...props}
@@ -42,7 +42,7 @@ export function DropdownMenuRadioItem({ className, children, ...props }: Compone
   return (
     <M.RadioItem
       className={cn(
-        "flex cursor-pointer select-none items-center gap-2 rounded-md px-2.5 py-1.5 text-sm outline-none data-[highlighted]:bg-surface-2 data-[state=checked]:font-semibold [&_svg]:size-4",
+        "flex cursor-pointer select-none items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-bold outline-none data-[highlighted]:bg-primary-soft data-[state=checked]:font-semibold [&_svg]:size-4",
         className,
       )}
       {...props}

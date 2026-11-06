@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CheckCircle2, Circle, Eye, FlaskConical, GitCompare, Lightbulb, Loader2, Play, RotateCcw, Sparkles, XCircle, Download, Trophy } from "lucide-react";
+import { CheckCircle2, Eye, FlaskConical, GitCompare, Lightbulb, Loader2, Play, RotateCcw, Sparkles, XCircle, Download, Trophy, Target } from "lucide-react";
 import type { Exercise } from "@/content/types";
 import { CodeEditor, type CodeEditorHandle, type LineMark } from "@/components/code/code-editor";
 import { ConsoleView, PlotGallery } from "@/components/code/output-panels";
@@ -9,13 +9,16 @@ import { StaticCode } from "@/components/code/static-code";
 import { Markdown } from "@/components/content/markdown";
 import { DiffView } from "@/components/error-checker/diff-view";
 import { Button } from "@/components/ui/button";
-import { DifficultyBadge, Badge } from "@/components/ui/badge";
+import { DifficultyBadge, Badge, XpBadge } from "@/components/ui/badge";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Hexy } from "@/components/brand/mascot";
+import { fireConfetti } from "@/components/game/confetti";
 import { rSession } from "@/lib/r/session";
 import type { RunResult, TestResult } from "@/lib/r/console";
 import { progress, useProgress } from "@/lib/store/progress";
 import { useSettings } from "@/lib/store/settings";
 import { useResolvedTheme } from "@/hooks/use-theme";
+import { encourage, exerciseXp, praise, XP } from "@/lib/game/xp";
 import { cn, downloadText } from "@/lib/utils";
 
 export interface ExerciseTask {
@@ -44,9 +47,13 @@ export interface ExerciseCardProps {
   onCodeChange?: (code: string) => void;
   onAskTutor?: (code: string) => void;
   headerExtra?: React.ReactNode;
+  /** Label shown above the title, e.g. "Challenge 1 of 2" or "Daily challenge". */
+  eyebrow?: string;
+  /** Override the XP shown (defaults to the exercise XP for its difficulty). */
+  xp?: number;
 }
 
-export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, savedCode, passed: passedProp, onResult, onCodeChange, onAskTutor, headerExtra }: ExerciseCardProps) {
+export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, savedCode, passed: passedProp, onResult, onCodeChange, onAskTutor, headerExtra, eyebrow, xp }: ExerciseCardProps) {
   const state = useProgress();
   const ep = state.exercises[task.id];
   const [code, setCode] = useState(task.starterCode);
@@ -57,11 +64,13 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
   const [showSolution, setShowSolution] = useState(false);
   const [confirmSolution, setConfirmSolution] = useState(false);
   const [compare, setCompare] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const editor = useRef<CodeEditorHandle>(null);
   const settings = useSettings();
   const theme = useResolvedTheme();
   const passed = passedProp ?? Boolean(ep?.passedAt);
   const ws = workspace ?? `exercise:${task.id}`;
+  const reward = xp ?? (kind === "project-step" ? XP.projectStep : exerciseXp(task.difficulty ?? "easy"));
 
   // Restore the learner's last code after mount.
   useEffect(() => {
@@ -104,7 +113,9 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
       const out = await rSession.test(src, task.tests, { ...opts(), fresh: !setupCode });
       setResult(out.run);
       setTests(out.tests);
+      setAttempt((a) => a + 1);
       const ok = out.tests.length > 0 && out.tests.every((t) => t.pass);
+      if (ok) fireConfetti({ y: 0.45, count: passed ? 60 : 140 });
       if (kind === "exercise") progress.recordExerciseAttempt(task.id, task.title, ok, src);
       onResult?.(ok, src);
     } finally {
@@ -132,86 +143,102 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
   if (info?.status === "parse_error" && info.parse_error?.line) marks.push({ line: info.parse_error.line, kind: "error" });
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card" id={`exercise-${task.id}`}>
-      <div className="flex flex-wrap items-center gap-2 border-b border-border bg-surface px-4 py-3">
-        <FlaskConical className="size-4 text-primary" />
-        <h3 className="font-semibold">{task.title}</h3>
-        {task.difficulty && <DifficultyBadge difficulty={task.difficulty} />}
-        {passed && (
-          <Badge variant="success">
-            <CheckCircle2 /> Passed
-          </Badge>
-        )}
-        <div className="ml-auto">{headerExtra}</div>
+    <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]" id={`exercise-${task.id}`}>
+      <div className="flex flex-wrap items-center gap-3 border-b-2 border-border bg-gradient-to-r from-grape-soft to-transparent px-5 py-4">
+        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-grape text-white shadow-[0_3px_0_var(--grape-shadow)]">
+          <Target className="size-6" />
+        </span>
+        <div className="min-w-0 flex-1">
+          {eyebrow && <p className="font-display text-xs font-semibold uppercase tracking-wider text-grape">{eyebrow}</p>}
+          <h3 className="font-display text-xl font-semibold leading-tight">{task.title}</h3>
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {task.difficulty && <DifficultyBadge difficulty={task.difficulty} />}
+          {passed ? (
+            <Badge variant="success">
+              <CheckCircle2 /> Solved
+            </Badge>
+          ) : (
+            <XpBadge xp={reward} />
+          )}
+          {headerExtra}
+        </div>
       </div>
 
-      <div className="space-y-3 p-4">
+      <div className="space-y-3 p-5">
         <Markdown>{task.prompt}</Markdown>
         {task.expected && (
-          <div className="rounded-lg border border-border bg-surface px-3 py-2 text-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Expected result</p>
+          <div className="rounded-2xl border-2 border-dashed border-border bg-surface-2/50 px-4 py-3 text-sm">
+            <p className="font-display text-xs font-semibold uppercase tracking-wider text-primary">🎯 Goal</p>
             <Markdown runnableCode={false}>{task.expected}</Markdown>
           </div>
         )}
       </div>
 
-      <div className="border-y border-border">
-        <div className="flex flex-wrap items-center gap-1 bg-surface px-2 py-1.5">
-          <Button size="sm" onClick={runTests} disabled={!!running}>
-            {running === "test" ? <Loader2 className="animate-spin" /> : <FlaskConical />} Run &amp; Test
+      <div className="mx-5 overflow-hidden rounded-2xl border-2 border-border">
+        <div className="flex flex-wrap items-center gap-1.5 border-b-2 border-border bg-surface-2/70 px-3 py-2">
+          <Button size="sm" variant="success" onClick={runTests} disabled={!!running}>
+            {running === "test" ? <Loader2 className="animate-spin" /> : <FlaskConical />} Check my code
           </Button>
           <Button size="sm" variant="outline" onClick={run} disabled={!!running}>
             {running === "run" ? <Loader2 className="animate-spin" /> : <Play />} Run
           </Button>
           <div className="ml-auto flex gap-0.5">
             <Button size="sm" variant="ghost" onClick={() => change(task.starterCode)} aria-label="Reset to the starter code">
-              <RotateCcw /> Reset
+              <RotateCcw /> <span className="hidden sm:inline">Reset</span>
             </Button>
-            <Button size="sm" variant="ghost" onClick={() => downloadText(`${task.id}.R`, editor.current?.getValue() ?? code, "text/x-r")} aria-label="Download your code">
+            <Button size="icon-sm" variant="ghost" onClick={() => downloadText(`${task.id}.R`, editor.current?.getValue() ?? code, "text/x-r")} aria-label="Download your code">
               <Download />
             </Button>
           </div>
         </div>
-        <CodeEditor ref={editor} value={code} onChange={change} onRun={runTests} minHeight={140} maxHeight={420} lineMarks={marks} ariaLabel={`Your solution for: ${task.title}`} />
+        <CodeEditor ref={editor} value={code} onChange={change} onRun={runTests} minHeight={150} maxHeight={420} lineMarks={marks} ariaLabel={`Your solution for: ${task.title}`} />
+        {(result || running) && (
+          <div className="border-t-2 border-border">
+            <ConsoleView lines={result?.lines ?? []} running={!!running} empty="(Your code printed nothing.)" maxHeight={240} />
+            {result && result.images.length > 0 && <PlotGallery images={result.images} />}
+          </div>
+        )}
       </div>
 
-      {(result || running) && (
-        <div className="border-b border-border">
-          <ConsoleView lines={result?.lines ?? []} running={!!running} empty="(Your code printed nothing.)" maxHeight={240} />
-          {result && result.images.length > 0 && <PlotGallery images={result.images} />}
-        </div>
-      )}
-
       {tests && (
-        <div className="space-y-2 border-b border-border p-4" role="status">
-          <p className={cn("flex items-center gap-2 font-semibold", allPass ? "text-success" : "text-foreground")}>
-            {allPass ? <Trophy className="size-5" /> : <FlaskConical className="size-5 text-muted-foreground" />}
-            {allPass ? "All tests passed – great job!" : `${passCount} of ${tests.length} checks passed`}
-          </p>
-          {!allPass && passCount > 0 && <p className="text-sm text-muted-foreground">You&apos;re on the right track. Fix the remaining checks below.</p>}
-          <ul className="space-y-1.5">
-            {tests.map((t, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm">
-                {t.pass ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" aria-label="passed" /> : <XCircle className="mt-0.5 size-4 shrink-0 text-danger" aria-label="failed" />}
-                <span>
-                  <Markdown runnableCode={false}>{t.name}</Markdown>
-                  {!t.pass && (
-                    <span className="block text-muted-foreground">
-                      <Markdown runnableCode={false}>{t.failMessage}</Markdown>
+        <div role="status" className={cn("mx-5 mt-4 rounded-2xl border-2 p-4 animate-slide-up", allPass ? "border-mint bg-mint-soft" : "border-coral/50 bg-coral-soft")}>
+          <div className="flex items-start gap-3">
+            <Hexy mood={allPass ? "celebrate" : "oops"} size={58} className="shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className={cn("font-display text-xl font-semibold", allPass ? "text-success" : "text-danger")}>
+                {allPass ? `${praise(attempt + task.id.length)} ${passed ? "Challenge solved!" : ""}` : passCount > 0 ? `${passCount} of ${tests.length} checks passed – almost there!` : encourage(attempt + task.id.length)}
+              </p>
+              {allPass && (
+                <p className="mt-0.5 flex items-center gap-1.5 text-sm font-bold text-warning">
+                  <Trophy className="size-4" /> +{reward} XP{ep?.solutionViewed && kind === "exercise" ? " (half XP – you peeked at the solution)" : ""}
+                </p>
+              )}
+              <ul className="mt-2 space-y-1.5">
+                {tests.map((t, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm animate-fade-up" style={{ animationDelay: `${i * 80}ms` }}>
+                    {t.pass ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" aria-label="passed" /> : <XCircle className="mt-0.5 size-4 shrink-0 text-danger" aria-label="failed" />}
+                    <span className="font-semibold">
+                      <Markdown runnableCode={false}>{t.name}</Markdown>
+                      {!t.pass && (
+                        <span className="block font-medium text-muted-foreground">
+                          <Markdown runnableCode={false}>{t.failMessage}</Markdown>
+                        </span>
+                      )}
                     </span>
-                  )}
-                </span>
-              </li>
-            ))}
-          </ul>
-          {result?.info?.status === "error" && <p className="text-sm text-danger">Your code stopped with an error (see the console above) – fix that first. The Error Checker can explain it.</p>}
+                  </li>
+                ))}
+              </ul>
+              {result?.info?.status === "error" && <p className="mt-2 text-sm font-semibold text-danger">Your code stopped with an error (see the console) – fix that first. The Error Detective can explain it.</p>}
+            </div>
+          </div>
         </div>
       )}
 
-      <div className="space-y-3 p-4">
+      <div className="space-y-3 p-5">
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="outline" onClick={nextHint} disabled={hintsShown >= task.hints.length}>
-            <Lightbulb /> {hintsShown === 0 ? "Get a hint" : hintsShown >= task.hints.length ? "No more hints" : `Next hint (${hintsShown + 1}/${task.hints.length})`}
+          <Button size="sm" variant="sun" onClick={nextHint} disabled={hintsShown >= task.hints.length}>
+            <Lightbulb /> {hintsShown === 0 ? "Hint" : hintsShown >= task.hints.length ? "No more hints" : `Next hint (${hintsShown + 1}/${task.hints.length})`}
           </Button>
           {!showSolution && (
             <Button size="sm" variant="outline" onClick={() => (allPass || passed ? reveal() : setConfirmSolution(true))}>
@@ -220,20 +247,20 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
           )}
           {(showSolution || allPass) && (
             <Button size="sm" variant="outline" onClick={() => setCompare((c) => !c)}>
-              <GitCompare /> {compare ? "Hide comparison" : "Compare with the solution"}
+              <GitCompare /> {compare ? "Hide comparison" : "Compare with solution"}
             </Button>
           )}
           {onAskTutor && (
             <Button size="sm" variant="outline" onClick={() => onAskTutor(editor.current?.getValue() ?? code)}>
-              <Sparkles /> Ask the AI tutor
+              <Sparkles /> Ask AI
             </Button>
           )}
         </div>
         {hintsShown > 0 && (
           <ol className="space-y-2">
             {task.hints.slice(0, hintsShown).map((h, i) => (
-              <li key={i} className="flex gap-2 rounded-lg bg-warning-soft px-3 py-2 text-sm">
-                <span className="font-semibold text-warning">Hint {i + 1}</span>
+              <li key={i} className="flex gap-3 rounded-2xl border-2 border-sun/40 bg-sun-soft px-4 py-3 text-sm animate-pop-in">
+                <span className="grid size-6 shrink-0 place-items-center rounded-full bg-sun font-display text-xs font-bold text-[#3b2600]">{i + 1}</span>
                 <Markdown runnableCode={false}>{h}</Markdown>
               </li>
             ))}
@@ -241,40 +268,36 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
         )}
         {compare && <DiffView before={code} after={task.solution} beforeLabel="Your code" afterLabel="Example solution" />}
         {(showSolution || allPass) && (
-          <div className="space-y-2 rounded-lg border border-border p-3">
+          <div className="space-y-2 rounded-2xl border-2 border-border p-4">
             {showSolution && (
               <>
-                <p className="text-sm font-semibold">Example solution</p>
-                <StaticCode code={task.solution} lineNumbers className="rounded-md border border-border" />
+                <p className="font-display font-semibold">Example solution</p>
+                <StaticCode code={task.solution} lineNumbers className="rounded-xl border-2 border-border" />
               </>
             )}
-            <p className="text-sm font-semibold">Explanation</p>
+            <p className="font-display font-semibold">How it works</p>
             <Markdown>{task.explanation}</Markdown>
-            {allPass && !showSolution && <p className="text-xs text-muted-foreground">Your own solution passed every check – there is often more than one correct way. Use “Compare with the solution” to see another approach.</p>}
+            {allPass && !showSolution && <p className="text-xs font-semibold text-muted-foreground">Your own solution passed every check – there is often more than one correct way. Use “Compare with solution” to see another approach.</p>}
           </div>
         )}
-        {!tests && !passed && (
-          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Circle className="size-3" /> Press <strong>Run &amp; Test</strong> (or Ctrl+Enter) to check your answer automatically.
-          </p>
-        )}
+        {!tests && !passed && <p className="text-xs font-semibold text-muted-foreground">Press <strong>Check my code</strong> (or Ctrl+Enter) – R runs your code and checks the result automatically.</p>}
       </div>
 
       <Dialog open={confirmSolution} onOpenChange={setConfirmSolution}>
-        <DialogContent title="Show the solution?" description="You learn the most by struggling a little first. Hints give you a nudge without spoiling it.">
+        <DialogContent title="Peek at the solution?" description="You learn the most by struggling a little first. A hint gives you a nudge without spoiling it – and solving it yourself earns full XP.">
           <div className="flex flex-wrap justify-end gap-2">
             {hintsShown < task.hints.length && (
               <Button
-                variant="outline"
+                variant="sun"
                 onClick={() => {
                   setConfirmSolution(false);
                   nextHint();
                 }}
               >
-                <Lightbulb /> Give me a hint instead
+                <Lightbulb /> Give me a hint
               </Button>
             )}
-            <Button onClick={reveal}>
+            <Button variant="outline" onClick={reveal}>
               <Eye /> Show the solution
             </Button>
           </div>

@@ -15,7 +15,6 @@ import { Badge } from "@/components/ui/badge";
 import { StaticCode } from "@/components/code/static-code";
 import { openInPlayground } from "@/components/code/code-block";
 import {
-  achievements,
   allOutlineLessons,
   courseCompletion,
   currentStreak,
@@ -28,6 +27,7 @@ import {
   type Outline,
 } from "@/lib/store/progress";
 import { useSettings } from "@/lib/store/settings";
+import { badges as achievements } from "@/lib/game/badges";
 import { cn, plural, timeAgo, todayKey } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -150,7 +150,7 @@ export function Dashboard({ outline, conceptLessons, lessonTitles }: { outline: 
           <h2 className="mb-4 flex items-center gap-2 font-semibold"><CalendarDays className="size-5 text-primary" /> Activity</h2>
           <ActivityCalendar days={s.activityDays} />
           <p className="mt-4 text-sm">
-            Daily goal: <strong>{settings.dailyGoalMinutes} minutes</strong>. {streak > 0 ? "Keep your streak going!" : "Study today to start a streak."}
+            Daily goal: <strong>{settings.dailyGoalXp} XP</strong>. {streak > 0 ? "Keep your streak going!" : "Study today to start a streak."}
           </p>
         </Card>
       </div>

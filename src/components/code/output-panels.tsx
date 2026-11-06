@@ -39,7 +39,7 @@ export function ConsoleView({
       aria-label="Console output"
       tabIndex={0}
     >
-      {lines.length === 0 && !running && <p className="font-sans text-sm text-muted-foreground">{empty}</p>}
+      {lines.length === 0 && !running && <p className="flex items-center gap-2 font-sans text-sm font-semibold text-muted-foreground"><span aria-hidden className="font-mono text-primary">&gt;_</span> {empty}</p>}
       {lines.map((l, i) => (
         <pre key={i} className={cn("whitespace-pre-wrap break-words", KIND_CLASS[l.kind])}>
           {l.text || " "}
@@ -50,7 +50,7 @@ export function ConsoleView({
           <span className="typing-dot size-1.5 rounded-full bg-current" />
           <span className="typing-dot size-1.5 rounded-full bg-current" />
           <span className="typing-dot size-1.5 rounded-full bg-current" />
-          <span className="ml-1">Running…</span>
+          <span className="ml-1 font-semibold">R is thinking…</span>
         </p>
       )}
     </div>
@@ -67,7 +67,7 @@ export function PlotGallery({ images, name = "plot" }: { images: string[]; name?
   return (
     <div className="grid gap-4 p-4">
       {images.map((src, i) => (
-        <figure key={i} className="overflow-hidden rounded-lg border border-border bg-card">
+        <figure key={i} className="overflow-hidden rounded-2xl border-2 border-border bg-card animate-pop-in">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={src} alt={`Plot ${i + 1} produced by your R code`} className="mx-auto block h-auto w-full max-w-[900px]" />
           <figcaption className="flex items-center justify-between gap-2 border-t border-border px-3 py-2 text-xs text-muted-foreground">
@@ -131,7 +131,7 @@ export function DataViewer({ tables }: { tables: RTable[] }) {
           <Download /> CSV
         </Button>
       </div>
-      <div className="max-h-80 overflow-auto rounded-lg border border-border scrollbar-thin">
+      <div className="max-h-80 overflow-auto rounded-2xl border-2 border-border scrollbar-thin">
         <table className="w-full border-collapse text-xs">
           <caption className="sr-only">{t.label}</caption>
           <thead className="sticky top-0 bg-surface">

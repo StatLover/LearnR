@@ -6,14 +6,14 @@ import { cn } from "@/lib/utils";
 export const Tabs = T.Root;
 
 export function TabsList({ className, ...props }: ComponentProps<typeof T.List>) {
-  return <T.List className={cn("inline-flex items-center gap-1 rounded-lg bg-surface-2 p-1", className)} {...props} />;
+  return <T.List className={cn("inline-flex items-center gap-1 rounded-2xl bg-surface-2 p-1", className)} {...props} />;
 }
 
 export function TabsTrigger({ className, ...props }: ComponentProps<typeof T.Trigger>) {
   return (
     <T.Trigger
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm cursor-pointer [&_svg]:size-3.5",
+        "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-[13px] font-bold text-muted-foreground transition-colors hover:text-foreground data-[state=active]:bg-surface data-[state=active]:text-primary data-[state=active]:shadow-sm cursor-pointer [&_svg]:size-3.5",
         className,
       )}
       {...props}

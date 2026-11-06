@@ -193,8 +193,8 @@ export function SettingsForm() {
           <Segmented label="Learning mode" value={s.learningMode} onChange={(v) => set({ learningMode: v })} options={[{ value: "guided", label: "Guided" }, { value: "free", label: "Free" }]} />
         </Row>
         <Row label="Daily goal" htmlFor="goal">
-          <Select id="goal" value={s.dailyGoalMinutes} onChange={(e) => set({ dailyGoalMinutes: Number(e.target.value) })}>
-            {[10, 20, 30, 45, 60].map((n) => <option key={n} value={n}>{n} minutes</option>)}
+          <Select id="goal" value={s.dailyGoalXp} onChange={(e) => set({ dailyGoalXp: Number(e.target.value) })}>
+            {[20, 50, 100, 150].map((n) => <option key={n} value={n}>{n} XP</option>)}
           </Select>
         </Row>
         <Row label="Your name" htmlFor="pname"><Input id="pname" className="w-52" value={p.profile.name ?? ""} onChange={(e) => progress.setProfile({ name: e.target.value })} placeholder="optional" /></Row>

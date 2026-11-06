@@ -7,16 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Markdown } from "@/components/content/markdown";
 import { StaticCode } from "@/components/code/static-code";
+import { HexyAvatar } from "@/components/brand/mascot";
 import { highlightR } from "@/lib/r/language";
 import { progress } from "@/lib/store/progress";
+import { encourage, praise, XP } from "@/lib/game/xp";
 import { cn } from "@/lib/utils";
 
 const TYPE_LABEL: Record<QuizQuestion["type"], string> = {
-  "multiple-choice": "Multiple choice",
+  "multiple-choice": "Pick the answer",
   "predict-output": "Predict the output",
   "fill-blank": "Fill in the blank",
-  "find-error": "Find the error",
-  "true-false": "True or false",
+  "find-error": "Find the bug",
+  "true-false": "True or false?",
 };
 
 const norm = (s: string) => s.replace(/\s+/g, "").replace(/["']/g, '"').toLowerCase();
@@ -38,23 +40,29 @@ export function isCorrect(q: QuizQuestion, answer: unknown): boolean {
 export interface QuestionCardProps {
   question: QuizQuestion;
   index?: number;
+  total?: number;
   /** Called once when the learner submits an answer. */
   onAnswered?: (correct: boolean) => void;
-  /** Quiz mode: answers are revealed together by the parent. */
   allowRetry?: boolean;
-  compact?: boolean;
+  /** Borderless variant used inside the lesson player. */
+  bare?: boolean;
 }
 
-export function QuestionCard({ question: q, index, onAnswered, allowRetry = true }: QuestionCardProps) {
+const LETTERS = "ABCDEFGH";
+
+export function QuestionCard({ question: q, index, total, onAnswered, allowRetry = true, bare }: QuestionCardProps) {
   const [answer, setAnswer] = useState<unknown>(null);
   const [submitted, setSubmitted] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [tries, setTries] = useState(0);
   const correct = submitted && isCorrect(q, answer);
   const name = `q-${q.id}`;
+  const seed = q.id.length + tries;
 
   const submit = () => {
     if (answer === null || answer === "") return;
     setSubmitted(true);
+    setTries((t) => t + 1);
     const ok = isCorrect(q, answer);
     progress.recordQuestion(q.id, ok, q.concept);
     onAnswered?.(ok);
@@ -64,34 +72,37 @@ export function QuestionCard({ question: q, index, onAnswered, allowRetry = true
     setAnswer(null);
   };
 
+  const tile = (on: boolean, isAns: boolean, chosen: boolean) =>
+    cn(
+      "press flex w-full cursor-pointer items-start gap-3 rounded-2xl border-2 px-4 py-3 text-left text-[15px] font-semibold",
+      !submitted && (on ? "border-primary bg-primary-soft [--press-shadow:var(--primary)]" : "border-border bg-surface [--press-shadow:var(--border)] hover:bg-surface-2"),
+      submitted && isAns && "border-mint bg-mint-soft [--press-shadow:var(--mint)]",
+      submitted && chosen && !isAns && "border-coral bg-coral-soft [--press-shadow:var(--coral)] animate-shake",
+      submitted && !chosen && !isAns && "border-border bg-surface opacity-60 [--press-shadow:var(--border)]",
+      submitted && "cursor-default",
+    );
+
   const optionList = (options: string[], mono: boolean) => (
-    <div role="radiogroup" aria-labelledby={`${name}-prompt`} className="grid gap-2">
+    <div role="radiogroup" aria-labelledby={`${name}-prompt`} className="grid gap-2.5">
       {options.map((o, i) => {
         const chosen = answer === i;
         const isAns = submitted && "answer" in q && q.answer === i;
         return (
-          <label
-            key={i}
-            className={cn(
-              "flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors",
-              !submitted && (chosen ? "border-primary bg-primary-soft" : "border-border hover:bg-surface-2"),
-              submitted && isAns && "border-success bg-success-soft",
-              submitted && chosen && !isAns && "border-danger bg-danger-soft",
-              submitted && !chosen && !isAns && "border-border opacity-70",
-              submitted && "cursor-default",
-            )}
-          >
-            <input type="radio" name={name} className="mt-1 accent-[var(--primary)]" checked={chosen} disabled={submitted} onChange={() => setAnswer(i)} />
+          <label key={i} className={tile(chosen, Boolean(isAns), chosen)}>
+            <input type="radio" name={name} className="sr-only" checked={chosen} disabled={submitted} onChange={() => setAnswer(i)} />
+            <span className={cn("grid size-7 shrink-0 place-items-center rounded-lg border-2 font-display text-sm", chosen ? "border-primary text-primary" : "border-border text-muted-foreground")} aria-hidden>
+              {LETTERS[i]}
+            </span>
             <span className="min-w-0 flex-1">
               {mono ? <pre className="code-static whitespace-pre-wrap text-[13px]">{o}</pre> : <Markdown runnableCode={false}>{o}</Markdown>}
               {submitted && (chosen || isAns) && "optionFeedback" in q && q.optionFeedback?.[i] && (
-                <span className="mt-1 block text-xs text-muted-foreground">
+                <span className="mt-1 block text-xs font-medium text-muted-foreground">
                   <Markdown runnableCode={false}>{q.optionFeedback[i]}</Markdown>
                 </span>
               )}
             </span>
-            {submitted && isAns && <CheckCircle2 className="size-4 shrink-0 text-success" aria-label="Correct answer" />}
-            {submitted && chosen && !isAns && <XCircle className="size-4 shrink-0 text-danger" aria-label="Your answer (incorrect)" />}
+            {submitted && isAns && <CheckCircle2 className="size-5 shrink-0 text-success" aria-label="Correct answer" />}
+            {submitted && chosen && !isAns && <XCircle className="size-5 shrink-0 text-danger" aria-label="Your answer (incorrect)" />}
           </label>
         );
       })}
@@ -99,38 +110,36 @@ export function QuestionCard({ question: q, index, onAnswered, allowRetry = true
   );
 
   return (
-    <fieldset className="rounded-xl border border-border bg-card p-4" data-question={q.id}>
+    <fieldset className={cn(!bare && "rounded-3xl border-2 border-border bg-card p-5")} data-question={q.id}>
       <legend className="sr-only">{q.prompt}</legend>
-      <div className="mb-2 flex flex-wrap items-center gap-2">
-        {index !== undefined && <span className="text-xs font-semibold text-muted-foreground">Question {index + 1}</span>}
-        <Badge variant="outline">{TYPE_LABEL[q.type]}</Badge>
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <Badge variant="grape">{TYPE_LABEL[q.type]}</Badge>
+        {index !== undefined && (
+          <span className="text-xs font-bold text-muted-foreground">
+            Question {index + 1}
+            {total ? ` of ${total}` : ""}
+          </span>
+        )}
+        <span className="ml-auto text-xs font-bold text-warning">+{XP.question} XP</span>
       </div>
-      <div id={`${name}-prompt`} className="mb-3 font-medium">
+      <div id={`${name}-prompt`} className="mb-4 font-display text-lg font-semibold leading-snug">
         <Markdown runnableCode={false}>{q.prompt}</Markdown>
       </div>
 
-      {(q.type === "multiple-choice" || q.type === "true-false") && "code" in q && q.code && <StaticCode code={q.code} className="mb-3 rounded-lg border border-border" />}
-      {q.type === "predict-output" && <StaticCode code={q.code} className="mb-3 rounded-lg border border-border" />}
+      {(q.type === "multiple-choice" || q.type === "true-false") && "code" in q && q.code && <StaticCode code={q.code} className="mb-4 rounded-2xl border-2 border-border" />}
+      {q.type === "predict-output" && <StaticCode code={q.code} className="mb-4 rounded-2xl border-2 border-border" />}
 
       {q.type === "multiple-choice" && optionList(q.options, false)}
       {q.type === "predict-output" && optionList(q.options, true)}
       {q.type === "true-false" && (
-        <div role="radiogroup" aria-labelledby={`${name}-prompt`} className="flex gap-2">
+        <div role="radiogroup" aria-labelledby={`${name}-prompt`} className="grid grid-cols-2 gap-3">
           {[true, false].map((v) => {
             const chosen = answer === v;
             const isAns = submitted && q.answer === v;
             return (
-              <label
-                key={String(v)}
-                className={cn(
-                  "flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium",
-                  !submitted && (chosen ? "border-primary bg-primary-soft" : "border-border hover:bg-surface-2"),
-                  submitted && isAns && "border-success bg-success-soft",
-                  submitted && chosen && !isAns && "border-danger bg-danger-soft",
-                )}
-              >
-                <input type="radio" name={name} className="accent-[var(--primary)]" checked={chosen} disabled={submitted} onChange={() => setAnswer(v)} />
-                {v ? "True" : "False"}
+              <label key={String(v)} className={cn(tile(chosen, isAns, chosen), "justify-center py-4 font-display text-lg")}>
+                <input type="radio" name={name} className="sr-only" checked={chosen} disabled={submitted} onChange={() => setAnswer(v)} />
+                {v ? "👍 True" : "👎 False"}
               </label>
             );
           })}
@@ -140,8 +149,8 @@ export function QuestionCard({ question: q, index, onAnswered, allowRetry = true
       {q.type === "fill-blank" && <FillBlank code={q.code} value={(answer as string) ?? ""} onChange={setAnswer} disabled={submitted} onEnter={submit} id={name} />}
 
       {q.type === "find-error" && (
-        <div role="radiogroup" aria-labelledby={`${name}-prompt`} className="overflow-hidden rounded-lg border border-border bg-code">
-          <p className="border-b border-border bg-surface px-3 py-1.5 text-xs text-muted-foreground">Click the line that contains the mistake.</p>
+        <div role="radiogroup" aria-labelledby={`${name}-prompt`} className="overflow-hidden rounded-2xl border-2 border-border bg-code">
+          <p className="border-b-2 border-border bg-surface-2 px-4 py-2 text-xs font-bold text-muted-foreground">🐞 Tap the line that contains the bug</p>
           {highlightR(q.code).map((spans, i) => {
             const line = i + 1;
             const chosen = answer === line;
@@ -155,10 +164,10 @@ export function QuestionCard({ question: q, index, onAnswered, allowRetry = true
                 disabled={submitted}
                 onClick={() => setAnswer(line)}
                 className={cn(
-                  "code-static flex w-full items-start gap-3 px-3 py-0.5 text-left text-[13px] cursor-pointer",
+                  "code-static flex w-full items-start gap-3 px-4 py-1 text-left text-[13px] transition-colors cursor-pointer",
                   !submitted && (chosen ? "bg-primary-soft" : "hover:bg-surface-2"),
-                  submitted && isAns && "bg-success-soft",
-                  submitted && chosen && !isAns && "bg-danger-soft",
+                  submitted && isAns && "bg-mint-soft",
+                  submitted && chosen && !isAns && "bg-coral-soft",
                 )}
               >
                 <span className="w-5 shrink-0 select-none text-right text-[var(--code-gutter)]">{line}</span>
@@ -169,46 +178,48 @@ export function QuestionCard({ question: q, index, onAnswered, allowRetry = true
         </div>
       )}
 
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        {!submitted ? (
-          <>
-            <Button size="sm" onClick={submit} disabled={answer === null || answer === ""}>
-              Check answer
+      {!submitted && (
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <Button onClick={submit} disabled={answer === null || answer === ""} size="lg">
+            Check
+          </Button>
+          {q.type === "fill-blank" && q.hint && (
+            <Button variant="ghost" onClick={() => setShowHint(true)}>
+              <Lightbulb /> Hint
             </Button>
-            {q.type === "fill-blank" && q.hint && (
-              <Button size="sm" variant="ghost" onClick={() => setShowHint(true)}>
-                <Lightbulb /> Hint
-              </Button>
-            )}
-          </>
-        ) : (
-          allowRetry &&
-          !correct && (
-            <Button size="sm" variant="outline" onClick={retry}>
-              <RotateCcw /> Try again
-            </Button>
-          )
-        )}
-      </div>
-      {showHint && !submitted && q.type === "fill-blank" && q.hint && <p className="mt-2 text-sm text-muted-foreground">💡 {q.hint}</p>}
+          )}
+        </div>
+      )}
+      {showHint && !submitted && q.type === "fill-blank" && q.hint && <p className="mt-3 rounded-2xl bg-sun-soft px-4 py-2 text-sm font-semibold">💡 {q.hint}</p>}
 
       {submitted && (
-        <div role="status" className={cn("mt-3 rounded-lg p-3 text-sm", correct ? "bg-success-soft" : "bg-danger-soft")}>
-          <p className={cn("flex items-center gap-1.5 font-semibold", correct ? "text-success" : "text-danger")}>
-            {correct ? <CheckCircle2 className="size-4" /> : <XCircle className="size-4" />}
-            {correct ? "Correct – well done!" : "Not quite – here's why:"}
-          </p>
-          {!correct && q.type === "fill-blank" && <p className="mt-1">Accepted answer: <code className="font-mono">{q.accept[0]}</code></p>}
-          {!correct && q.type === "find-error" && <p className="mt-1">The mistake is on line {q.errorLine}.</p>}
-          <div className="mt-1">
-            <Markdown runnableCode={false}>{q.explanation}</Markdown>
-          </div>
-          {q.type === "find-error" && (
-            <div className="mt-2">
-              <p className="text-xs font-semibold">Corrected code</p>
-              <StaticCode code={q.fix} className="mt-1 rounded-md border border-border" />
+        <div role="status" className={cn("mt-4 rounded-2xl border-2 p-4 animate-slide-up", correct ? "border-mint bg-mint-soft" : "border-coral bg-coral-soft")}>
+          <div className="flex items-start gap-3">
+            <HexyAvatar mood={correct ? "celebrate" : "oops"} size={44} className={correct ? "bg-mint/20" : "bg-coral/20"} />
+            <div className="min-w-0 flex-1">
+              <p className={cn("font-display text-lg font-semibold", correct ? "text-success" : "text-danger")}>{correct ? praise(seed) : encourage(seed)}</p>
+              {!correct && q.type === "fill-blank" && (
+                <p className="mt-1 text-sm font-semibold">
+                  Accepted answer: <code className="font-mono">{q.accept[0]}</code>
+                </p>
+              )}
+              {!correct && q.type === "find-error" && <p className="mt-1 text-sm font-semibold">The bug is on line {q.errorLine}.</p>}
+              <div className="mt-1 text-sm">
+                <Markdown runnableCode={false}>{q.explanation}</Markdown>
+              </div>
+              {q.type === "find-error" && (
+                <div className="mt-2">
+                  <p className="text-xs font-bold">Fixed code</p>
+                  <StaticCode code={q.fix} className="mt-1 rounded-xl border-2 border-border" />
+                </div>
+              )}
+              {allowRetry && !correct && (
+                <Button size="sm" variant="outline" className="mt-3" onClick={retry}>
+                  <RotateCcw /> Try again
+                </Button>
+              )}
             </div>
-          )}
+          </div>
         </div>
       )}
     </fieldset>
@@ -219,7 +230,7 @@ function FillBlank({ code, value, onChange, disabled, onEnter, id }: { code: str
   const [before, after] = code.split("___");
   const width = Math.max(4, Math.min(30, value.length + 2));
   return (
-    <div className="code-static overflow-x-auto rounded-lg border border-border bg-code px-4 py-3 text-[13px]">
+    <div className="code-static overflow-x-auto rounded-2xl border-2 border-border bg-code px-4 py-3 text-[14px]">
       <pre className="whitespace-pre-wrap">
         {before}
         <label htmlFor={`${id}-blank`} className="sr-only">
@@ -234,7 +245,7 @@ function FillBlank({ code, value, onChange, disabled, onEnter, id }: { code: str
           spellCheck={false}
           autoComplete="off"
           style={{ width: `${width}ch` }}
-          className="mx-0.5 rounded border-b-2 border-primary bg-primary-soft px-1 font-mono text-foreground outline-none focus-visible:outline-2 focus-visible:outline-ring"
+          className="mx-0.5 rounded-lg border-2 border-dashed border-primary bg-primary-soft px-1.5 font-mono font-bold text-foreground outline-none focus-visible:border-solid"
           placeholder="?"
         />
         {after}

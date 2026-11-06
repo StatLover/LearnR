@@ -5,6 +5,7 @@
  */
 import { createPersistedStore, useStore } from "./create-store";
 import { todayKey, uid } from "../utils";
+import { moduleOrder } from "../game/worlds";
 
 export interface LessonProgress {
   visitedAt?: number;
@@ -72,6 +73,10 @@ export interface ProgressState {
   snippets: Snippet[];
   achievements: Record<string, number>;
   stats: { codeRuns: number; errorsAnalyzed: number; fixesApplied: number; tutorMessages: number };
+  /** Daily challenge per day (YYYY-MM-DD): which exercise, and when it was solved. */
+  daily: Record<string, { exerciseId: string; completedAt?: number }>;
+  /** Where the learner is inside each lesson (card index) and the furthest card reached. */
+  lessonSteps: Record<string, { at: number; max: number }>;
   updatedAt: number;
 }
 
@@ -91,6 +96,8 @@ export const emptyProgress = (): ProgressState => ({
   snippets: [],
   achievements: {},
   stats: { codeRuns: 0, errorsAnalyzed: 0, fixesApplied: 0, tutorMessages: 0 },
+  daily: {},
+  lessonSteps: {},
   updatedAt: 0,
 });
 
@@ -105,6 +112,8 @@ function migrate(raw: unknown): ProgressState {
     ...r,
     profile: { ...base.profile, ...(r.profile ?? {}) },
     stats: { ...base.stats, ...(r.stats ?? {}) },
+    daily: r.daily ?? {},
+    lessonSteps: r.lessonSteps ?? {},
     version: 1,
   };
 }
@@ -202,8 +211,12 @@ export const progress = {
   recordExerciseAttempt(id: string, title: string, passed: boolean, code: string) {
     update((s) => {
       const e = s.exercises[id] ?? { attempts: 0, hintsUsed: 0 };
+      const today = todayKey();
+      const d = s.daily[today];
+      const daily = passed && d?.exerciseId === id && !d.completedAt ? { ...s.daily, [today]: { ...d, completedAt: Date.now() } } : s.daily;
       return {
         ...s,
+        daily,
         exercises: { ...s.exercises, [id]: { ...e, attempts: e.attempts + 1, passedAt: e.passedAt ?? (passed ? Date.now() : undefined), code } },
         recent: pushRecent(s.recent, { kind: "exercise", id, title, href: `/exercises/${id}`, at: Date.now() }),
       };
@@ -251,6 +264,18 @@ export const progress = {
       const p = s.projects[projectId] ?? { steps: {}, startedAt: Date.now() };
       return { ...s, projects: { ...s.projects, [projectId]: { ...p, steps: { ...p.steps, [stepId]: { ...p.steps[stepId], code } } } } };
     }, false);
+  },
+
+  setLessonStep(id: string, at: number) {
+    update((s) => {
+      const prev = s.lessonSteps[id];
+      return { ...s, lessonSteps: { ...s.lessonSteps, [id]: { at, max: Math.max(prev?.max ?? 0, at) } } };
+    }, false);
+  },
+
+  /** Fix today's daily challenge (called once per day when it is first shown). */
+  setDailyChallenge(date: string, exerciseId: string) {
+    update((s) => (s.daily[date] ? s : { ...s, daily: { ...s.daily, [date]: { exerciseId } } }), false);
   },
 
   toggleBookmark(b: Omit<Bookmark, "at">) {
@@ -332,8 +357,9 @@ export interface Outline {
   projects: { id: string; title: string; stepIds: string[]; level: string }[];
 }
 
+/** All lessons in learning order (world order: modules 1–7, 9, 8, 10). */
 export function allOutlineLessons(o: Outline) {
-  return o.modules.flatMap((m) => m.lessons);
+  return [...o.modules].sort((a, b) => moduleOrder.indexOf(a.number) - moduleOrder.indexOf(b.number)).flatMap((m) => m.lessons);
 }
 
 export function currentStreak(days: string[], today = todayKey()): number {
@@ -399,56 +425,3 @@ export function weakConcepts(s: ProgressState): { concept: string; wrong: number
     .sort((a, b) => b.wrong - a.wrong);
 }
 
-/* --------------------------- achievements --------------------------- */
-
-export interface AchievementDef {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  check: (s: ProgressState, o: Outline) => boolean;
-}
-
-const passedExercises = (s: ProgressState) => Object.values(s.exercises).filter((e) => e.passedAt).length;
-const completedLessons = (s: ProgressState) => Object.values(s.lessons).filter((l) => l.completedAt).length;
-
-export const achievements: AchievementDef[] = [
-  { id: "first-run", title: "First Run", description: "Ran your first line of R code.", icon: "play", check: (s) => s.stats.codeRuns >= 1 },
-  { id: "first-lesson", title: "Hello, R!", description: "Completed your first lesson.", icon: "book-open", check: (s) => completedLessons(s) >= 1 },
-  { id: "five-lessons", title: "On a Roll", description: "Completed five lessons.", icon: "flame", check: (s) => completedLessons(s) >= 5 },
-  { id: "first-exercise", title: "Problem Solver", description: "Passed your first exercise.", icon: "check-circle", check: (s) => passedExercises(s) >= 1 },
-  { id: "ten-exercises", title: "Practice Makes Progress", description: "Passed ten exercises.", icon: "dumbbell", check: (s) => passedExercises(s) >= 10 },
-  {
-    id: "challenge",
-    title: "Challenge Accepted",
-    description: "Passed a challenge-level exercise.",
-    icon: "mountain",
-    check: (s, o) => o.modules.some((m) => m.exercises.some((e) => e.difficulty === "challenge" && s.exercises[e.id]?.passedAt)),
-  },
-  { id: "perfect-quiz", title: "Perfect Score", description: "Answered every question of a lesson quiz correctly.", icon: "star", check: (s) => Object.values(s.lessons).some((l) => (l.quizBest ?? 0) >= 1) },
-  { id: "checkpoint", title: "Checkpoint Cleared", description: "Passed a module checkpoint.", icon: "flag", check: (s) => Object.values(s.checkpoints).some((c) => c.passedAt) },
-  { id: "debugger", title: "Bug Hunter", description: "Used the Error Checker to analyse an error.", icon: "bug", check: (s) => s.stats.errorsAnalyzed >= 1 },
-  {
-    id: "stage-1",
-    title: "Foundations Complete",
-    description: "Completed every lesson in Stage 1.",
-    icon: "trophy",
-    check: (s, o) => {
-      const ls = o.modules.filter((m) => m.stage === 1).flatMap((m) => m.lessons);
-      return ls.length > 0 && ls.every((l) => s.lessons[l.id]?.completedAt);
-    },
-  },
-  {
-    id: "project",
-    title: "Data Detective",
-    description: "Completed every step of a guided project.",
-    icon: "search",
-    check: (s, o) => o.projects.some((p) => p.stepIds.length > 0 && p.stepIds.every((st) => s.projects[p.id]?.steps[st]?.passedAt)),
-  },
-  { id: "streak-3", title: "Three-Day Streak", description: "Learned on three days in a row.", icon: "calendar", check: (s) => longestStreak(s.activityDays) >= 3 },
-  { id: "streak-7", title: "Week of R", description: "Learned on seven days in a row.", icon: "calendar-check", check: (s) => longestStreak(s.activityDays) >= 7 },
-];
-
-export function newlyEarned(s: ProgressState, o: Outline): string[] {
-  return achievements.filter((a) => !s.achievements[a.id] && a.check(s, o)).map((a) => a.id);
-}

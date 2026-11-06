@@ -1,0 +1,455 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ */
+/* Design tokens                                                       */
+/* ------------------------------------------------------------------ */
+:root {
+  --background: #ffffff;
+  --surface: #f6f7f9;
+  --surface-2: #eef1f5;
+  --card: #ffffff;
+  --foreground: #0f172a;
+  --muted-foreground: #556070;
+  --border: #e2e7ee;
+  --ring: #2563eb;
+
+  --primary: #0e8a4f; /* green */
+  --primary-strong: #0b7342;
+  --primary-soft: #e3f5ec;
+  --primary-foreground: #ffffff;
+  --accent: #2563eb; /* blue */
+  --accent-soft: #e6eefe;
+
+  --success: #15803d;
+  --success-soft: #e5f6ea;
+  --warning: #b45309;
+  --warning-soft: #fdf1df;
+  --danger: #c62828;
+  --danger-soft: #fde8e8;
+  --info: #1d63c9;
+  --info-soft: #e4eefc;
+
+  /* code & console */
+  --code-bg: #f8fafc;
+  --code-gutter: #94a3b8;
+  --code-active-line: #eef2f7;
+  --code-selection: #cfe0fb;
+  --console-bg: #fbfcfd;
+  --syn-keyword: #7c3aed;
+  --syn-string: #0a7d38;
+  --syn-number: #b45309;
+  --syn-comment: #6b7280;
+  --syn-function: #1d4ed8;
+  --syn-atom: #c2410c;
+  --syn-operator: #be185d;
+  --syn-variable: #0f172a;
+  --syn-punct: #475569;
+
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.06);
+  --radius: 0.75rem;
+  --header-h: 3.75rem;
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0a1020;
+  --surface: #0f1729;
+  --surface-2: #162036;
+  --card: #111a2e;
+  --foreground: #e6edf7;
+  --muted-foreground: #9aa7bd;
+  --border: #233049;
+  --ring: #22d3ee;
+
+  --primary: #34d399; /* green */
+  --primary-strong: #6ee7b7;
+  --primary-soft: #0f2e27;
+  --primary-foreground: #04231a;
+  --accent: #22d3ee; /* cyan */
+  --accent-soft: #0d2a36;
+
+  --success: #4ade80;
+  --success-soft: #0f2a1c;
+  --warning: #fbbf24;
+  --warning-soft: #2e2410;
+  --danger: #f87171;
+  --danger-soft: #34151a;
+  --info: #60a5fa;
+  --info-soft: #122440;
+
+  --code-bg: #0c1426;
+  --code-gutter: #55627c;
+  --code-active-line: #131f36;
+  --code-selection: #24406b;
+  --console-bg: #0b1222;
+  --syn-keyword: #c4b5fd;
+  --syn-string: #86efac;
+  --syn-number: #fcd34d;
+  --syn-comment: #7d8aa3;
+  --syn-function: #7dd3fc;
+  --syn-atom: #fdba74;
+  --syn-operator: #f9a8d4;
+  --syn-variable: #e6edf7;
+  --syn-punct: #a5b1c6;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-code: var(--code-bg);
+  --color-console: var(--console-bg);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius-lg: var(--radius);
+  --shadow-card: var(--shadow-card);
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+html[data-font-size="sm"] {
+  font-size: 15px;
+}
+html[data-font-size="lg"] {
+  font-size: 18px;
+}
+html[data-font-size="xl"] {
+  font-size: 20px;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  border-color: var(--border);
+}
+
+::selection {
+  background: var(--code-selection);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+}
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html[data-reduce-motion="true"] *,
+html[data-reduce-motion="true"] *::before,
+html[data-reduce-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Prose (lesson text, AI answers)                                     */
+/* ------------------------------------------------------------------ */
+.prose-ra {
+  line-height: 1.7;
+  color: var(--foreground);
+}
+.prose-ra > * + * {
+  margin-top: 0.85em;
+}
+.prose-ra h1,
+.prose-ra h2,
+.prose-ra h3,
+.prose-ra h4 {
+  font-weight: 650;
+  line-height: 1.3;
+  margin-top: 1.4em;
+}
+.prose-ra h2 {
+  font-size: 1.3em;
+}
+.prose-ra h3 {
+  font-size: 1.12em;
+}
+.prose-ra a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-ra strong {
+  font-weight: 650;
+}
+.prose-ra ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+.prose-ra ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+.prose-ra li + li {
+  margin-top: 0.3em;
+}
+.prose-ra li::marker {
+  color: var(--muted-foreground);
+}
+.prose-ra :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  padding: 0.08em 0.35em;
+  white-space: break-spaces;
+}
+.prose-ra blockquote {
+  border-left: 3px solid var(--primary);
+  padding-left: 1em;
+  color: var(--muted-foreground);
+}
+.prose-ra table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.93em;
+}
+.prose-ra th,
+.prose-ra td {
+  border: 1px solid var(--border);
+  padding: 0.45em 0.7em;
+  text-align: left;
+  vertical-align: top;
+}
+.prose-ra th {
+  background: var(--surface);
+  font-weight: 600;
+}
+.prose-ra hr {
+  border-top: 1px solid var(--border);
+}
+.prose-ra > :first-child {
+  margin-top: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Static syntax highlighting (same token colours as the editor)       */
+/* ------------------------------------------------------------------ */
+/* Ligatures would draw "<-" as an arrow – beginners must see the real characters. */
+.code-static,
+.cm-editor,
+code,
+pre,
+kbd {
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+.code-static {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  line-height: 1.6;
+  tab-size: 2;
+}
+.tok-keyword,
+.tok-controlKeyword,
+.tok-definitionKeyword {
+  color: var(--syn-keyword);
+}
+.tok-string,
+.tok-string2 {
+  color: var(--syn-string);
+}
+.tok-number {
+  color: var(--syn-number);
+}
+.tok-comment {
+  color: var(--syn-comment);
+  font-style: italic;
+}
+.tok-atom,
+.tok-bool {
+  color: var(--syn-atom);
+}
+.tok-operator {
+  color: var(--syn-operator);
+}
+.tok-variableName {
+  color: var(--syn-variable);
+}
+.tok-variableName.tok-definition,
+.tok-function {
+  color: var(--syn-function);
+}
+.tok-punctuation,
+.tok-bracket {
+  color: var(--syn-punct);
+}
+.tok-meta {
+  color: var(--syn-keyword);
+}
+
+/* ------------------------------------------------------------------ */
+/* CodeMirror                                                          */
+/* ------------------------------------------------------------------ */
+.cm-editor {
+  background: var(--code-bg);
+  color: var(--foreground);
+  height: 100%;
+  font-size: var(--editor-font-size, 14px);
+}
+.cm-editor.cm-focused {
+  outline: none;
+}
+.cm-scroller {
+  font-family: var(--font-mono) !important;
+  line-height: 1.65 !important;
+}
+.cm-gutters {
+  background: var(--code-bg) !important;
+  color: var(--code-gutter) !important;
+  border-right: 1px solid var(--border) !important;
+}
+.cm-activeLine {
+  background: var(--code-active-line) !important;
+}
+.cm-activeLineGutter {
+  background: var(--code-active-line) !important;
+  color: var(--foreground) !important;
+}
+.cm-selectionBackground,
+.cm-editor.cm-focused .cm-selectionBackground,
+.cm-content ::selection {
+  background: var(--code-selection) !important;
+}
+.cm-cursor {
+  border-left-color: var(--foreground) !important;
+  border-left-width: 2px !important;
+}
+.cm-matchingBracket {
+  background: var(--primary-soft) !important;
+  outline: 1px solid var(--primary);
+}
+.cm-tooltip {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 0.5rem;
+  color: var(--foreground);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+}
+.cm-tooltip-autocomplete ul li[aria-selected] {
+  background: var(--accent-soft) !important;
+  color: var(--foreground) !important;
+}
+.cm-panels {
+  background: var(--surface) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+.cm-panels input,
+.cm-panels button {
+  color: var(--foreground);
+}
+.cm-error-line {
+  background: var(--danger-soft) !important;
+}
+.cm-warning-line {
+  background: var(--warning-soft) !important;
+}
+.cm-error-token {
+  text-decoration: underline wavy var(--danger);
+  text-underline-offset: 3px;
+}
+.cm-highlight-line {
+  background: var(--info-soft) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Small utilities                                                     */
+/* ------------------------------------------------------------------ */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.35s ease-out both;
+}
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.typing-dot {
+  animation: pulse-dot 1.2s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}

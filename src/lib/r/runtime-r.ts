@@ -301,6 +301,39 @@ local(envir = new.env(parent = baseenv()), {
     }))
   }
 
+  # Columns of every data frame in an environment (for "did you mean" column hints).
+  ra$.ra_df_columns <- function(envir) {
+    nms <- ls(envir)
+    out <- list()
+    for (n in nms) {
+      x <- get(n, envir = envir)
+      if (is.data.frame(x)) out[[n]] <- I(names(x))
+    }
+    for (n in c("mtcars", "iris", "airquality", "ToothGrowth", "PlantGrowth", "ChickWeight", "women", "cars")) {
+      if (is.null(out[[n]])) out[[n]] <- I(names(get(n, envir = as.environment("package:datasets"))))
+    }
+    out
+  }
+
+  ra$.ra_files <- function() {
+    I(c(list.files(".", recursive = FALSE), file.path("data", list.files("data"))))
+  }
+
+  # Which variables in an expression's environment are text that looks like numbers?
+  ra$.ra_numeric_text <- function(names, envir) {
+    I(Filter(function(n) {
+      if (!exists(n, envir = envir)) return(FALSE)
+      x <- get(n, envir = envir)
+      is.character(x) && length(x) > 0 && !anyNA(suppressWarnings(as.numeric(x[!is.na(x)])))
+    }, names))
+  }
+
+  ra$.ra_classes <- function(names, envir) {
+    out <- list()
+    for (n in names) if (exists(n, envir = envir)) out[[n]] <- class(get(n, envir = envir))[1L]
+    out
+  }
+
   # ---------------- exercise tests ----------------
   ra$.ra_tests <- function(checks, uenv, out = "", err = NULL, plots = 0L, code = "") {
     tenv <- new.env(parent = uenv)

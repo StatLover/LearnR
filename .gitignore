@@ -12,3 +12,4 @@ npm-debug.log*
 # webR runtime is copied from node_modules on install (scripts/copy-webr.mjs)
 public/webr/
 .verify-cache/
+Rplots.pdf

@@ -1,20 +1,29 @@
 import type { Metadata } from "next";
-import { BarChart3 } from "lucide-react";
+import { FlaskConical } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
-import { VizLab } from "@/components/playground/viz-lab";
+import { Hexy } from "@/components/brand/mascot";
+import { LabHub } from "@/components/playground/labs/lab-hub";
+import { LabArt } from "@/components/playground/labs/lab-art";
+import { labs } from "@/components/playground/labs/lab-list";
 
-export const metadata: Metadata = { title: "Visualization Lab", description: "Pick a dataset and a chart type, get real R plotting code (base R or ggplot2), run it, modify it and export the plot." };
+export const metadata: Metadata = {
+  title: "R Labs",
+  description: "Interactive simulations powered by real R: build charts, explore the normal distribution, the Central Limit Theorem, correlation and regression with sliders – and see the R code behind every result.",
+};
 
 export default function VisualizePage() {
   return (
     <>
       <PageHeader
-        icon={<BarChart3 />}
-        title="Data Visualization Lab"
-        description="Pick a sample dataset and a chart type. R Academy writes the R code for you – in base R or ggplot2 – and runs it. Then change the code to customise the chart, and export the plot as a PNG."
+        icon={<FlaskConical />}
+        color="mint"
+        eyebrow="Interactive simulations"
+        title="R Labs"
+        description="Play with sliders, switches and datasets and watch statistics come alive. Every plot and every number is computed by real R in your browser – and every lab shows you the code, so you can take it to the playground."
+        art={<Hexy mood="cool" size={130} animate />}
       />
-      <div className="mx-auto max-w-7xl px-4 py-6">
-        <VizLab />
+      <div className="mx-auto max-w-7xl px-5 py-8 sm:py-10">
+        <LabHub arts={Object.fromEntries(labs.map((l) => [l.id, <LabArt key={l.id} lab={l} className="block" />]))} />
       </div>
     </>
   );

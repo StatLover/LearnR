@@ -490,9 +490,9 @@ export function Diagram({ name, caption }: { name: DiagramName; caption?: string
   const D = diagrams[name];
   if (!D) return null;
   return (
-    <figure className="not-prose my-5 rounded-xl border border-border bg-card p-4">
+    <figure className="not-prose my-5 rounded-3xl border-2 border-border bg-card p-5">
       <div className="mx-auto max-w-2xl">{D()}</div>
-      {caption && <figcaption className="mt-2 text-center text-sm text-muted-foreground">{caption}</figcaption>}
+      {caption && <figcaption className="mt-3 text-center text-sm font-semibold text-muted-foreground">{caption}</figcaption>}
     </figure>
   );
 }

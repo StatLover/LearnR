@@ -19,6 +19,7 @@ import {
   Sparkles,
   Check,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { CodeEditor, type CodeEditorHandle, type LineMark } from "./code-editor";
 import { ConsoleView, DataViewer, EnvironmentPane, PlotGallery } from "./output-panels";
 import { Button } from "@/components/ui/button";
@@ -245,13 +246,15 @@ export function CodeRunner({
 
   const status = last?.info?.status ?? (last ? last.status : null);
   const errLine = last?.info?.error?.line_start ?? last?.info?.parse_error?.line ?? null;
+  const router = useRouter();
   const findMistake = () => {
     try {
       sessionStorage.setItem("ra-check-code", editor.current?.getValue() ?? code);
+      sessionStorage.setItem("ra-check-auto", "1");
     } catch {
       /* ignore */
     }
-    window.location.href = "/error-checker";
+    router.push("/error-checker");
   };
 
   return (

@@ -4,10 +4,15 @@ An interactive website that teaches R programming to complete beginners and take
 
 R code runs **in the learner's browser**, using [webR](https://docs.r-wasm.org/webr/latest/) (R compiled to WebAssembly). Every Run button executes real R. No output is simulated.
 
+The site is designed as a playful coding adventure ("Duolingo meets DataCamp"): a learning map of seven worlds, bite-sized lesson steps, XP, levels, streaks, badges, daily challenges and a friendly hexagon mascot called **Hexy** – on top of a serious, fully tested R course. See [docs/DESIGN.md](docs/DESIGN.md) for the design system.
+
 ## What's inside
 
 | Area | What it does |
 | --- | --- |
+| **Learning map** | **7 worlds** (R Explorer → Data Adventurer → Logic Builder → Data Wizard → Visualization Creator → Statistics Detective → R Pro) group the 10 modules. Each world has goals, progress and a winding path of lesson nodes (completed / current / locked), module checkpoints and – in R Pro – the projects. Completed lessons stay open for review. |
+| **Lesson player** | Every lesson is split into short cards in six steps: **Learn → Watch it work → Try it yourself → Challenge → Get feedback → Earn XP**. Next / Previous / Skip, Hint, Retry and Ask AI buttons, Alt+←/→ shortcuts, an outline drawer, a docked AI tutor, and resume-where-you-left-off. Finishing a lesson celebrates with confetti and shows the XP earned. |
+| **Gamification** | XP for lessons, challenges, correct answers, checkpoints, projects and the daily challenge; levels; a daily XP goal; streaks; 27 badges; level-up and badge celebrations. XP is *derived* from real progress (`src/lib/game/xp.ts`), so it can't be double-counted and needs no extra storage. |
 | **Curriculum** | 3 stages, 10 modules, **34 lessons**. Each lesson has objectives, a plain-English explanation, detailed sections, runnable examples with line-by-line notes and expected output, common mistakes, exercises, a quiz and a summary. Each module ends with a checkpoint. |
 | **Code editor** | CodeMirror 6 with R highlighting, line numbers, auto-indent, bracket and quote closing, autocomplete, search and RStudio-style shortcuts (`Alt+-` inserts `<-`, `Ctrl+Shift+M` inserts `|>`). Buttons: Run, Stop, Reset, Copy, Format, Download `.R`, Save, Clear. Output has Console, Plots (PNG export), Data viewer (`View(df)`) and Environment tabs. |
 | **Error Checker** | Paste code, then **Check My Code** (parse plus static checks), **Run and Analyze** (real run, exact failing line and call stack), **Explain My Error** (AI) or **Fix My Code**. It separates syntax errors, runtime errors, warnings and logic issues. Every location claim comes with a "How we know" note. Corrected code is only shown after R has run it, with a before/after diff, Apply Fix, Explain More Simply and Restore my original code. |
@@ -79,9 +84,14 @@ src/
     r/format.ts, tokens.ts  Code formatter and tokenizer
     errors/               Error analysis rules and the fix-verification loop
     ai/                   Prompts, config, rate limiting, browser tutor store
-    store/                Settings and progress (localStorage), achievements, streaks
+    game/                 Worlds, XP and levels, daily challenge, badges
+    store/                Settings and progress (localStorage), streaks, unlocking
     sync/                 Optional Supabase sync and merge
-  components/             UI (editor, runner, lesson, quiz, exercise, tutor, dashboard, …)
+  components/             UI (editor, runner, lesson player, map, quiz, exercise, tutor, dashboard, …)
+    brand/                Hexy the mascot, topic illustrations, decorations
+    game/                 Celebrations (XP pop-ups, level-ups, badges), confetti, hex badges
+    learn/lesson-player   The six-step card-based lesson player (lesson-cards.ts builds the cards)
+    path/world-map        The interactive learning map
 scripts/
   generate-datasets.ts    Seeded generator for the sample CSV files in public/data
   verify-content.ts       Runs all course code through real R (see below)

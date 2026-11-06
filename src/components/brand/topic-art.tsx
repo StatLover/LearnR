@@ -174,7 +174,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
     <g>
       <circle cx="80" cy="52" r="30" fill="none" stroke={P.grape} strokeWidth="8" strokeDasharray="150 40" strokeLinecap="round" />
       <path d="M104 26 l8 14 -16 0z" fill={P.grape} transform="rotate(20 104 33)" />
-      {[0, 1, 2, 3].map((i) => <circle key={i} cx={80 + 30 * Math.cos((i * Math.PI) / 2)} cy={52 + 30 * Math.sin((i * Math.PI) / 2)} r="7" fill={[P.sun, P.mint, P.sky, P.pink][i]} />)}
+      {[0, 1, 2, 3].map((i) => <circle key={i} cx={Math.round(80 + 30 * Math.cos((i * Math.PI) / 2))} cy={Math.round(52 + 30 * Math.sin((i * Math.PI) / 2))} r="7" fill={[P.sun, P.mint, P.sky, P.pink][i]} />)}
       <text x="80" y="57" textAnchor="middle" fontFamily={MONO} fontSize="12" fontWeight="800" fill={P.ink}>i</text>
     </g>
   ),
@@ -279,7 +279,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
   bell: () => {
     const pts = Array.from({ length: 41 }, (_, i) => {
       const z = -3 + (6 * i) / 40;
-      return `${80 + z * 20},${84 - 60 * Math.exp(-(z * z) / 2)}`;
+      return `${80 + z * 20},${(84 - 60 * Math.exp(-(z * z) / 2)).toFixed(2)}`;
     }).join(" ");
     return (
       <g>

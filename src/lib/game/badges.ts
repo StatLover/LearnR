@@ -2,7 +2,8 @@
  * Achievement badges. Each badge is checked against progress; earned badges
  * are stored with the date they were earned (progress.achievements).
  */
-import { allOutlineLessons, currentStreak, longestStreak, type Outline, type ProgressState } from "../store/progress";
+import type { ProgressState } from "../store/progress";
+import { allOutlineLessons, currentStreak, longestStreak, type Outline } from "../store/derived";
 import { levelInfo, totalXp } from "./xp";
 import { worlds } from "./worlds";
 

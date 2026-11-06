@@ -6,8 +6,9 @@
  * never be double-counted, existing progress is rewarded automatically, and
  * account sync needs nothing extra.
  */
-import type { Outline, ProgressState } from "../store/progress";
-import { allOutlineLessons } from "../store/progress";
+// Imported by server components too, so only the store's *types* are used here.
+import type { ProgressState } from "../store/progress";
+import { allOutlineLessons, type Outline } from "../store/derived";
 import { todayKey } from "../utils";
 import { moduleOrder } from "./worlds";
 

@@ -1,0 +1,61 @@
+customer_id,name,age,gender,city,signup_date,total_spent
+C001,Hugo Smith,67,M, New York ,2023-05-15,339.39
+C002,Olivia Garcia,47,Female,Boston,2022-03-18,463.51
+C003,Vera Garcia,60,female,chicago,2023-07-09,368.13
+C004,Carlos Smith,61,male, Boston ,01/16/2023,539.64
+C004,Carlos Smith,61,male, Boston ,01/16/2023,539.64
+C005,Julia Khan,34,female, Chicago ,2024-05-14,$412.27
+C006,  Ravi Smith,71,M,BOSTON,2023-05-06,157.92
+C007,Yara Kim,44,female,Boston,2023-09-08,112.97
+C008,Felix Kim,,Male,Boston,02/03/2024,417.98
+C009,DANIEL MÜLLER,27,Male,HOUSTON,2024-12-15,329.97
+C010,Keiko Garcia,24,Female,Seattle,2023-08-25,"$1,026.94"
+C011,rosa novak,62,Female,BOSTON,2022-09-08,474.91
+C012,  Yusuf Silva,50,M, Chicago ,07/26/2023,284.85
+C013,Fatima Garcia,71, f,boston,2023-10-12,743.28
+C014,Mateo Garcia,20,MALE , Chicago ,2023-10-26,296.75
+C015,Uma Chen,unknown,Female, Boston ,2023-07-28,$430.93
+C016,Bruno Okafor,48,M, Seattle ,07/15/2022,271.54
+C017,Ines Müller,22, f, New York ,2024-06-13,120.12
+C017,Ines Müller,22, f, New York ,2024-06-13,120.12
+C018,  GRACE GARCIA,26,F,HOUSTON,2023-05-09,681.09
+C019,Noah Okafor,65,male,Chicago,2023-09-05,
+C020,Umar Khan,21,Male,Seattle,05/20/2023,$971.17
+C021,Bianca Okafor,24,F,NEW YORK,2023-01-13,549.58
+C022,ivan kim,49,Male,boston,2024-11-05,285.65
+C023,Priya Rossi,59,Female,New York,2023-08-12,263.12
+C024,  Xavier Khan,27,M,HOUSTON,06/12/2024,341.51
+C025,Emma Müller,62,F, New York ,2023-07-16,$414.94
+C026,Chloe Okafor,26,Female,houston,2022-08-19,332.29
+C027,JAMAL ROSSI,-4,male,seattle,2024-04-13,494.76
+C028,Quinn Silva,37,Female,BOSTON,01/08/2023,147.57
+C029,Ximena Garcia,57,F,Seattle,2023-12-13,251.52
+C029,Ximena Garcia,57,F,Seattle,2023-12-13,251.52
+C030,  Ethan Smith,24,Male, New York ,2022-12-03,$572.09
+C031,Lena Garcia,74,female,CHICAGO,2022-06-18,480.84
+C032,Tomas Khan,53,Male,Boston,07/25/2022,1103.43
+C033,alice müller,230,F, Seattle ,2023-09-04,58.84
+C034,Hassan Okafor,49,male,New York,2024-02-27,340.09
+C035,Farid Novak,59,MALE ,New York,2022-09-05,$500.16
+C036,  MAYA SMITH,50,Female,houston,07/27/2024,407.92
+C037,Tara Garcia,70,female,New York,2023-09-25,1547.38
+C038,Aiden Garcia,61,Male,Houston,2024-02-17,444.38
+C039,Hana Chen,36,Female,HOUSTON,2022-01-25,167.65
+C040,Oscar Novak,31,Male, Chicago ,05/27/2023,
+C041,Wendy Silva,73, f,Houston,2022-11-26,439.89
+C042,  Diego Okafor,21,Male,seattle,2023-09-27,151.03
+C042,  Diego Okafor,21,Male,seattle,2023-09-27,151.03
+C043,Ben Silva,31,MALE ,Seattle,2024-05-14,430.82
+C044,isla silva,67,F,Houston,11/13/2024,398.23
+C045,PABLO CHEN,54,Male,Houston,2024-04-05,$420.91
+C046,Wei Rossi,N/A,male,BOSTON,2022-03-18,283.44
+C047,Dina Kim,53,F,CHICAGO,2022-06-02,390.21
+C048,  Kofi Silva,60,MALE , Boston ,02/22/2024,137.86
+C049,Sofia Silva,19, f,Chicago,2023-09-26,489.99
+C050,Zane Chen,62,male,Chicago,2024-06-23,$969.60
+C051,Gina Garcia,55,Female,Houston,2022-07-18,596.38
+C052,Elena Okafor,57,Female,Boston,12/26/2022,N/A
+C053,Liam Rossi,25,M, Chicago ,2023-11-18,126.71
+C054,  SAMIR NOVAK,45,Male,boston,2023-10-05,698.07
+C055,zoe rossi,51,female,HOUSTON,2023-10-18,$784.31
+C056,George Kim,53,Male,chicago,01/20/2022,174.24

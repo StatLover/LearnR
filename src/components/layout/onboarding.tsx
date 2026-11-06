@@ -142,7 +142,7 @@ export function Onboarding() {
               <Button variant="outline" onClick={() => finish("/learn")}>
                 See the learning path
               </Button>
-              <Button onClick={() => finish("/learn/what-is-programming-and-r")}>Start learning</Button>
+              <Button onClick={() => finish("/learn/what-is-programming")}>Start learning</Button>
             </div>
           </div>
         )}

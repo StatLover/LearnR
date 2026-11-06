@@ -236,7 +236,7 @@ export function analyzeParseError(code: string, pe: RParseError): Diagnosis {
   if (/unexpected '='/.test(msg) && at) {
     const { open } = depthAt(code, at.offset);
     const lastOpen = open[open.length - 1];
-    const before = lastOpen ? sig[sig.indexOf(lastOpen) - 1] : undefined;
+    const before = lastOpen ? sig[sig.findIndex((t) => t.offset === lastOpen.offset) - 1] : undefined;
     if (lastOpen && before && before.kind === "keyword" && (before.text === "if" || before.text === "while")) {
       return {
         ...base,
@@ -361,7 +361,7 @@ export function analyzeParseError(code: string, pe: RParseError): Diagnosis {
     if (prevIsValue && depth > 0) {
       // 9d. print("a" "b") – special-case two strings in print()
       const callOpen = open[open.length - 1];
-      const callName = sig[sig.indexOf(callOpen) - 1];
+      const callName = sig[sig.findIndex((t) => t.offset === callOpen.offset) - 1];
       if (callName?.text === "print" && prev.kind === "string" && at.kind === "string") {
         const newCode = code.slice(0, callOpen.offset + 1) + "paste(" + code.slice(callOpen.offset + 1, at.offset).replace(/\s+$/, "") + ", " + code.slice(at.offset, at.offset + at.text.length) + ")" + code.slice(at.offset + at.text.length);
         return {

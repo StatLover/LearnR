@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   BookOpen,
   Bug,
@@ -111,7 +111,12 @@ function ThemeMenu() {
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  useEffect(() => setOpen(false), [pathname]);
+  const [openedAt, setOpenedAt] = useState(pathname);
+  // Close the mobile menu after navigating (adjusting state during render, as React recommends).
+  if (open && openedAt !== pathname) {
+    setOpen(false);
+    setOpenedAt(pathname);
+  }
   const active = (href: string) => pathname === href || pathname.startsWith(href + "/");
   const refActive = REFERENCE.some((r) => active(r.href));
 
@@ -191,7 +196,10 @@ export function Header() {
               </Link>
             </Button>
           </Tooltip>
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "Close menu" : "Open menu"}>
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => {
+              setOpenedAt(pathname);
+              setOpen((o) => !o);
+            }} aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "Close menu" : "Open menu"}>
             {open ? <X /> : <Menu />}
           </Button>
         </div>

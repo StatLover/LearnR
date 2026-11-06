@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -121,9 +121,14 @@ export function LessonNotes({ lessonId, title }: { lessonId: string; title: stri
   const state = useProgress();
   const saved = state.notes[lessonId]?.text ?? "";
   const [text, setText] = useState(saved);
+  const [lastSaved, setLastSaved] = useState(saved);
   const [status, setStatus] = useState<"saved" | "typing">("saved");
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  useEffect(() => setText(saved), [saved]);
+  // When the stored note changes (another tab, sync, first load), show it.
+  if (saved !== lastSaved) {
+    setLastSaved(saved);
+    if (status === "saved") setText(saved);
+  }
   const change = (v: string) => {
     setText(v);
     setStatus("typing");
@@ -201,6 +206,7 @@ export function BookmarkButton({ id, title, href, kind = "lesson" }: { id: strin
 /* ---------------------------- the three-panel shell ---------------------------- */
 
 type MobileTab = "lesson" | "contents" | "code" | "tutor";
+const noopSubscribe = () => () => {};
 
 export function LessonShell({ outline, lesson, children, prevId }: { outline: Outline; lesson: LessonMeta; children: ReactNode; prevId?: string; prevTitle?: string }) {
   const [tab, setTab] = useState<MobileTab>("lesson");
@@ -210,12 +216,11 @@ export function LessonShell({ outline, lesson, children, prevId }: { outline: Ou
   const last = useRef<RunResult | null>(null);
   const state = useProgress();
   const settings = useSettings();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
   const unlocked = !mounted || isLessonUnlocked(outline, state, lesson.id, settings.learningMode);
   const prev = outline.modules.flatMap((m) => m.lessons).find((l) => l.id === prevId);
 
   useEffect(() => {
-    setMounted(true);
     progress.visitLesson(lesson.id, lesson.title);
   }, [lesson.id, lesson.title]);
 

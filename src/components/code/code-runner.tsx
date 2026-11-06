@@ -119,6 +119,8 @@ export function CodeRunner({
   // Restore saved edits after mount (avoids hydration mismatch).
   useEffect(() => {
     const saved = readStored(storageKey);
+    // Restoring from localStorage can only happen after hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved !== null && saved !== initialCode) setCode(saved);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storageKey]);
@@ -230,19 +232,13 @@ export function CodeRunner({
     toast("Saved to your dashboard", { description: "Find it under Saved code on your Dashboard." });
   };
   const stop = () => rSession.interrupt();
+  const askTutor = () => onAskTutor?.(editor.current?.getValue() ?? code, last);
+  const runNow = () => void run();
   const clear = () => {
     setLines([]);
     setImages([]);
     setTables([]);
   };
-
-  const iconBtn = (label: string, onClick: () => void, icon: ReactNode, shortcut?: string) => (
-    <Tooltip content={shortcut ? `${label} (${shortcut})` : label}>
-      <Button variant="ghost" size="icon-sm" onClick={onClick} aria-label={label}>
-        {icon}
-      </Button>
-    </Tooltip>
-  );
 
   const loadingR = session.status === "loading";
   const editorMin = editorMinHeight ?? (compact ? 60 : variant === "panel" ? 160 : 240);
@@ -262,14 +258,14 @@ export function CodeRunner({
         {title && !compact && <span className="ml-1 hidden truncate text-sm font-medium text-muted-foreground sm:inline">{title}</span>}
         <div className="ml-auto flex items-center gap-0.5">
           {extraToolbar}
-          {iconBtn("Reset code", reset, <RotateCcw />)}
-          {iconBtn(copied ? "Copied!" : "Copy code", copy, copied ? <Check className="text-success" /> : <Copy />)}
-          {!compact && iconBtn("Format code", format, <Wand2 />, "Ctrl+Shift+F")}
-          {iconBtn("Download as .R file", download, <Download />)}
-          {showSave && !compact && iconBtn("Save to dashboard", save, <Save />, "Ctrl+S")}
-          {!compact && iconBtn("Clear console", clear, <Eraser />)}
-          {!compact && iconBtn("Keyboard shortcuts", () => setShowKeys(true), <Keyboard />)}
-          {onAskTutor && iconBtn("Ask the AI tutor about this code", () => onAskTutor(editor.current?.getValue() ?? code, last), <Sparkles />)}
+          <IconBtn label="Reset code" onClick={reset} icon={<RotateCcw />} />
+          <IconBtn label={copied ? "Copied!" : "Copy code"} onClick={copy} icon={copied ? <Check className="text-success" /> : <Copy />} />
+          {!compact && <IconBtn label="Format code" onClick={format} icon={<Wand2 />} shortcut="Ctrl+Shift+F" />}
+          <IconBtn label="Download as .R file" onClick={download} icon={<Download />} />
+          {showSave && !compact && <IconBtn label="Save to dashboard" onClick={save} icon={<Save />} shortcut="Ctrl+S" />}
+          {!compact && <IconBtn label="Clear console" onClick={clear} icon={<Eraser />} />}
+          {!compact && <IconBtn label="Keyboard shortcuts" onClick={() => setShowKeys(true)} icon={<Keyboard />} />}
+          {onAskTutor && <IconBtn label="Ask the AI tutor about this code" onClick={askTutor} icon={<Sparkles />} />}
         </div>
       </div>
 
@@ -277,7 +273,7 @@ export function CodeRunner({
         ref={editor}
         value={code}
         onChange={onChange}
-        onRun={() => void run()}
+        onRun={runNow}
         onFormat={format}
         onSave={showSave ? save : undefined}
         minHeight={editorMin}
@@ -336,6 +332,16 @@ export function CodeRunner({
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+function IconBtn({ label, onClick, icon, shortcut }: { label: string; onClick: () => void; icon: ReactNode; shortcut?: string }) {
+  return (
+    <Tooltip content={shortcut ? `${label} (${shortcut})` : label}>
+      <Button variant="ghost" size="icon-sm" onClick={onClick} aria-label={label}>
+        {icon}
+      </Button>
+    </Tooltip>
   );
 }
 

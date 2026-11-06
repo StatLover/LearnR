@@ -143,7 +143,7 @@ export class NativeEngine implements Engine {
 
   constructor() {
     mkdirSync(CACHE, { recursive: true });
-    this.runtimeFile = join(CACHE, "runtime.R");
+    this.runtimeFile = join(CACHE, `runtime-${process.pid}.R`); // per process: parallel verifier runs must not overwrite each other
     writeFileSync(this.runtimeFile, R_RUNTIME);
     const dataLink = join(CACHE, "data");
     if (!existsSync(dataLink)) {

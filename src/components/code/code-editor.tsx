@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useImperativeHandle, useRef, type Ref } from "react";
+import { useEffect, useImperativeHandle, useLayoutEffect, useRef, type Ref } from "react";
 import { EditorState, Compartment, StateEffect, StateField, type Extension, RangeSetBuilder } from "@codemirror/state";
 import {
   EditorView,
@@ -119,7 +119,9 @@ export function CodeEditor({
   const view = useRef<EditorView | null>(null);
   const settings = useSettings();
   const callbacks = useRef({ onChange, onRun, onFormat, onSave });
-  callbacks.current = { onChange, onRun, onFormat, onSave };
+  useLayoutEffect(() => {
+    callbacks.current = { onChange, onRun, onFormat, onSave };
+  });
   const comps = useRef({ lines: new Compartment(), brackets: new Compartment(), readOnly: new Compartment(), size: new Compartment() });
 
   useImperativeHandle(ref, () => ({

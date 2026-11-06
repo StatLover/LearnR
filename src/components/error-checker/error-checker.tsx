@@ -102,6 +102,8 @@ export function ErrorChecker() {
       const incoming = sessionStorage.getItem("ra-check-code");
       if (incoming) {
         sessionStorage.removeItem("ra-check-code");
+        // Code handed over from another page (sessionStorage) – only readable after hydration.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCode(incoming);
       }
     } catch {
@@ -448,10 +450,10 @@ export function ErrorChecker() {
                     {d.token ? <code className="rounded bg-surface-2 px-1 font-mono text-xs">{d.token.text}</code> : null}
                   </button>
                 )}
-                <p className="rounded-md bg-surface px-3 py-2 text-xs text-muted-foreground">
+                <div className="rounded-md bg-surface px-3 py-2 text-xs text-muted-foreground">
                   <span className="font-semibold">How we know: </span>
-                  {d.evidence}
-                </p>
+                  <Markdown runnableCode={false} className="inline [&>p]:inline">{d.evidence}</Markdown>
+                </div>
                 {isSimple ? (
                   <div className="rounded-lg bg-primary-soft/60 p-3">
                     <p className="text-xs font-semibold text-primary-strong dark:text-primary">In very simple words</p>

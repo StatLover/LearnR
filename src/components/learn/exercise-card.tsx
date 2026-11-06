@@ -66,6 +66,8 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
   // Restore the learner's last code after mount.
   useEffect(() => {
     const saved = savedCode ?? (kind === "exercise" ? ep?.code : undefined);
+    // Saved progress lives in localStorage, so it is restored after hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved) setCode(saved);
     if (kind === "exercise" && ep?.hintsUsed) setHintsShown(Math.min(ep.hintsUsed, task.hints.length));
     if (kind === "exercise" && ep?.solutionViewed) setShowSolution(true);
@@ -237,7 +239,7 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
             ))}
           </ol>
         )}
-        {compare && <DiffView before={editor.current?.getValue() ?? code} after={task.solution} beforeLabel="Your code" afterLabel="Example solution" />}
+        {compare && <DiffView before={code} after={task.solution} beforeLabel="Your code" afterLabel="Example solution" />}
         {(showSolution || allPass) && (
           <div className="space-y-2 rounded-lg border border-border p-3">
             {showSolution && (

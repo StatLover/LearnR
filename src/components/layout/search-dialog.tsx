@@ -83,7 +83,6 @@ export function SearchDialog() {
     return index.search(q).slice(0, 30) as unknown as (SearchDoc & { score: number })[];
   }, [index, q]);
 
-  useEffect(() => setSel(0), [q]);
 
   const go = (href: string) => {
     closeSearch();
@@ -100,7 +99,10 @@ export function SearchDialog() {
             ref={inputRef}
             autoFocus
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(e) => {
+              setQ(e.target.value);
+              setSel(0);
+            }}
             onKeyDown={(e) => {
               if (e.key === "ArrowDown") {
                 e.preventDefault();

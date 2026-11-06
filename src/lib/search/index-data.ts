@@ -1,4 +1,5 @@
 import "server-only";
+import { fnSlug } from "@/lib/fn-slug";
 import { modules } from "@/content/curriculum";
 import { projects } from "@/content/projects";
 import { rFunctions } from "@/content/functions";
@@ -51,7 +52,7 @@ export function buildSearchDocs(): SearchDoc[] {
   }
   for (const p of projects) docs.push({ id: `pr-${p.id}`, type: "Project", title: p.title, text: strip(`${p.summary} ${p.skills.join(" ")}`), href: `/projects/${p.id}`, meta: p.level });
   for (const f of rFunctions)
-    docs.push({ id: `f-${f.package}-${f.name}`, type: "Function", title: `${f.name}()`, text: strip(`${f.purpose} ${f.syntax} ${f.category}`), href: `/reference/${encodeURIComponent(f.name)}`, meta: f.package });
+    docs.push({ id: `f-${f.package}-${f.name}`, type: "Function", title: `${f.name}()`, text: strip(`${f.purpose} ${f.syntax} ${f.category}`), href: `/reference/${fnSlug(f.name)}`, meta: f.package });
   for (const g of glossary) docs.push({ id: `g-${g.slug}`, type: "Glossary", title: g.term, text: strip(g.definition), href: `/glossary#${g.slug}`, meta: g.category });
   for (const c of cheatSheets) docs.push({ id: `c-${c.id}`, type: "Cheat sheet", title: c.title, text: strip(`${c.description} ${c.sections.map((s) => s.title).join(" ")}`), href: `/cheatsheets#${c.id}` });
   for (const d of datasets) docs.push({ id: `d-${d.id}`, type: "Dataset", title: d.name, text: strip(`${d.description} ${d.columns.map((c) => c.name).join(" ")}`), href: `/datasets#${d.id}` });

@@ -200,7 +200,7 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
               currentAnswered ? (results[q.id] ? "border-mint/50 bg-mint-soft" : "border-coral/50 bg-coral-soft") : "border-border bg-surface-2",
             )}
           >
-            <p className="text-sm font-bold text-muted-foreground">
+            <p className={cn("text-sm font-bold text-muted-foreground", currentAnswered && "max-sm:sr-only")}>
               {currentAnswered
                 ? results[q.id]
                   ? "Correct – that counts towards your score."

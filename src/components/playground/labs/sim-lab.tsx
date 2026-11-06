@@ -365,7 +365,7 @@ export function SimLab({ workspace, code, color, controls, onReset, explore, con
           </div>
         </Panel>
 
-        <div className="grid gap-6">
+        <div className="grid grid-cols-1 gap-6">
           <Panel icon={<Terminal />} title="R console output" color="mint">
             <ConsoleView lines={result?.lines ?? []} running={running && !result} empty="The real R output appears here." maxHeight={340} className="min-h-40" />
           </Panel>

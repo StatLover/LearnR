@@ -63,7 +63,7 @@ export function LabHub({ arts }: { arts: Record<string, ReactNode> }) {
         {shown.length} {shown.length === 1 ? "lab" : "labs"} shown
       </p>
 
-      <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {shown.map((lab, i) => (
           <li key={lab.id} className="animate-fade-up" style={{ animationDelay: `${i * 60}ms` }}>
             <Link

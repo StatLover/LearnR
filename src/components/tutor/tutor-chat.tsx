@@ -293,6 +293,10 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
   const programmatic = useRef(0);
   const getCodeRef = useRef(getCode);
   const uid = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
+  // Narrow containers (side drawers, phones) get the compact layout automatically.
+  const [narrow, setNarrow] = useState(false);
+  const dense = compact || narrow;
   const mode = MODES.find((m) => m.value === settings.tutorMode) ?? MODES[0];
   const ctx = { lessonId, exerciseId, mode: settings.tutorMode };
 
@@ -316,6 +320,14 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [configured]);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || compact || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(([e]) => setNarrow(e.contentRect.width < 560));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [compact]);
 
   // The editor next to the chat changes without re-rendering us: check now and then whether it has code.
   useEffect(() => {
@@ -361,8 +373,8 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
     const el = inputRef.current;
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = `${Math.min(el.scrollHeight + 4, compact ? 140 : 200)}px`;
-  }, [text, compact]);
+    el.style.height = `${Math.min(el.scrollHeight + 4, dense ? 140 : 200)}px`;
+  }, [text, dense]);
 
   const disabled = configured === false;
 
@@ -431,7 +443,7 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
     if (m.role === "user" && Array.isArray(m.content)) return; // tool results – shown as "Hexy ran R code" cards
     if (m.role === "user") {
       prev = "user";
-      rows.push(<UserBubble key={i} text={messageText(m)} compact={compact} />);
+      rows.push(<UserBubble key={i} text={messageText(m)} compact={dense} />);
       return;
     }
     const blocks = Array.isArray(m.content) ? m.content : [{ type: "text", text: m.content }];
@@ -450,8 +462,8 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
     const continued = prev === "assistant";
     prev = "assistant";
     rows.push(
-      <HexyRow key={i} continued={continued} compact={compact}>
-        <div className={bubble(compact)}>
+      <HexyRow key={i} continued={continued} compact={dense}>
+        <div className={bubble(dense)}>
           <span className="sr-only">Hexy said: </span>
           {parts}
         </div>
@@ -462,12 +474,12 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
   const empty = rows.length === 0;
 
   return (
-    <div className={cn("flex h-full min-h-0 flex-1 flex-col bg-card", className)}>
+    <div ref={rootRef} className={cn("flex h-full min-h-0 flex-1 flex-col bg-card", className)}>
       {/* Header: who you're talking to, and the mode */}
       <div className="border-b-2 border-border bg-gradient-to-r from-primary-soft via-card to-card">
         <div className="flex items-center gap-2.5 px-3 pb-2 pt-2.5">
           <span className="relative shrink-0">
-            <HexyAvatar size={compact ? 38 : 44} mood={headerMood} className="bg-card shadow-[0_2px_0_var(--border)]" />
+            <HexyAvatar size={dense ? 38 : 44} mood={headerMood} className="bg-card shadow-[0_2px_0_var(--border)]" />
             <span
               className={cn("absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full border-2 border-card", configured ? "bg-mint" : configured === false ? "bg-border-strong" : "bg-sun")}
               aria-hidden
@@ -501,16 +513,16 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
             </div>
           ) : (
             <Button size="sm" variant="ghost" className="shrink-0" onClick={() => setConfirmClear(true)} disabled={!t.messages.length} aria-label="Clear conversation" title="Clear conversation">
-              <Trash2 /> {!compact && <span>New chat</span>}
+              <Trash2 /> {!dense && <span>New chat</span>}
             </Button>
           )}
         </div>
         <div className="px-3 pb-2.5">
-          <div role="radiogroup" aria-label="How Hexy helps you (tutor mode)" onKeyDown={onModeKey} className={cn("flex gap-1.5", compact ? "items-center" : "flex-wrap")}>
+          <div role="radiogroup" aria-label="How Hexy helps you (tutor mode)" onKeyDown={onModeKey} className={cn("flex gap-1.5", dense ? "items-center" : "flex-wrap")}>
             {MODES.map((m) => {
               const on = m.value === settings.tutorMode;
               const Icon = m.icon;
-              const iconOnly = compact && !on;
+              const iconOnly = dense && !on;
               return (
                 <button
                   key={m.value}
@@ -542,19 +554,19 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
         <div
           ref={listRef}
           onScroll={onScroll}
-          className={cn("h-full space-y-4 overflow-y-auto scrollbar-thin", compact ? "p-3" : "p-4")}
+          className={cn("h-full space-y-4 overflow-y-auto scrollbar-thin", dense ? "p-3" : "p-4")}
           role="log"
           aria-live="polite"
           aria-relevant="additions"
           aria-label="Conversation with Hexy, the AI tutor"
           tabIndex={0}
         >
-          {configured === false && <NotConfigured compact={compact} />}
+          {configured === false && <NotConfigured compact={dense} />}
 
           {empty && configured !== false && (
             <div className="flex flex-col items-center pt-2 text-center">
-              <Hexy mood="wave" size={compact ? 78 : 104} animate />
-              <div className={cn("relative mt-2 max-w-md", bubble(compact), "rounded-3xl")}>
+              <Hexy mood="wave" size={dense ? 78 : 104} animate />
+              <div className={cn("relative mt-2 max-w-md", bubble(dense), "rounded-3xl")}>
                 <span className="absolute -top-2 left-1/2 size-4 -translate-x-1/2 rotate-45 border-l-2 border-t-2 border-border bg-card" aria-hidden />
                 <p className="relative font-semibold">
                   Hi, I&apos;m <strong className="text-primary-strong dark:text-primary">Hexy</strong> – your R learning buddy! 👋{" "}
@@ -589,9 +601,9 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
 
           {t.busy && (
             <div aria-hidden>
-              <HexyRow mood="think" compact={compact} label={false}>
+              <HexyRow mood="think" compact={dense} label={false}>
                 {t.streaming ? (
-                  <div className={bubble(compact)}>
+                  <div className={bubble(dense)}>
                     <Markdown runnableCode={false}>{t.streaming}</Markdown>
                   </div>
                 ) : null}
@@ -609,8 +621,8 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
 
           {t.error && (
             <div role="alert">
-              <HexyRow mood="oops" compact={compact} label={false}>
-                <div className={cn(bubble(compact), "border-coral/40 bg-coral-soft")}>
+              <HexyRow mood="oops" compact={dense} label={false}>
+                <div className={cn(bubble(dense), "border-coral/40 bg-coral-soft")}>
                   <p className="font-display font-semibold text-danger">Oops – that didn&apos;t work</p>
                   <p className="mt-0.5">{t.error}</p>
                   {(t.retryText || t.messages.length >= 60) && (
@@ -668,7 +680,7 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
             </button>
           </div>
         )}
-        <ChipStrip scroll={compact} label="Quick help from Hexy">
+        <ChipStrip scroll={dense} label="Quick help from Hexy">
           {actions.map((a) => {
             const why = blockedReason(a);
             const Icon = a.icon;
@@ -738,7 +750,7 @@ export function TutorChat({ lessonId, lessonTitle, exerciseId, getCode, compact,
               )}
             </div>
           </div>
-          {!compact && (
+          {!dense && (
             <p className="mt-2 text-xs text-muted-foreground">
               <kbd className="rounded border border-border bg-surface px-1 font-mono text-[11px]">Enter</kbd> to send ·{" "}
               <kbd className="rounded border border-border bg-surface px-1 font-mono text-[11px]">Shift</kbd>+<kbd className="rounded border border-border bg-surface px-1 font-mono text-[11px]">Enter</kbd> for a new line. Hexy can make mistakes – code output is real because it runs in your browser. Your chat stays in this browser.{" "}

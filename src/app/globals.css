@@ -19,6 +19,7 @@
   --muted-foreground: #5c6189;
   --border: #dde1f4;
   --border-strong: #c9cfec;
+  --art-line: #1b1e3d;
   --ring: #5b5bf6;
 
   /* brand (indigo) */
@@ -100,6 +101,7 @@
   --muted-foreground: #a2a8d6;
   --border: #2a3062;
   --border-strong: #39407a;
+  --art-line: #c3c8f2;
   --ring: #8d8dff;
 
   --primary: #7d7dff;

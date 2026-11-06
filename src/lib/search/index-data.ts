@@ -16,7 +16,8 @@ export interface SearchDoc {
   meta?: string;
 }
 
-const strip = (md: string) => md.replace(/[`*_#>\[\]()]/g, " ").replace(/\s+/g, " ").trim();
+// Markdown punctuation is removed, but ">" stays (it is part of R operators such as %>% and |>); only quote markers at line starts go.
+const strip = (md: string) => md.replace(/^\s*>\s?/gm, "").replace(/[`*_#\[\]()]/g, " ").replace(/\s+/g, " ").trim();
 
 const PAGES: SearchDoc[] = [
   { id: "p-learn", type: "Page", title: "Learning Path", text: "all modules course curriculum roadmap stages", href: "/learn" },

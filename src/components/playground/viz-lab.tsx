@@ -99,7 +99,7 @@ export function VizLab() {
   const apply = () => runner.current?.setCode(generate(ds, chart, engine, x, y, chart === "scatter" && engine === "base" ? "" : group, title, color));
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
       <form
         className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]"
         aria-labelledby="vz-heading"

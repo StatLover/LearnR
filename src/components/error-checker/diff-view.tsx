@@ -61,7 +61,7 @@ export function DiffView({ before, after, beforeLabel = "Your code", afterLabel 
           <span className="w-3 shrink-0 select-none font-bold" aria-hidden>
             {c.kind === "removed" ? <span className="text-danger">−</span> : c.kind === "added" ? <span className="text-success">+</span> : ""}
           </span>
-          <span className="whitespace-pre-wrap break-all">
+          <span className="min-w-0 whitespace-pre-wrap break-words">
             <span className="sr-only">{c.kind === "removed" ? "removed: " : c.kind === "added" ? "added: " : ""}</span>
             <Line text={c.text} />
           </span>
@@ -71,7 +71,7 @@ export function DiffView({ before, after, beforeLabel = "Your code", afterLabel 
   );
   return (
     <div className="overflow-x-auto rounded-2xl border-2 border-border bg-code scrollbar-thin">
-      <table className="code-static w-full border-collapse text-[13px]">
+      <table className="code-static w-full min-w-[34rem] border-collapse text-[13px]">
         <thead>
           <tr className="border-b-2 border-border bg-surface-2/70 text-left text-xs text-muted-foreground">
             <th scope="col" className="border-r-2 border-border px-3 py-2 font-display font-semibold">

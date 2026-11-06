@@ -888,92 +888,94 @@ export function ErrorChecker() {
 
           {(diagnoses ?? []).map((d, i) => caseFile(d, i))}
 
-          {aiError && (
-            <div role="alert" className="rounded-3xl border-2 border-sun/60 bg-sun-soft p-4 text-sm">
-              <p className="flex items-center gap-2 font-display font-semibold text-warning">
-                <AlertTriangle className="size-4" aria-hidden /> AI explanation unavailable
-              </p>
-              <p className="mt-1 font-semibold text-muted-foreground">{aiError}</p>
-            </div>
-          )}
-
-          {busy === "ai" && diagnoses && (
-            <div className="flex items-center gap-3 rounded-3xl border-2 border-grape/40 bg-grape-soft p-4 text-sm font-semibold">
-              <Loader2 className="size-5 animate-spin text-grape" aria-hidden /> Asking Hexy&apos;s AI brain for a second opinion…
-            </div>
-          )}
-
-          {ai && (
-            <div ref={aiRef} className="scroll-mt-24 overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] animate-fade-up">
-              <div className="flex flex-wrap items-center gap-2 border-b-2 border-border bg-gradient-to-r from-grape-soft to-transparent px-5 py-3">
-                <span className="grid size-9 place-items-center rounded-xl bg-grape text-white shadow-[0_3px_0_var(--grape-shadow)]" aria-hidden>
-                  <Sparkles className="size-5" />
-                </span>
-                <h3 className="font-display text-lg font-semibold">Second opinion from Hexy AI</h3>
-                <Badge variant="grape">{ai.category}</Badge>
+          <div ref={aiRef} className="scroll-mt-24 space-y-5 empty:hidden">
+            {aiError && (
+              <div role="alert" className="rounded-3xl border-2 border-sun/60 bg-sun-soft p-4 text-sm">
+                <p className="flex items-center gap-2 font-display font-semibold text-warning">
+                  <AlertTriangle className="size-4" aria-hidden /> AI explanation unavailable
+                </p>
+                <p className="mt-1 font-semibold text-muted-foreground">{aiError}</p>
               </div>
-              <div className="space-y-3 p-5 text-sm">
-                <p className="font-display text-base font-semibold">{ai.summary}</p>
-                {ai.location.line && (
-                  <p className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-                    <MapPin className="size-3.5" aria-hidden /> Location: line {ai.location.line} ({ai.location.basis === "reported_by_r" ? "reported by R" : ai.location.basis === "inferred_from_code" ? "inferred from the code" : "uncertain"}) – {ai.location.note}
-                  </p>
-                )}
-                <Markdown runnableCode={false}>{ai.explanation}</Markdown>
-                <div>
-                  <p className="font-display font-semibold">How to fix it</p>
-                  <Markdown runnableCode={false}>{ai.how_to_fix}</Markdown>
+            )}
+
+            {busy === "ai" && diagnoses && (
+              <div className="flex items-center gap-3 rounded-3xl border-2 border-grape/40 bg-grape-soft p-4 text-sm font-semibold">
+                <Loader2 className="size-5 animate-spin text-grape" aria-hidden /> Asking Hexy&apos;s AI brain for a second opinion…
+              </div>
+            )}
+
+            {ai && (
+              <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] animate-fade-up">
+                <div className="flex flex-wrap items-center gap-2 border-b-2 border-border bg-gradient-to-r from-grape-soft to-transparent px-5 py-3">
+                  <span className="grid size-9 place-items-center rounded-xl bg-grape text-white shadow-[0_3px_0_var(--grape-shadow)]" aria-hidden>
+                    <Sparkles className="size-5" />
+                  </span>
+                  <h3 className="font-display text-lg font-semibold">Second opinion from Hexy AI</h3>
+                  <Badge variant="grape">{ai.category}</Badge>
                 </div>
-                {ai.fixed_code && (
-                  <div className="space-y-2">
-                    <DiffView before={analyzedCode ?? code} after={ai.fixed_code} afterLabel="AI suggestion" />
-                    {ai.changes.length > 0 && (
-                      <ul className="list-disc space-y-1 pl-5">
-                        {ai.changes.map((c, i) => (
-                          <li key={i}>
-                            {c.line ? `Line ${c.line}: ` : ""}
-                            <code className="font-mono text-xs">{c.before}</code> → <code className="font-mono text-xs">{c.after}</code> – {c.reason}
-                          </li>
+                <div className="space-y-3 p-5 text-sm">
+                  <p className="font-display text-base font-semibold">{ai.summary}</p>
+                  {ai.location.line && (
+                    <p className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                      <MapPin className="size-3.5" aria-hidden /> Location: line {ai.location.line} ({ai.location.basis === "reported_by_r" ? "reported by R" : ai.location.basis === "inferred_from_code" ? "inferred from the code" : "uncertain"}) – {ai.location.note}
+                    </p>
+                  )}
+                  <Markdown runnableCode={false}>{ai.explanation}</Markdown>
+                  <div>
+                    <p className="font-display font-semibold">How to fix it</p>
+                    <Markdown runnableCode={false}>{ai.how_to_fix}</Markdown>
+                  </div>
+                  {ai.fixed_code && (
+                    <div className="space-y-2">
+                      <DiffView before={analyzedCode ?? code} after={ai.fixed_code} afterLabel="AI suggestion" />
+                      {ai.changes.length > 0 && (
+                        <ul className="list-disc space-y-1 pl-5">
+                          {ai.changes.map((c, i) => (
+                            <li key={i}>
+                              {c.line ? `Line ${c.line}: ` : ""}
+                              <code className="font-mono text-xs">{c.before}</code> → <code className="font-mono text-xs">{c.after}</code> – {c.reason}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {aiFixRun ? (
+                        <div>
+                          <p className={cn("flex items-center gap-1.5 text-xs font-bold", aiFixRun.status === "ok" ? "text-success" : "text-danger")}>
+                            {aiFixRun.status === "ok" ? <CheckCircle2 className="size-4" aria-hidden /> : <XCircle className="size-4" aria-hidden />}
+                            {aiFixRun.status === "ok" ? "Verified: the suggested code ran successfully in R. Real output:" : "Not verified: the suggested code still fails when run in R:"}
+                          </p>
+                          <div className="mt-1 overflow-hidden rounded-2xl border-2 border-border">
+                            <ConsoleView lines={aiFixRun.lines} empty="(No output.)" maxHeight={200} />
+                            {aiFixRun.images.length > 0 && <PlotGallery images={aiFixRun.images} />}
+                          </div>
+                        </div>
+                      ) : (
+                        <StaticCode code={ai.fixed_code} className="rounded-2xl border-2 border-border" />
+                      )}
+                      {aiFixRun?.status === "ok" && (
+                        <Button variant="success" onClick={() => void applyAndTest(ai.fixed_code!)} disabled={working}>
+                          <Wand2 /> Apply fix &amp; test
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                  {ai.prevention_tips.length > 0 && (
+                    <div className="rounded-2xl border-2 border-dashed border-border px-3.5 py-2.5">
+                      <p className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">Avoid it next time</p>
+                      <ul className="mt-1 list-disc space-y-1 pl-5">
+                        {ai.prevention_tips.map((t) => (
+                          <li key={t}>{t}</li>
                         ))}
                       </ul>
-                    )}
-                    {aiFixRun ? (
-                      <div>
-                        <p className={cn("flex items-center gap-1.5 text-xs font-bold", aiFixRun.status === "ok" ? "text-success" : "text-danger")}>
-                          {aiFixRun.status === "ok" ? <CheckCircle2 className="size-4" aria-hidden /> : <XCircle className="size-4" aria-hidden />}
-                          {aiFixRun.status === "ok" ? "Verified: the suggested code ran successfully in R. Real output:" : "Not verified: the suggested code still fails when run in R:"}
-                        </p>
-                        <div className="mt-1 overflow-hidden rounded-2xl border-2 border-border">
-                          <ConsoleView lines={aiFixRun.lines} empty="(No output.)" maxHeight={200} />
-                          {aiFixRun.images.length > 0 && <PlotGallery images={aiFixRun.images} />}
-                        </div>
-                      </div>
-                    ) : (
-                      <StaticCode code={ai.fixed_code} className="rounded-2xl border-2 border-border" />
-                    )}
-                    {aiFixRun?.status === "ok" && (
-                      <Button variant="success" onClick={() => void applyAndTest(ai.fixed_code!)} disabled={working}>
-                        <Wand2 /> Apply fix &amp; test
-                      </Button>
-                    )}
-                  </div>
-                )}
-                {ai.prevention_tips.length > 0 && (
-                  <div className="rounded-2xl border-2 border-dashed border-border px-3.5 py-2.5">
-                    <p className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">Avoid it next time</p>
-                    <ul className="mt-1 list-disc space-y-1 pl-5">
-                      {ai.prevention_tips.map((t) => (
-                        <li key={t}>{t}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                <Button size="sm" variant="outline" onClick={() => void explainAi(true)} disabled={working}>
-                  <MessageCircleQuestion /> Explain more simply
-                </Button>
+                    </div>
+                  )}
+                  <Button size="sm" variant="outline" onClick={() => void explainAi(true)} disabled={working}>
+                    <MessageCircleQuestion /> Explain more simply
+                  </Button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </section>
       </div>
 

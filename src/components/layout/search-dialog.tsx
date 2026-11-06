@@ -167,7 +167,7 @@ export function SearchDialog() {
                 setSel(results.length - 1);
               } else if (e.key === "Enter" && results[sel]) go(results[sel].href);
             }}
-            placeholder="Search lessons, functions, exercises, glossary…"
+            placeholder="Search lessons, functions, terms…"
             className="h-11 min-w-0 flex-1 bg-transparent font-display text-lg font-medium outline-none placeholder:font-sans placeholder:text-base placeholder:font-semibold placeholder:text-muted-foreground"
             aria-label="Search"
             role="combobox"

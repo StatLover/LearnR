@@ -7,6 +7,8 @@ import type { ReactNode } from "react";
 import type { TopicKind } from "@/lib/game/worlds";
 import { cn } from "@/lib/utils";
 
+/** Lines drawn straight on the background (axes, arrows) adapt to the theme; ink on white panels stays dark. */
+const LINE = { stroke: "var(--art-line)" } as const;
 const P = { ink: "#1b1e3d", w: "#ffffff", indigo: "#5b5bf6", mint: "#18b874", sun: "#ffbd14", coral: "#ff5a5f", sky: "#1e9bf0", grape: "#9a5cf0", tang: "#ff8433", pink: "#f2559d", teal: "#10b3b0", soft: "#eef0fd" };
 const MONO = "var(--font-mono)";
 
@@ -115,7 +117,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
         <path d="M30 70 q5 -5 10 0 t10 0 t10 0" stroke={P.coral} strokeWidth="2" fill="none" />
       </Win>
       <circle cx="128" cy="68" r="14" fill={P.w} stroke={P.ink} strokeWidth="3" />
-      <line x1="138" y1="78" x2="148" y2="88" stroke={P.ink} strokeWidth="5" strokeLinecap="round" />
+      <line x1="138" y1="78" x2="148" y2="88" style={LINE} strokeWidth="5" strokeLinecap="round" />
     </g>
   ),
   vector: () => (
@@ -195,8 +197,8 @@ const scenes: Record<TopicKind, () => ReactNode> = {
       <path d="M24 22 h26 l10 10 v48 a5 5 0 0 1 -5 5 h-31 a5 5 0 0 1 -5 -5 v-53 a5 5 0 0 1 5 -5z" fill={P.w} />
       <path d="M50 22 v10 h10" fill={P.tang} />
       <text x="40" y="62" textAnchor="middle" fontSize="10" fontWeight="900" fill={P.tang}>CSV</text>
-      <path d="M68 52 h22" stroke={P.ink} strokeWidth="5" strokeLinecap="round" />
-      <path d="M84 44 l9 8 -9 8" stroke={P.ink} strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M68 52 h22" style={LINE} strokeWidth="5" strokeLinecap="round" />
+      <path d="M84 44 l9 8 -9 8" style={LINE} strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       <rect x="100" y="28" width="44" height="50" rx="7" fill={P.w} />
       <rect x="100" y="28" width="44" height="11" rx="7" fill={P.tang} />
       {[0, 1, 2].map((r) => <rect key={r} x="106" y={46 + r * 10} width="32" height="5" rx="2.5" fill={P.soft} />)}
@@ -213,7 +215,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
     <g>
       <rect x="24" y="30" width="58" height="50" rx="8" fill={P.w} />
       {[0, 1, 2, 3].map((r) => <rect key={r} x="30" y={37 + r * 10} width={[40, 28, 44, 20][r]} height="5" rx="2.5" fill={r % 2 ? P.coral : "#a0a6c8"} transform={`rotate(${[4, -6, 3, -4][r]} 50 50)`} />)}
-      <path d="M90 55 h14" stroke={P.ink} strokeWidth="4" strokeLinecap="round" />
+      <path d="M90 55 h14" style={LINE} strokeWidth="4" strokeLinecap="round" />
       <rect x="110" y="30" width="34" height="50" rx="8" fill={P.w} />
       {[0, 1, 2, 3].map((r) => <rect key={r} x="115" y={37 + r * 10} width="24" height="5" rx="2.5" fill={P.mint} />)}
       <path d="M136 20 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill={P.sun} />
@@ -233,14 +235,14 @@ const scenes: Record<TopicKind, () => ReactNode> = {
   ),
   bar: () => (
     <g>
-      <line x1="26" y1="84" x2="138" y2="84" stroke={P.ink} strokeWidth="3" strokeLinecap="round" />
+      <line x1="26" y1="84" x2="138" y2="84" style={LINE} strokeWidth="3" strokeLinecap="round" />
       <Bars x={34} y={82} heights={[30, 52, 40, 64, 46]} colors={[P.pink, P.sky, P.sun, P.mint, P.grape]} w={16} gap={6} />
     </g>
   ),
   scatter: () => (
     <g>
-      <line x1="26" y1="84" x2="138" y2="84" stroke={P.ink} strokeWidth="3" strokeLinecap="round" />
-      <line x1="26" y1="84" x2="26" y2="16" stroke={P.ink} strokeWidth="3" strokeLinecap="round" />
+      <line x1="26" y1="84" x2="138" y2="84" style={LINE} strokeWidth="3" strokeLinecap="round" />
+      <line x1="26" y1="84" x2="26" y2="16" style={LINE} strokeWidth="3" strokeLinecap="round" />
       {[[40, 72], [52, 66], [60, 70], [70, 56], [82, 52], [90, 46], [100, 40], [112, 34], [122, 26], [76, 62], [106, 44]].map(([x, y], i) => (
         <circle key={i} cx={x} cy={y} r="5" fill={[P.pink, P.sky, P.grape][i % 3]} opacity="0.9" />
       ))}
@@ -254,7 +256,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
   ),
   center: () => (
     <g>
-      <line x1="20" y1="70" x2="140" y2="70" stroke={P.ink} strokeWidth="3" strokeLinecap="round" />
+      <line x1="20" y1="70" x2="140" y2="70" style={LINE} strokeWidth="3" strokeLinecap="round" />
       {[38, 52, 64, 74, 84, 96, 112].map((x, i) => <circle key={i} cx={x} cy="58" r="7" fill={[P.sky, P.mint, P.grape, P.pink, P.sun, P.tang, P.sky][i]} />)}
       <path d="M78 26 v60" stroke={P.teal} strokeWidth="4" strokeDasharray="6 4" />
       <path d="M68 18 h20 l-10 12z" fill={P.teal} />
@@ -262,7 +264,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
   ),
   spread: () => (
     <g>
-      <line x1="20" y1="64" x2="140" y2="64" stroke={P.ink} strokeWidth="3" strokeLinecap="round" />
+      <line x1="20" y1="64" x2="140" y2="64" style={LINE} strokeWidth="3" strokeLinecap="round" />
       {[30, 50, 70, 80, 90, 110, 130].map((x, i) => <circle key={i} cx={x} cy="52" r="6" fill={P.teal} opacity={0.5 + (i % 3) * 0.2} />)}
       <path d="M30 80 h100" stroke={P.tang} strokeWidth="4" strokeLinecap="round" />
       <path d="M36 74 l-8 6 8 6 M124 74 l8 6 -8 6" stroke={P.tang} strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -285,7 +287,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
       <g>
         <polygon points={`20,84 ${pts} 140,84`} fill={P.teal} opacity="0.25" />
         <polyline points={pts} fill="none" stroke={P.teal} strokeWidth="4" strokeLinejoin="round" />
-        <line x1="16" y1="84" x2="144" y2="84" stroke={P.ink} strokeWidth="3" strokeLinecap="round" />
+        <line x1="16" y1="84" x2="144" y2="84" style={LINE} strokeWidth="3" strokeLinecap="round" />
         <line x1="80" y1="24" x2="80" y2="84" stroke={P.indigo} strokeWidth="2.5" strokeDasharray="4 3" />
       </g>
     );
@@ -297,14 +299,14 @@ const scenes: Record<TopicKind, () => ReactNode> = {
       <rect x="30" y="54" width="40" height="5" rx="2.5" fill={P.teal} />
       <rect x="30" y="64" width="30" height="5" rx="2.5" fill="#a0a6c8" />
       <circle cx="108" cy="50" r="22" fill={P.w} stroke={P.ink} strokeWidth="4" />
-      <line x1="124" y1="66" x2="140" y2="82" stroke={P.ink} strokeWidth="7" strokeLinecap="round" />
+      <line x1="124" y1="66" x2="140" y2="82" style={LINE} strokeWidth="7" strokeLinecap="round" />
       <path d="M98 50 l7 7 12 -14" stroke={P.mint} strokeWidth="4.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
     </g>
   ),
   regression: () => (
     <g>
-      <line x1="26" y1="84" x2="138" y2="84" stroke={P.ink} strokeWidth="3" strokeLinecap="round" />
-      <line x1="26" y1="84" x2="26" y2="16" stroke={P.ink} strokeWidth="3" strokeLinecap="round" />
+      <line x1="26" y1="84" x2="138" y2="84" style={LINE} strokeWidth="3" strokeLinecap="round" />
+      <line x1="26" y1="84" x2="26" y2="16" style={LINE} strokeWidth="3" strokeLinecap="round" />
       {[[40, 70], [54, 72], [62, 58], [76, 60], [88, 46], [98, 50], [112, 34], [124, 36]].map(([x, y], i) => {
         const ly = 78 - (Number(x) - 30) * 0.42;
         return (
@@ -322,7 +324,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
       {[0, 1, 2, 3].map((i) => (
         <g key={i}>
           <rect x={22 + i * 30} y="24" width="22" height="18" rx="5" fill={P.sky} />
-          <path d={`M${33 + i * 30} 44 v10`} stroke={P.ink} strokeWidth="2.5" />
+          <path d={`M${33 + i * 30} 44 v10`} style={LINE} strokeWidth="2.5" />
           <rect x={22 + i * 30} y="56" width="22" height="18" rx="5" fill={P.mint} />
         </g>
       ))}

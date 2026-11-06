@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { Check, Code2, Lightbulb, Lock, PlayCircle, Send, Bug } from "lucide-react";
+import { Check, Code2, Lightbulb, Lock, PlayCircle } from "lucide-react";
 import { TutorChat, MODES, accentVars, onAccent } from "./tutor-chat";
 import { QUICK_ACTIONS, SEND_CODE_ACTION, type QuickAction } from "./quick-actions";
 import { CodeRunner, type CodeRunnerHandle } from "@/components/code/code-runner";
@@ -168,7 +168,7 @@ export function TutorPage() {
                 onClick={() => updateSettings({ tutorMode: m.value })}
                 style={accentVars(m.color)}
                 className={cn(
-                  "press group relative flex cursor-pointer flex-col items-start rounded-3xl border-2 p-4 text-left",
+                  "press group relative flex cursor-pointer flex-col items-start rounded-3xl border-2 p-3.5 text-left sm:p-4",
                   on ? "border-[var(--a)] bg-[var(--a-soft)] [--press-shadow:var(--a)]" : "border-border bg-card [--press-shadow:var(--border)] hover:border-[var(--a)]",
                 )}
               >
@@ -180,8 +180,11 @@ export function TutorPage() {
                 <span className={cn("grid size-11 place-items-center rounded-2xl bg-[var(--a)] shadow-[0_3px_0_var(--a-shadow)] transition-transform group-hover:-rotate-6", onAccent(m.color))} aria-hidden>
                   <Icon className="size-6" />
                 </span>
-                <span className="mt-3 font-display text-lg font-semibold leading-tight">{m.label}</span>
-                <span className="mt-1 text-[13px] font-semibold leading-snug text-muted-foreground">{m.long}</span>
+                <span className="mt-2.5 font-display text-lg font-semibold leading-tight sm:mt-3">{m.label}</span>
+                <span className="mt-1 text-[13px] font-semibold leading-snug text-muted-foreground">
+                  <span className="sm:hidden">{m.desc}</span>
+                  <span className="hidden sm:inline">{m.long}</span>
+                </span>
                 <span className="mt-2 hidden text-xs font-semibold text-muted-foreground sm:block">
                   Try: <span className="text-foreground">{MODE_EXAMPLES[m.value]}</span>
                 </span>
@@ -226,7 +229,7 @@ export function TutorPage() {
             <p className="font-display text-sm font-semibold">Ask Hexy about this code</p>
             <div className="mt-2.5 flex flex-wrap gap-2">
               {scratchActions.map((a) => {
-                const Icon = a.id === "send" ? Send : a.id === "mistake" ? Bug : a.icon;
+                const Icon = a.icon;
                 return (
                   <Button key={a.id} size="sm" variant={a.id === "mistake" ? "danger" : a.id === "explain" ? "accent" : "primary"} disabled={off || t.busy} onClick={() => sendFromScratchpad(a)}>
                     <Icon /> {a.label}

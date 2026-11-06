@@ -180,7 +180,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
 
       <div className="mx-auto max-w-7xl space-y-6 px-5 py-8">
         {/* ----------------------- continue + daily ----------------------- */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <section aria-labelledby="continue-title" className="flex flex-col overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] lg:col-span-2">
             {next ? (
               <div className="grid flex-1 sm:grid-cols-[minmax(0,260px)_minmax(0,1fr)]">
@@ -285,7 +285,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
         </div>
 
         {/* ----------------------- week chart + stats ----------------------- */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <DashCard id="week-title" title="Your week in XP" icon={<TrendingUp />} color="primary" className="lg:col-span-2">
             <WeekChart week={g.week} goal={g.goalXp} />
           </DashCard>
@@ -316,7 +316,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
             </Link>
           }
         >
-          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {worlds.map((w) => {
               const mods = outline.modules.filter((m) => w.modules.includes(m.number)).sort((a, b) => w.modules.indexOf(a.number) - w.modules.indexOf(b.number));
               const ls = mods.flatMap((m) => m.lessons);
@@ -377,7 +377,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
         {weak.length > 0 && (
           <DashCard id="revision-title" title="Suggested revision" icon={<RefreshCw />} color="sun" className="border-sun/60 bg-gradient-to-br from-sun-soft/70 to-card">
             <p className="-mt-2 mb-3 text-sm font-semibold text-muted-foreground">Based on your quiz answers, these topics could use another look. Everyone needs a second pass sometimes!</p>
-            <ul className="grid gap-2.5 sm:grid-cols-2">
+            <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
               {weak.map((w) => (
                 <li key={w.concept}>
                   <Link href={`/learn/${conceptLessons[w.concept].id}`} className="press flex items-center justify-between gap-2 rounded-2xl border-2 border-border bg-card p-3 text-sm [--press-shadow:var(--border)] hover:bg-surface-2">
@@ -394,7 +394,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
         )}
 
         {/* --------------------- activity, quizzes, calendar --------------------- */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <DashCard id="recent-title" title="Recent activity" icon={<History />} color="sky">
             <Tabs defaultValue="visited">
               <TabsList className="mb-3 w-full">
@@ -519,7 +519,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
         </DashCard>
 
         {/* --------------------- saved code, bookmarks, notes --------------------- */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <DashCard id="saved-title" title={`Saved code (${s.snippets.length})`} icon={<Code2 />} color="primary">
             {s.snippets.length === 0 ? (
               <p className="text-sm font-semibold text-muted-foreground">Use the save button (or Ctrl+S) in any code editor to keep code here.</p>

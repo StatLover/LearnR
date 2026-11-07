@@ -50,13 +50,14 @@ import { analyzeParseError, analyzeRun, outputChecks, staticChecks, type Analysi
 import { verifyFix, type VerifiedFix } from "@/lib/errors/fix-loop";
 import { definedFunctions } from "@/lib/errors/helpers";
 import { significant, tokenize } from "@/lib/r/tokens";
-import { aiStatus, codeMessage, tutor } from "@/lib/ai/tutor-store";
+import { AI_NEEDS_SERVER, aiStatus, codeMessage, tutor } from "@/lib/ai/tutor-store";
 import { progress } from "@/lib/store/progress";
 import { useSettings } from "@/lib/store/settings";
 import { useResolvedTheme } from "@/hooks/use-theme";
 import { useRSession } from "@/hooks/use-r-session";
 import type { HexyMood } from "@/components/brand/mascot";
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/base-path";
 
 const EXAMPLES: { label: string; code: string; icon: LucideIcon; color: string }[] = [
   { label: "Object not found", code: "numbers <- c(10, 20, 30)\nmean(number)", icon: SearchX, color: "coral" },
@@ -292,13 +293,17 @@ export function ErrorChecker() {
       ds = out.ds;
     }
     if (!aiConfigured) {
-      setAiError("AI explanations are not configured on this server (the site owner needs to set ANTHROPIC_API_KEY). The rule-based analysis above is based on what R reported.");
+      setAiError(
+        AI_NEEDS_SERVER
+          ? "AI explanations need a server, and this copy of R Academy is a static site. The rule-based analysis above is based on what R reported."
+          : "AI explanations are not configured on this server (the site owner needs to set ANTHROPIC_API_KEY). The rule-based analysis above is based on what R reported.",
+      );
       return null;
     }
     setBusy("ai");
     setAiError(null);
     try {
-      const res = await fetch("/api/ai/analyze", {
+      const res = await fetch(withBase("/api/ai/analyze"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

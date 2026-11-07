@@ -9,6 +9,7 @@ import { rSession } from "../r/session";
 import { transcript } from "../r/console";
 import { progress, progressStore } from "../store/progress";
 import { settingsStore, type TutorMode } from "../store/settings";
+import { STATIC_EXPORT, withBase } from "../base-path";
 
 type Block = Record<string, unknown> & { type: string };
 export interface ChatMessage {
@@ -81,7 +82,7 @@ export interface TutorContext {
 
 async function requestTurn(messages: ChatMessage[], ctx: TutorContext, onText: (t: string) => void, signal: AbortSignal) {
   const p = progressStore.get();
-  const res = await fetch("/api/ai/chat", {
+  const res = await fetch(withBase("/api/ai/chat"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     signal,
@@ -210,9 +211,21 @@ export const tutor = {
   },
 };
 
+/**
+ * True when this copy of the site is a static export (GitHub Pages): there is
+ * no server, so there is nowhere to keep an API key secret and the AI
+ * endpoints don't exist. The AI features then explain that they need a server.
+ */
+export const AI_NEEDS_SERVER = STATIC_EXPORT;
+
 let statusPromise: Promise<{ configured: boolean; model: string | null }> | null = null;
 export function aiStatus() {
-  if (!statusPromise) statusPromise = fetch("/api/ai/status").then((r) => r.json()).catch(() => ({ configured: false, model: null }));
+  if (!statusPromise)
+    statusPromise = AI_NEEDS_SERVER
+      ? Promise.resolve({ configured: false, model: null })
+      : fetch(withBase("/api/ai/status"))
+          .then((r) => r.json())
+          .catch(() => ({ configured: false, model: null }));
   return statusPromise;
 }
 

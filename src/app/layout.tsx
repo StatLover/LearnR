@@ -8,13 +8,14 @@ import { Footer } from "@/components/layout/footer";
 import { Providers } from "@/components/layout/providers";
 import { themeBootScript } from "@/lib/store/theme-script";
 import { getOutline } from "@/content/outline";
+import { withBase } from "@/lib/base-path";
 
 export const metadata: Metadata = {
   title: { default: "R Academy – Learn R. Write Code. Unlock Your Potential.", template: "%s · R Academy" },
   description:
     "Learn R programming as an adventure: bite-sized interactive lessons, real R running in your browser, XP and levels, daily challenges, an Error Detective and a friendly AI tutor.",
   applicationName: "R Academy",
-  icons: { icon: "/icon.svg" },
+  icons: { icon: withBase("/icon.svg") },
 };
 
 export const viewport: Viewport = {

@@ -19,6 +19,7 @@ import { cn, todayKey } from "@/lib/utils";
 import { exerciseMeta, formatDay } from "./daily-meta";
 import { MidnightCountdown } from "./countdown";
 import { useMounted } from "./use-mounted";
+import { withBase } from "@/lib/base-path";
 
 function HeroPill({ icon, children, tone }: { icon: ReactNode; children: ReactNode; tone: "sun" | "sky" | "tangerine" }) {
   const tile = { sun: "bg-sun text-[#3b2600]", sky: "bg-sky text-white", tangerine: "bg-tangerine text-white" }[tone];
@@ -98,7 +99,7 @@ export function DailyChallenge() {
   useEffect(() => {
     if (!id) return;
     const ctrl = new AbortController();
-    fetch(`/challenge/exercise/${encodeURIComponent(id)}`, { signal: ctrl.signal })
+    fetch(withBase(`/challenge/exercise/${encodeURIComponent(id)}`), { signal: ctrl.signal })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`The server answered ${r.status}.`))))
       .then((exercise: Exercise) => setData({ id, exercise }))
       .catch((e: unknown) => {

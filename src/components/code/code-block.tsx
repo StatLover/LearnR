@@ -37,13 +37,13 @@ export function CodeBlock({ code, runnable = true, workspace = "snippets", class
     }
   };
   return (
-    <div className={cn("not-prose my-3 overflow-hidden rounded-lg border border-border", className)}>
-      <div className="flex items-center gap-1 border-b border-border bg-surface px-2 py-1">
-        <span className="px-1 text-xs font-medium text-muted-foreground">{label ?? "R"}</span>
+    <div className={cn("@container not-prose my-3 overflow-hidden rounded-2xl border-2 border-border", className)}>
+      <div className="flex items-center gap-1 border-b-2 border-border bg-surface-2/70 px-2 py-1">
+        <span className="rounded-md bg-primary px-1.5 py-0.5 font-mono text-[11px] font-bold text-white">{label ?? "R"}</span>
         <div className="ml-auto flex gap-0.5">
           {runnable && (
             <Button size="sm" variant="ghost" onClick={run} disabled={running} aria-label="Run this code">
-              {running ? <Loader2 className="animate-spin" /> : <Play />} Run
+              {running ? <Loader2 className="animate-spin" /> : <Play />} <span className="hidden @[17rem]:inline">Run</span>
             </Button>
           )}
           <Button
@@ -57,7 +57,7 @@ export function CodeBlock({ code, runnable = true, workspace = "snippets", class
               }
             }}
           >
-            {copied ? <Check className="text-success" /> : <Copy />} {copied ? "Copied" : "Copy"}
+            {copied ? <Check className="text-success" /> : <Copy />} <span className="hidden @[17rem]:inline">{copied ? "Copied" : "Copy"}</span>
           </Button>
           {runnable && (
             <Button
@@ -69,14 +69,14 @@ export function CodeBlock({ code, runnable = true, workspace = "snippets", class
                 router.push("/playground");
               }}
             >
-              <ExternalLink /> Playground
+              <ExternalLink /> <span className="hidden @[17rem]:inline">Playground</span>
             </Button>
           )}
         </div>
       </div>
       <StaticCode code={code} />
       {result && (
-        <div className="border-t border-border">
+        <div className="border-t-2 border-border">
           <ConsoleView lines={result.lines} empty="(This code printed nothing.)" maxHeight={280} />
           {result.images.length > 0 && <PlotGallery images={result.images} />}
         </div>

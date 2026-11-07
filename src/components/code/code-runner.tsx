@@ -19,6 +19,7 @@ import {
   Sparkles,
   Check,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { CodeEditor, type CodeEditorHandle, type LineMark } from "./code-editor";
 import { ConsoleView, DataViewer, EnvironmentPane, PlotGallery } from "./output-panels";
 import { Button } from "@/components/ui/button";
@@ -243,20 +244,38 @@ export function CodeRunner({
   const loadingR = session.status === "loading";
   const editorMin = editorMinHeight ?? (compact ? 60 : variant === "panel" ? 160 : 240);
 
+  const status = last?.info?.status ?? (last ? last.status : null);
+  const errLine = last?.info?.error?.line_start ?? last?.info?.parse_error?.line ?? null;
+  const router = useRouter();
+  const findMistake = () => {
+    try {
+      sessionStorage.setItem("ra-check-code", editor.current?.getValue() ?? code);
+      sessionStorage.setItem("ra-check-auto", "1");
+    } catch {
+      /* ignore */
+    }
+    router.push("/error-checker");
+  };
+
   return (
-    <div className={cn("flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card", className)}>
-      <div className="flex flex-wrap items-center gap-1 border-b border-border bg-surface px-2 py-1.5">
-        <Button size="sm" onClick={() => void run()} disabled={running} aria-label="Run code (Ctrl+Enter)" className="mr-1">
-          {running ? <Loader2 className="animate-spin" /> : <Play />}
-          {running ? "Running" : "Run"}
+    <div className={cn("flex min-w-0 flex-col overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]", className)}>
+      <div className="flex flex-wrap items-center gap-1.5 border-b-2 border-border bg-surface-2/70 px-3 py-2">
+        <span className="mr-1 hidden items-center gap-1.5 sm:flex" aria-hidden>
+          <span className="size-3 rounded-full bg-coral" />
+          <span className="size-3 rounded-full bg-sun" />
+          <span className="size-3 rounded-full bg-mint" />
+        </span>
+        {title && !compact && <span className="mr-1 hidden max-w-48 truncate rounded-lg bg-surface px-2.5 py-1 font-mono text-xs font-semibold text-muted-foreground md:inline">{title.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 28)}.R</span>}
+        <Button size="sm" variant="success" onClick={() => void run()} disabled={running} aria-label="Run code (Ctrl+Enter)">
+          {running ? <Loader2 className="animate-spin" /> : <Play className="fill-current" />}
+          {running ? "Running…" : "Run"}
         </Button>
         {running && (
           <Button size="sm" variant="outline" onClick={stop} aria-label="Stop running code">
             <Square /> Stop
           </Button>
         )}
-        {title && !compact && <span className="ml-1 hidden truncate text-sm font-medium text-muted-foreground sm:inline">{title}</span>}
-        <div className="ml-auto flex items-center gap-0.5">
+        <div className="ml-auto flex flex-wrap items-center justify-end gap-0.5">
           {extraToolbar}
           <IconBtn label="Reset code" onClick={reset} icon={<RotateCcw />} />
           <IconBtn label={copied ? "Copied!" : "Copy code"} onClick={copy} icon={copied ? <Check className="text-success" /> : <Copy />} />
@@ -283,9 +302,23 @@ export function CodeRunner({
       />
 
       {(lines.length > 0 || running || !compact || images.length > 0) && (
-        <Tabs value={tab} onValueChange={setTab} className="border-t border-border">
-          <div className="flex items-center gap-2 bg-surface px-2 py-1">
-            <TabsList className="bg-transparent p-0">
+        <Tabs value={tab} onValueChange={setTab} className="border-t-2 border-border">
+          {!running && status && status !== "ok" && (status === "error" || status === "parse_error") && (
+            <div role="status" className="flex flex-wrap items-center gap-2 bg-coral-soft px-4 py-2 text-sm font-semibold text-danger animate-fade-up">
+              <span aria-hidden>🔍</span>
+              <span className="min-w-0 flex-1">
+                R stopped {errLine ? `on line ${errLine}` : "with an error"} – that&apos;s normal while learning! Read the message below{onAskTutor ? ", ask the tutor," : ""} or let the Error Detective explain it.
+              </span>
+              <Button size="sm" variant="outline" onClick={findMistake}>Find my mistake</Button>
+            </div>
+          )}
+          {!running && status === "ok" && (last?.info?.warnings.length ?? 0) === 0 && (
+            <div role="status" className="flex items-center gap-2 bg-mint-soft px-4 py-1.5 text-xs font-bold text-success animate-fade-up">
+              <Check className="size-4" /> Ran successfully in {((last?.elapsedMs ?? 0) / 1000).toFixed(2)} s
+            </div>
+          )}
+          <div className="flex items-center gap-2 bg-surface-2/60 px-2 py-1.5">
+            <TabsList className="no-scrollbar min-w-0 max-w-full overflow-x-auto bg-transparent p-0">
               <TabsTrigger value="console">
                 <Terminal /> Console
               </TabsTrigger>
@@ -298,13 +331,13 @@ export function CodeRunner({
                     <Table2 /> Data{tables.length ? ` (${tables.length})` : ""}
                   </TabsTrigger>
                   <TabsTrigger value="env">
-                    <Boxes /> Environment
+                    <Boxes /> Variables
                   </TabsTrigger>
                 </>
               )}
             </TabsList>
-            <span className="ml-auto truncate text-xs text-muted-foreground" aria-live="polite">
-              {loadingR ? session.message : running ? "" : last ? `Ran in ${(last.elapsedMs / 1000).toFixed(2)} s` : session.status === "ready" ? "R is ready" : "R starts when you press Run"}
+            <span className="ml-auto min-w-0 truncate text-xs font-semibold text-muted-foreground" aria-live="polite">
+              {loadingR ? session.message : running ? "" : session.status === "ready" ? "R is ready" : "R starts when you press Run"}
             </span>
           </div>
           <TabsContent value="console">

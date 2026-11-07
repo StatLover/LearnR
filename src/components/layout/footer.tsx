@@ -1,46 +1,43 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Hexy } from "@/components/brand/mascot";
+import { isFocusRoute } from "./header";
+
+const COLS = [
+  { title: "Learn", links: [["/learn", "Learning map"], ["/exercises", "Practice & daily challenge"], ["/projects", "Projects"], ["/dashboard", "My dashboard"]] },
+  { title: "Tools", links: [["/playground", "R Playground"], ["/error-checker", "Error Detective"], ["/tutor", "AI Tutor"], ["/visualize", "R Labs"]] },
+  { title: "Reference", links: [["/reference", "Functions"], ["/cheatsheets", "Cheat sheets"], ["/glossary", "Glossary"], ["/datasets", "Datasets"]] },
+];
 
 export function Footer() {
+  const pathname = usePathname();
+  if (isFocusRoute(pathname)) return null;
   return (
-    <footer className="border-t border-border bg-surface">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 text-sm sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="relative mt-16 overflow-hidden border-t-2 border-border bg-surface pb-24 lg:pb-0">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
-          <p className="flex items-center gap-2 font-semibold">
-            <span className="grid size-7 place-items-center rounded-md bg-primary text-xs font-bold text-primary-foreground">R</span> R Academy
-          </p>
-          <p className="mt-2 text-muted-foreground">Learn R from zero – an interactive textbook, coding classroom and AI tutor in one place.</p>
+          <Link href="/" className="flex items-center gap-2 font-display text-2xl font-bold">
+            <Hexy size={44} mood="wave" /> <span><span className="text-primary">R</span> Academy</span>
+          </Link>
+          <p className="mt-3 max-w-xs text-sm text-muted-foreground">Learn R by playing with it: bite-sized lessons, real R in your browser, challenges, XP and a friendly AI tutor.</p>
         </div>
-        <div>
-          <p className="font-semibold">Learn</p>
-          <ul className="mt-2 space-y-1.5 text-muted-foreground">
-            <li><Link className="hover:text-foreground" href="/learn">Learning path</Link></li>
-            <li><Link className="hover:text-foreground" href="/exercises">Exercises & challenges</Link></li>
-            <li><Link className="hover:text-foreground" href="/projects">Projects</Link></li>
-            <li><Link className="hover:text-foreground" href="/dashboard">Your dashboard</Link></li>
-          </ul>
-        </div>
-        <div>
-          <p className="font-semibold">Tools</p>
-          <ul className="mt-2 space-y-1.5 text-muted-foreground">
-            <li><Link className="hover:text-foreground" href="/playground">R playground</Link></li>
-            <li><Link className="hover:text-foreground" href="/error-checker">Error checker</Link></li>
-            <li><Link className="hover:text-foreground" href="/tutor">AI tutor</Link></li>
-            <li><Link className="hover:text-foreground" href="/visualize">Visualization lab</Link></li>
-          </ul>
-        </div>
-        <div>
-          <p className="font-semibold">Reference</p>
-          <ul className="mt-2 space-y-1.5 text-muted-foreground">
-            <li><Link className="hover:text-foreground" href="/reference">Function reference</Link></li>
-            <li><Link className="hover:text-foreground" href="/cheatsheets">Cheat sheets</Link></li>
-            <li><Link className="hover:text-foreground" href="/glossary">Glossary</Link></li>
-            <li><Link className="hover:text-foreground" href="/datasets">Datasets</Link></li>
-          </ul>
-        </div>
+        {COLS.map((c) => (
+          <div key={c.title}>
+            <p className="font-display text-sm font-semibold uppercase tracking-wider text-primary">{c.title}</p>
+            <ul className="mt-3 space-y-2 text-sm font-semibold">
+              {c.links.map(([href, label]) => (
+                <li key={href}>
+                  <Link className="text-muted-foreground hover:text-foreground" href={href}>{label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-      <div className="border-t border-border">
-        <p className="mx-auto max-w-7xl px-4 py-4 text-xs text-muted-foreground">
-          R code runs entirely in your browser using webR (R compiled to WebAssembly) – nothing you run is sent to our server. Sample datasets are synthetic and for learning only.
+      <div className="border-t-2 border-border">
+        <p className="mx-auto max-w-7xl px-5 py-4 text-xs font-semibold text-muted-foreground">
+          R runs entirely in your browser with webR (R compiled to WebAssembly) – your code is never sent to our server. Sample datasets are synthetic and for learning only.
         </p>
       </div>
     </footer>

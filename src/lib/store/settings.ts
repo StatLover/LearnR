@@ -17,7 +17,10 @@ export interface Settings {
   /** Seconds before running code is stopped automatically. */
   runTimeout: number;
   reduceMotion: "system" | "on";
-  dailyGoalMinutes: number;
+  /** Daily XP goal. */
+  dailyGoalXp: number;
+  /** Confetti and celebration animations. */
+  celebrations: boolean;
 }
 
 export const defaultSettings: Settings = {
@@ -31,7 +34,8 @@ export const defaultSettings: Settings = {
   tutorMode: "beginner",
   runTimeout: 30,
   reduceMotion: "system",
-  dailyGoalMinutes: 20,
+  dailyGoalXp: 50,
+  celebrations: true,
 };
 
 import { SETTINGS_KEY } from "./theme-script";

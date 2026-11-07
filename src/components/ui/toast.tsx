@@ -35,14 +35,14 @@ export function Toaster() {
     () => EMPTY,
   );
   return (
-    <div aria-live="polite" role="status" className="pointer-events-none fixed bottom-4 right-4 z-[70] flex w-[min(92vw,360px)] flex-col gap-2">
+    <div aria-live="polite" role="status" className="pointer-events-none fixed bottom-20 right-4 z-[70] lg:bottom-4 flex w-[min(92vw,360px)] flex-col gap-2">
       {list.map((t) => {
         const Icon = t.tone === "success" ? CheckCircle2 : t.tone === "warning" ? AlertTriangle : Info;
         return (
-          <div key={t.id} className="pointer-events-auto flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-xl animate-fade-up">
+          <div key={t.id} className="pointer-events-auto flex items-start gap-3 rounded-2xl border-2 border-border bg-surface p-3.5 shadow-[var(--shadow-pop)] animate-pop-in">
             <Icon className={cn("mt-0.5 size-5 shrink-0", t.tone === "success" ? "text-success" : t.tone === "warning" ? "text-warning" : "text-info")} />
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold">{t.title}</p>
+              <p className="font-display text-[15px] font-semibold">{t.title}</p>
               {t.description && <p className="mt-0.5 text-sm text-muted-foreground">{t.description}</p>}
             </div>
             <button onClick={() => dismiss(t.id)} className="rounded p-0.5 text-muted-foreground hover:text-foreground cursor-pointer" aria-label="Dismiss notification">

@@ -301,7 +301,7 @@ Error in sqrt("49") : non-numeric argument to mathematical function
             "Read the message after the colon. What is R complaining about?",
             "Look at the code mentioned in the message (or the line number) and check spelling, capitals, quotes, commas and parentheses.",
             "Change **one** thing and run the code again.",
-            "Still stuck? Paste your code into the **Error Checker** page of this site, which explains R errors in plain English, or ask the AI tutor.",
+            "Still stuck? Paste your code into the **Error Detective** page of this site, which explains R errors in plain English, or ask the AI tutor.",
           ],
         },
         {
@@ -420,8 +420,8 @@ price * 2`,
         {
           kind: "callout",
           tone: "info",
-          title: "The Error Checker",
-          md: `R Academy has an **Error Checker** page: paste any code that gives an error and it highlights the problem line and explains the message in plain English, with suggestions for fixing it.`,
+          title: "The Error Detective",
+          md: `R Academy has an **Error Detective** page: paste any code that gives an error and it highlights the problem line and explains the message in plain English, with suggestions for fixing it.`,
         },
         {
           kind: "question",

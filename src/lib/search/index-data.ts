@@ -16,12 +16,13 @@ export interface SearchDoc {
   meta?: string;
 }
 
-const strip = (md: string) => md.replace(/[`*_#>\[\]()]/g, " ").replace(/\s+/g, " ").trim();
+// Markdown punctuation is removed, but ">" stays (it is part of R operators such as %>% and |>); only quote markers at line starts go.
+const strip = (md: string) => md.replace(/^\s*>\s?/gm, "").replace(/[`*_#\[\]()]/g, " ").replace(/\s+/g, " ").trim();
 
 const PAGES: SearchDoc[] = [
   { id: "p-learn", type: "Page", title: "Learning Path", text: "all modules course curriculum roadmap stages", href: "/learn" },
   { id: "p-play", type: "Page", title: "R Code Playground", text: "write and run R code editor console upload csv", href: "/playground" },
-  { id: "p-err", type: "Page", title: "R Code Error Checker", text: "debug fix error message explain my error syntax", href: "/error-checker" },
+  { id: "p-err", type: "Page", title: "R Error Detective", text: "error checker debug fix error message explain my error syntax find my error", href: "/error-checker" },
   { id: "p-tutor", type: "Page", title: "AI Tutor", text: "ask questions chat assistant help hint explain", href: "/tutor" },
   { id: "p-ex", type: "Page", title: "Exercises and Challenges", text: "practice coding problems", href: "/exercises" },
   { id: "p-proj", type: "Page", title: "Projects", text: "real world data analysis projects capstone", href: "/projects" },

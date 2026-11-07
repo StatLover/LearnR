@@ -2,131 +2,165 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import {
-  BookOpen,
   Bug,
   ChevronDown,
   Code2,
   Dumbbell,
+  FlaskConical,
+  Flame,
   FolderKanban,
-  GraduationCap,
   LayoutDashboard,
   Library,
-  Menu,
-  Monitor,
-  Moon,
+  Map as MapIcon,
   Search,
   Settings,
   Sparkles,
-  Sun,
-  X,
+  Zap,
   FileText,
   BookA,
   Database,
-  BarChart3,
+  Moon,
+  Sun,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown";
+import { Hexy } from "@/components/brand/mascot";
 import { Tooltip } from "@/components/ui/tooltip";
-import { updateSettings, useSettings, type ThemePref } from "@/lib/store/settings";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown";
+import { useGame } from "@/components/game/outline-context";
 import { useRSession } from "@/hooks/use-r-session";
-import { rSession } from "@/lib/r/session";
+import { useResolvedTheme } from "@/hooks/use-theme";
+import { updateSettings } from "@/lib/store/settings";
 import { cn } from "@/lib/utils";
 import { openSearch } from "./search-dialog";
 
-const NAV = [
-  { href: "/learn", label: "Learn", icon: GraduationCap },
-  { href: "/playground", label: "Playground", icon: Code2 },
-  { href: "/error-checker", label: "Error Checker", icon: Bug },
-  { href: "/tutor", label: "AI Tutor", icon: Sparkles },
+export const NAV = [
+  { href: "/learn", label: "Learn", icon: MapIcon },
   { href: "/exercises", label: "Practice", icon: Dumbbell },
-  { href: "/projects", label: "Projects", icon: FolderKanban },
+  { href: "/playground", label: "Playground", icon: Code2 },
+  { href: "/error-checker", label: "Error Detective", short: "Debug", icon: Bug },
+  { href: "/tutor", label: "AI Tutor", short: "Tutor", icon: Sparkles },
 ];
 
-const REFERENCE = [
-  { href: "/reference", label: "Function Reference", icon: Library, desc: "Searchable R functions with examples" },
-  { href: "/cheatsheets", label: "Cheat Sheets", icon: FileText, desc: "Quick references for everyday R" },
-  { href: "/glossary", label: "Glossary", icon: BookA, desc: "Programming & statistics terms explained" },
-  { href: "/datasets", label: "Datasets", icon: Database, desc: "Sample data you can use anywhere" },
-  { href: "/visualize", label: "Visualization Lab", icon: BarChart3, desc: "Experiment with charts" },
+export const MORE = [
+  { href: "/projects", label: "Projects", icon: FolderKanban, desc: "Guided real-world data adventures" },
+  { href: "/visualize", label: "R Labs", icon: FlaskConical, desc: "Interactive simulations powered by R" },
+  { href: "/reference", label: "Function Reference", icon: Library, desc: "Every function explained simply" },
+  { href: "/cheatsheets", label: "Cheat Sheets", icon: FileText, desc: "Quick, copy-ready references" },
+  { href: "/glossary", label: "Glossary", icon: BookA, desc: "Coding & stats words in plain English" },
+  { href: "/datasets", label: "Datasets", icon: Database, desc: "Data to explore and practise with" },
 ];
 
-function RStatus() {
-  const s = useRSession();
-  const color =
-    s.status === "ready" ? "bg-success" : s.status === "busy" ? "bg-accent animate-pulse" : s.status === "loading" ? "bg-warning animate-pulse" : s.status === "error" ? "bg-danger" : "bg-muted-foreground/50";
-  const label =
-    s.status === "idle" ? "R not started – click to start" : s.status === "busy" ? "R is running code" : s.message;
+/** True on the full-screen lesson player, where the site chrome is hidden. */
+export function isFocusRoute(pathname: string) {
+  return /^\/learn\/(?!module\/)[^/]+$/.test(pathname);
+}
+
+export function ThemeSwitch({ className }: { className?: string }) {
+  const theme = useResolvedTheme();
+  const dark = theme === "dark";
+  const toggle = () => {
+    const root = document.documentElement;
+    root.classList.add("theme-transition");
+    updateSettings({ theme: dark ? "light" : "dark" });
+    window.setTimeout(() => root.classList.remove("theme-transition"), 450);
+  };
   return (
-    <Tooltip content={label}>
-      <button
-        onClick={() => s.status === "idle" || s.status === "error" ? void rSession.ensure().catch(() => {}) : undefined}
-        className="hidden items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium text-muted-foreground hover:bg-surface-2 md:inline-flex cursor-pointer"
-        aria-label={`R status: ${label}`}
-      >
-        <span className={cn("size-2 rounded-full", color)} aria-hidden />
-        R
-      </button>
-    </Tooltip>
+    <button
+      onClick={toggle}
+      role="switch"
+      aria-checked={dark}
+      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+      className={cn("relative inline-flex h-9 w-16 shrink-0 items-center rounded-full border-2 border-border bg-surface-2 p-0.5 transition-colors cursor-pointer", className)}
+    >
+      <Sun className={cn("absolute left-2 size-4 transition-opacity", dark ? "opacity-40" : "opacity-0")} aria-hidden />
+      <Moon className={cn("absolute right-2 size-4 transition-opacity", dark ? "opacity-0" : "opacity-40")} aria-hidden />
+      <span className={cn("grid size-7 place-items-center rounded-full shadow-md transition-all duration-300", dark ? "translate-x-7 bg-grape text-white" : "translate-x-0 bg-sun text-[#3b2600]")}>
+        {dark ? <Moon className="size-4" aria-hidden /> : <Sun className="size-4" aria-hidden />}
+      </span>
+    </button>
   );
 }
 
-function ThemeMenu() {
-  const { theme } = useSettings();
-  const Icon = theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;
+function StatChips() {
+  const g = useGame();
+  return (
+    <div className="flex items-center gap-1.5">
+      <Tooltip content={g.streak ? `${g.streak}-day streak – keep it going!` : "Learn today to start a streak"}>
+        <Link href="/dashboard" className={cn("flex h-9 items-center gap-1 rounded-xl px-2 font-display text-sm font-semibold hover:bg-surface-2", g.streak ? "text-tangerine" : "text-muted-foreground")} aria-label={`Streak: ${g.streak} days`}>
+          <Flame className={cn("size-5", g.streak && "fill-current")} />
+          {g.streak}
+        </Link>
+      </Tooltip>
+      <Tooltip content={`${g.todayXp} of ${g.goalXp} XP today`}>
+        <Link href="/dashboard" className="flex h-9 items-center gap-1 rounded-xl px-2 font-display text-sm font-semibold text-warning hover:bg-surface-2" aria-label={`${g.xp} XP in total`}>
+          <Zap className="size-5 fill-sun text-sun" />
+          {g.xp.toLocaleString()}
+        </Link>
+      </Tooltip>
+    </div>
+  );
+}
+
+function ProfileMenu() {
+  const g = useGame();
   return (
     <DropdownMenu>
-      <Tooltip content="Theme">
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label={`Theme: ${theme}. Change theme`}>
-            <Icon />
-          </Button>
-        </DropdownMenuTrigger>
-      </Tooltip>
-      <DropdownMenuContent>
-        <DropdownMenuRadioGroup value={theme} onValueChange={(v) => updateSettings({ theme: v as ThemePref })}>
-          <DropdownMenuRadioItem value="light">
-            <Sun /> Light
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="dark">
-            <Moon /> Dark
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="system">
-            <Monitor /> System
-          </DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
+      <DropdownMenuTrigger className="group relative grid size-10 place-items-center cursor-pointer" aria-label={`Level ${g.level.level} ${g.level.title}. Open your menu`}>
+        <svg viewBox="0 0 40 44" className="absolute inset-0 size-10" aria-hidden>
+          <path d="M20 3 L36 12 L36 32 L20 41 L4 32 L4 12 Z" fill="var(--primary)" stroke="var(--primary-shadow)" strokeWidth="2.5" strokeLinejoin="round" />
+        </svg>
+        <span className="relative font-display text-sm font-bold text-white">{g.level.level}</span>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-64">
+        <DropdownMenuLabel className="px-3 py-2">
+          <span className="block font-display text-base font-semibold text-foreground">Level {g.level.level} · {g.level.title}</span>
+          <span className="mt-1 block h-2 overflow-hidden rounded-full bg-surface-3">
+            <span className="block h-full rounded-full bg-sun" style={{ width: `${g.level.pct}%` }} />
+          </span>
+          <span className="mt-1 block text-xs">{(g.level.next - g.xp).toLocaleString()} XP to level {g.level.level + 1}</span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/dashboard"><LayoutDashboard /> My dashboard</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/settings"><Settings /> Settings</Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        {MORE.map((m) => (
+          <DropdownMenuItem key={m.href} asChild className="lg:hidden">
+            <Link href={m.href}><m.icon /> {m.label}</Link>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
+function RDot() {
+  const s = useRSession();
+  const color = s.status === "ready" ? "bg-mint" : s.status === "busy" ? "bg-sky animate-pulse" : s.status === "loading" ? "bg-sun animate-pulse" : s.status === "error" ? "bg-coral" : "bg-border-strong";
+  return (
+    <Tooltip content={s.status === "idle" ? "R starts when you run code" : s.status === "busy" ? "R is running your code" : s.message}>
+      <span className="hidden items-center gap-1.5 rounded-xl px-2 py-1 text-xs font-bold text-muted-foreground xl:inline-flex" aria-label={`R status: ${s.message}`}>
+        <span className={cn("size-2.5 rounded-full", color)} aria-hidden /> R
+      </span>
+    </Tooltip>
+  );
+}
+
 export function Header() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const [openedAt, setOpenedAt] = useState(pathname);
-  // Close the mobile menu after navigating (adjusting state during render, as React recommends).
-  if (open && openedAt !== pathname) {
-    setOpen(false);
-    setOpenedAt(pathname);
-  }
+  if (isFocusRoute(pathname)) return null;
   const active = (href: string) => pathname === href || pathname.startsWith(href + "/");
-  const refActive = REFERENCE.some((r) => active(r.href));
-
+  const moreActive = MORE.some((m) => active(m.href));
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="mx-auto flex h-[var(--header-h)] max-w-[1600px] items-center gap-2 px-4">
-        <Link href="/" className="mr-3 flex items-center gap-2 font-semibold" aria-label="R Academy home">
-          <span className="grid size-8 place-items-center rounded-lg bg-primary font-bold text-primary-foreground shadow-sm">R</span>
-          <span className="hidden text-[15px] sm:inline">
-            R Academy
+    <header className="sticky top-0 z-40 border-b-2 border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
+      <div className="mx-auto flex h-[var(--header-h)] max-w-[1400px] items-center gap-2 px-3 sm:px-5">
+        <Link href="/" className="group mr-2 flex items-center gap-1.5" aria-label="R Academy home">
+          <Hexy size={36} className="transition-transform group-hover:-rotate-6 group-hover:scale-105" />
+          <span className="hidden font-display text-xl font-bold tracking-tight sm:inline">
+            <span className="text-primary">R</span> Academy
           </span>
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-0.5 lg:flex">
@@ -136,30 +170,26 @@ export function Header() {
               href={n.href}
               aria-current={active(n.href) ? "page" : undefined}
               className={cn(
-                "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
-                active(n.href) ? "bg-primary-soft text-primary-strong dark:text-primary" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
+                "flex items-center gap-1.5 rounded-xl px-3 py-2 font-display text-[15px] font-semibold transition-colors",
+                active(n.href) ? "bg-primary-soft text-primary" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
               )}
             >
+              <n.icon className="size-[18px]" aria-hidden />
               {n.label}
             </Link>
           ))}
           <DropdownMenu>
-            <DropdownMenuTrigger
-              className={cn(
-                "flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer",
-                refActive ? "bg-primary-soft text-primary-strong dark:text-primary" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
-              )}
-            >
-              Resources <ChevronDown className="size-3.5" />
+            <DropdownMenuTrigger className={cn("flex items-center gap-1 rounded-xl px-3 py-2 font-display text-[15px] font-semibold cursor-pointer", moreActive ? "bg-primary-soft text-primary" : "text-muted-foreground hover:bg-surface-2 hover:text-foreground")}>
+              More <ChevronDown className="size-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-72">
-              {REFERENCE.map((r) => (
-                <DropdownMenuItem key={r.href} asChild>
-                  <Link href={r.href} className="items-start">
-                    <r.icon className="mt-0.5" />
+            <DropdownMenuContent align="start" className="w-80">
+              {MORE.map((m) => (
+                <DropdownMenuItem key={m.href} asChild className="items-start py-2.5">
+                  <Link href={m.href}>
+                    <m.icon className="mt-0.5 text-primary" />
                     <span>
-                      <span className="block font-medium">{r.label}</span>
-                      <span className="block text-xs text-muted-foreground">{r.desc}</span>
+                      <span className="block">{m.label}</span>
+                      <span className="block text-xs font-semibold text-muted-foreground">{m.desc}</span>
                     </span>
                   </Link>
                 </DropdownMenuItem>
@@ -167,59 +197,41 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         </nav>
-        <div className="ml-auto flex items-center gap-1">
-          <button
-            onClick={openSearch}
-            className="hidden h-9 items-center gap-2 rounded-lg border border-border bg-surface px-3 text-sm text-muted-foreground hover:text-foreground sm:flex cursor-pointer"
-            aria-label="Search the site (Ctrl+K)"
-          >
-            <Search className="size-4" />
-            <span className="hidden xl:inline">Search lessons, functions…</span>
-            <kbd className="hidden rounded border border-border bg-card px-1.5 font-mono text-[11px] xl:inline">Ctrl K</kbd>
+        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+          <button onClick={openSearch} className="flex h-9 items-center gap-2 rounded-xl px-2 text-muted-foreground hover:bg-surface-2 hover:text-foreground cursor-pointer xl:border-2 xl:border-border xl:bg-surface xl:px-3" aria-label="Search (Ctrl+K)">
+            <Search className="size-[18px]" />
+            <span className="hidden text-sm font-semibold xl:inline">Search</span>
+            <kbd className="hidden rounded-md bg-surface-2 px-1.5 font-mono text-[11px] xl:inline">Ctrl K</kbd>
           </button>
-          <Button variant="ghost" size="icon" className="sm:hidden" onClick={openSearch} aria-label="Search">
-            <Search />
-          </Button>
-          <RStatus />
-          <ThemeMenu />
-          <Tooltip content="Dashboard">
-            <Button variant="ghost" size="icon" asChild className="hidden sm:inline-flex">
-              <Link href="/dashboard" aria-label="Dashboard">
-                <LayoutDashboard />
-              </Link>
-            </Button>
-          </Tooltip>
-          <Tooltip content="Settings">
-            <Button variant="ghost" size="icon" asChild className="hidden sm:inline-flex">
-              <Link href="/settings" aria-label="Settings">
-                <Settings />
-              </Link>
-            </Button>
-          </Tooltip>
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => {
-              setOpenedAt(pathname);
-              setOpen((o) => !o);
-            }} aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "Close menu" : "Open menu"}>
-            {open ? <X /> : <Menu />}
-          </Button>
+          <RDot />
+          <StatChips />
+          <ThemeSwitch className="hidden sm:inline-flex" />
+          <ProfileMenu />
         </div>
       </div>
-      {open && (
-        <nav id="mobile-nav" aria-label="Mobile" className="border-t border-border bg-background px-4 pb-4 pt-2 lg:hidden">
-          <ul className="grid gap-1 sm:grid-cols-2">
-            {[...NAV, ...REFERENCE, { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard }, { href: "/settings", label: "Settings", icon: Settings }, { href: "/resources", label: "All resources", icon: BookOpen }].map((n) => (
-              <li key={n.href}>
-                <Link
-                  href={n.href}
-                  className={cn("flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium", active(n.href) ? "bg-primary-soft text-primary-strong dark:text-primary" : "hover:bg-surface-2")}
-                >
-                  <n.icon className="size-4 text-muted-foreground" /> {n.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
     </header>
+  );
+}
+
+/** Duolingo-style bottom tab bar on phones and small tablets. */
+export function MobileNav() {
+  const pathname = usePathname();
+  if (isFocusRoute(pathname)) return null;
+  const active = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  return (
+    <nav aria-label="Mobile navigation" className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
+      <ul className="mx-auto grid max-w-lg grid-cols-5">
+        {NAV.map((n) => (
+          <li key={n.href}>
+            <Link href={n.href} aria-current={active(n.href) ? "page" : undefined} className={cn("flex flex-col items-center gap-0.5 py-2 text-[11px] font-bold", active(n.href) ? "text-primary" : "text-muted-foreground")}>
+              <span className={cn("grid h-8 w-12 place-items-center rounded-xl transition-colors", active(n.href) && "bg-primary-soft")}>
+                <n.icon className="size-5" />
+              </span>
+              {n.short ?? n.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }

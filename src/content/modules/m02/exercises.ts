@@ -354,7 +354,7 @@ print(badge)`,
     concepts: ["error-messages", "case-sensitivity", "type-conversion"],
     prompt: `This program should work out the cost of 4 notebooks at 12.50 each, take off a discount of 5, and print \`"You pay 45"\`. But it contains **three bugs**.
 
-Run it, read the first error message, fix that bug and run again – repeat until the program works. Each error message tells you what is wrong. (Stuck? Try the Error Checker page.)`,
+Run it, read the first error message, fix that bug and run again – repeat until the program works. Each error message tells you what is wrong. (Stuck? Try the Error Detective page.)`,
     starterCode: `# Fix the bugs so the whole program runs.
 item_price <- "12.5"
 quantity <- 4

@@ -24,6 +24,7 @@ import {
   type RunResult,
   type TestResult,
 } from "./console";
+import { withBase } from "../base-path";
 
 export type SessionStatus = "idle" | "loading" | "ready" | "busy" | "error";
 
@@ -46,7 +47,7 @@ export interface RunOptions {
   onSystem?: (line: ConsoleLine) => void;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_WEBR_BASE_URL || "/webr/";
+const BASE_URL = process.env.NEXT_PUBLIC_WEBR_BASE_URL || withBase("/webr/");
 const REPO_URL = process.env.NEXT_PUBLIC_WEBR_REPO_URL || "https://repo.r-wasm.org/";
 
 /** Packages whose names are commonly mistyped or that need a hint. */
@@ -103,7 +104,7 @@ class RSession {
       }
       await Promise.all(
         csvDatasets.map(async (d) => {
-          const res = await fetch(`/${d.path}`);
+          const res = await fetch(withBase(`/${d.path}`));
           if (!res.ok) return;
           const buf = new Uint8Array(await res.arrayBuffer());
           await webR.FS.writeFile(`/home/web_user/${d.path}`, buf);

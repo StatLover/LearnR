@@ -28,7 +28,7 @@ import { Markdown } from "@/components/content/markdown";
 import { StaticCode } from "@/components/code/static-code";
 import { PlotGallery } from "@/components/code/output-panels";
 import { Hexy, HexyAvatar, type HexyMood } from "@/components/brand/mascot";
-import { aiStatus, tutor, useTutor, type ChatMessage, type ToolRun } from "@/lib/ai/tutor-store";
+import { AI_NEEDS_SERVER, aiStatus, tutor, useTutor, type ChatMessage, type ToolRun } from "@/lib/ai/tutor-store";
 import { updateSettings, useSettings, type TutorMode } from "@/lib/store/settings";
 import { cn } from "@/lib/utils";
 import { LESSON_ACTION, matchAction, QUICK_ACTIONS, SEND_CODE_ACTION, type Availability, type QuickAction, type QuickContext } from "./quick-actions";
@@ -261,13 +261,22 @@ function NotConfigured({ compact }: { compact?: boolean }) {
       </div>
       <p className="mt-3 font-bold">To wake Hexy up, the site owner needs to:</p>
       <ol className="mt-2 space-y-2">
-        {[
-          <>Get an API key from the Anthropic Console.</>,
-          <>
-            Add it to the server&apos;s environment as <code className="rounded bg-surface px-1 font-mono text-[12px]">ANTHROPIC_API_KEY</code> – for example in <code className="rounded bg-surface px-1 font-mono text-[12px]">.env.local</code> (see <code className="rounded bg-surface px-1 font-mono text-[12px]">.env.example</code>).
-          </>,
-          <>Restart the server.</>,
-        ].map((step, i) => (
+        {(AI_NEEDS_SERVER
+          ? [
+              <>Know that this copy is a static site (for example GitHub Pages). It has no server, so it has nowhere to keep an API key secret.</>,
+              <>Deploy the same code to a Node.js host such as Vercel (see the README).</>,
+              <>
+                Set <code className="rounded bg-surface px-1 font-mono text-[12px]">ANTHROPIC_API_KEY</code> in that host&apos;s environment settings.
+              </>,
+            ]
+          : [
+              <>Get an API key from the Anthropic Console.</>,
+              <>
+                Add it to the server&apos;s environment as <code className="rounded bg-surface px-1 font-mono text-[12px]">ANTHROPIC_API_KEY</code> – for example in <code className="rounded bg-surface px-1 font-mono text-[12px]">.env.local</code> (see <code className="rounded bg-surface px-1 font-mono text-[12px]">.env.example</code>).
+              </>,
+              <>Restart the server.</>,
+            ]
+        ).map((step, i) => (
           <li key={i} className="flex gap-2.5">
             <span className="grid size-6 shrink-0 place-items-center rounded-full bg-sun font-display text-xs font-bold text-[#3b2600]" aria-hidden>
               {i + 1}

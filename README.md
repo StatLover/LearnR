@@ -47,6 +47,38 @@ npm run build
 npm start
 ```
 
+## Deploying
+
+There are two ways to put the site online.
+
+### GitHub Pages (static, free)
+
+`.github/workflows/pages.yml` builds a static export of the site and publishes it on every push to `main`.
+
+**One-time setup:** in the repository, open **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
+
+With the other option, "Deploy from a branch", GitHub runs Jekyll on the raw repository instead of building the app. That publishes this README as the homepage, not R Academy.
+
+The site is then at `https://<owner>.github.io/<repo>/`. The workflow reads that sub-path from GitHub (`NEXT_PUBLIC_BASE_PATH`), and it is empty for a custom domain. To build the same thing locally:
+
+```bash
+NEXT_PUBLIC_STATIC_EXPORT=true NEXT_PUBLIC_BASE_PATH=/LearnR npm run build
+```
+
+The result is in `out/`.
+
+What a static host can't do:
+
+- **No AI features.** There is no server to keep an API key secret, so the AI tutor and "Explain with AI" explain that they need a server. The AI routes (`route.server.ts`) are left out of the export.
+  - Lessons, exercises, real R, the rule-based Error Detective, labs and progress all work.
+- **No custom headers, so no cross-origin isolation.** webR uses its slower PostMessage channel, and the time limit stops runaway code by restarting R instead of interrupting it.
+
+### A Node.js host (full features)
+
+Deploy to a host that runs Next.js, such as Vercel, or run `npm run build && npm start` on your own server. Set `ANTHROPIC_API_KEY` there (see Configuration).
+
+Everything works, including the AI tutor, the security headers and cross-origin isolation.
+
 ## Configuration
 
 Everything is optional. Without any configuration, the lessons, the R environment, exercises, projects and the rule-based Error Detective all work. Copy `.env.example` to `.env.local` to configure the rest.

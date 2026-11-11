@@ -14,6 +14,7 @@ import { LevelBadge, levelColor, projectXp } from "@/components/projects/project
 import { Button } from "@/components/ui/button";
 import { PROJECT_ART } from "@/lib/game/worlds";
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/base-path";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ id: p.id }));
@@ -115,7 +116,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                 </div>
                 {d.source === "r-academy" && (
                   <Button asChild variant="outline" size="sm">
-                    <a href={`/${d.path}`} download>
+                    <a href={withBase(`/${d.path}`)} download>
                       <Download /> Download CSV
                     </a>
                   </Button>

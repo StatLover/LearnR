@@ -59,7 +59,7 @@ import { progress, progressStore, useProgress, type Profile } from "@/lib/store/
 import { account, syncConfigured, useSyncState } from "@/lib/sync/sync-manager";
 import { rSession } from "@/lib/r/session";
 import { useRSession } from "@/hooks/use-r-session";
-import { aiStatus } from "@/lib/ai/tutor-store";
+import { AI_NEEDS_SERVER, aiStatus } from "@/lib/ai/tutor-store";
 import { cn, downloadText } from "@/lib/utils";
 
 /* ------------------------------------------------------------------ */
@@ -682,7 +682,7 @@ export function SettingsForm() {
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-sun-soft px-2.5 py-0.5 text-warning">
-                  <TriangleAlert className="size-3.5" aria-hidden /> not configured on this server (ANTHROPIC_API_KEY is not set)
+                  <TriangleAlert className="size-3.5" aria-hidden /> {AI_NEEDS_SERVER ? "needs a server – this copy is a static site" : "not configured on this server (ANTHROPIC_API_KEY is not set)"}
                 </span>
               )}
             </p>

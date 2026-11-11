@@ -1,0 +1,75 @@
+# Builds R Academy as a static site and publishes it to GitHub Pages.
+#
+# One-time setup: repository Settings → Pages → Build and deployment →
+# Source: "GitHub Actions". (With "Deploy from a branch", GitHub runs Jekyll
+# on the raw repository instead, which publishes README.md as the homepage
+# rather than the app.)
+#
+# Pull requests only build the site, to check that the static export works.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Read the Pages base path
+        id: pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      # postinstall copies the webR runtime into public/webr.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the static site
+        run: npm run build
+        env:
+          NEXT_PUBLIC_STATIC_EXPORT: "true"
+          # "/LearnR" for https://<owner>.github.io/LearnR/, "" for a custom domain.
+          NEXT_PUBLIC_BASE_PATH: ${{ github.event_name == 'pull_request' && '/LearnR' || steps.pages.outputs.base_path }}
+
+      - name: Check the export
+        run: |
+          test -f out/index.html
+          test -f out/webr/R.wasm
+          touch out/.nojekyll
+
+      - name: Upload the site
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

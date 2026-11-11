@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { JumpNav } from "@/components/reference/jump-nav";
 import { candy, INK, type Candy } from "@/components/reference/candy";
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/base-path";
 
 export const metadata: Metadata = { title: "Sample Datasets", description: "Ready-to-use datasets for practising R: student performance, survey, sales, health, housing, weather and built-in R datasets." };
 
@@ -109,7 +110,7 @@ function DatasetCard({ d }: { d: DatasetInfo }) {
         {!builtIn && (
           <div className="mt-auto flex flex-wrap items-center gap-3 pt-1">
             <Button asChild variant="outline" size="sm">
-              <a href={`/${d.path}`} download>
+              <a href={withBase(`/${d.path}`)} download>
                 <Download /> Download CSV
               </a>
             </Button>

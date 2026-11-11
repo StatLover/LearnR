@@ -8,6 +8,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Hexy } from "@/components/brand/mascot";
 import { candy, INK, type Candy } from "@/components/reference/candy";
 import { cn } from "@/lib/utils";
+import { withBase } from "@/lib/base-path";
 
 interface SearchDoc {
   id: string;
@@ -47,7 +48,7 @@ function closeSearch() {
 let indexPromise: Promise<MiniSearch<SearchDoc>> | null = null;
 function loadIndex() {
   if (!indexPromise) {
-    indexPromise = fetch("/api/search-index")
+    indexPromise = fetch(withBase("/api/search-index"))
       .then((r) => r.json() as Promise<SearchDoc[]>)
       .then((docs) => {
         const ms = new MiniSearch<SearchDoc>({

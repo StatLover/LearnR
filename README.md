@@ -198,3 +198,5 @@ The lesson then appears automatically in navigation, search, the dashboard, the 
 - **Dark-mode plots:** dark-themed plots apply to base graphics and to ggplot2 plots that are auto-printed. A plot printed with an explicit `print(p)`, or one that sets its own colours, keeps those colours. Settings has an "Always light" option.
 - **The AI can make mistakes.** The interface reduces this: the tutor runs code before reporting what it prints, and AI fixes are run before they are shown. Rule-based explanations always come from what R actually reported.
 - **The sample datasets are synthetic** and meant for learning. The health data is not medical information.
+Website deployment update
+  

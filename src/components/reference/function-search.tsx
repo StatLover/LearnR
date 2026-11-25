@@ -51,7 +51,7 @@ function FunctionCard({ f, bookmarked }: { f: FnSummary; bookmarked: boolean }) 
             <Icon />
           </span>
           <span className={cn("truncate text-[11px] font-extrabold uppercase tracking-wider", INK)}>{f.category}</span>
-          <span className="ml-auto font-display text-xs font-semibold text-muted-foreground">
+          <span className="ml-auto font-display text-xs font-semibold text-foreground/80">
             <span className="sr-only">Card </span>#{String(f.no).padStart(3, "0")}
           </span>
         </span>
@@ -101,7 +101,7 @@ function CategoryChip({ label, count, color, icon: Icon, active, onClick }: { la
     >
       <Icon className={cn(!active && INK)} aria-hidden />
       {label}
-      <span className={cn("rounded-full px-1.5 text-xs font-bold", active ? "bg-white/25" : "bg-card/70 text-muted-foreground")}>{count}</span>
+      <span className={cn("rounded-full px-1.5 text-xs font-bold", active ? "bg-black/15 dark:bg-white/35" : "bg-card/70 text-muted-foreground")}>{count}</span>
     </button>
   );
 }

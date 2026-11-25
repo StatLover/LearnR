@@ -41,7 +41,12 @@ export { SETTINGS_KEY };
 export const settingsStore = createPersistedStore<Settings>(
   SETTINGS_KEY,
   () => ({ ...defaultSettings }),
-  (raw) => ({ ...defaultSettings, ...(typeof raw === "object" && raw ? (raw as Partial<Settings>) : {}) }),
+  (raw) => {
+    const stored = typeof raw === "object" && raw ? { ...(raw as Record<string, unknown>) } : {};
+    // Settings saved by older versions may contain the removed AI tutor's mode.
+    delete stored.tutorMode;
+    return { ...defaultSettings, ...(stored as Partial<Settings>) };
+  },
 );
 
 export function useSettings() {

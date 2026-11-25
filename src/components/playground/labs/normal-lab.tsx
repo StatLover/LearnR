@@ -69,7 +69,7 @@ function RuleDiagram() {
             {z === 0 ? "μ" : `${z > 0 ? "+" : "−"}${Math.abs(z)}σ`}
           </text>
         ))}
-        <text x={sx(0)} y="70" textAnchor="middle" fontSize="13" fontWeight="800" fill="#ffffff">68%</text>
+        <text x={sx(0)} y="70" textAnchor="middle" fontSize="13" fontWeight="800" fill="var(--on-accent)">68%</text>
         <text x={sx(-1.5)} y="88" textAnchor="middle" fontSize="10" fontWeight="800" fill="var(--foreground)">95%</text>
         <text x={sx(1.5)} y="88" textAnchor="middle" fontSize="10" fontWeight="800" fill="var(--foreground)">95%</text>
         <text x={sx(2.55)} y="80" textAnchor="middle" fontSize="9" fontWeight="800" fill="var(--muted-foreground)">99.7%</text>

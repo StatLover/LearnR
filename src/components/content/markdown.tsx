@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CodeBlock } from "@/components/code/code-block";
 import { cn } from "@/lib/utils";
 
-/** Markdown for lesson text and AI answers. R code fences become runnable code blocks. */
+/** Markdown for lesson text. R code fences become runnable code blocks. */
 export function Markdown({ children, className, runnableCode = true, workspace }: { children: string; className?: string; runnableCode?: boolean; workspace?: string }) {
   return (
     <div className={cn("prose-ra", className)}>

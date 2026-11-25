@@ -80,7 +80,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               <BookmarkToggle id={`project:${p.id}`} kind="project" title={p.title} href={`/projects/${p.id}`} />
             </div>
           </div>
-          <div className={cn("hidden overflow-hidden rounded-3xl border shadow-[var(--shadow-card)] md:block [&_svg]:block", boss ? "border-sun" : "border-border", "rotate-2")}>
+          <div className={cn("hidden overflow-hidden rounded-3xl border shadow-[var(--shadow-card)] md:block [&_svg]:block", boss ? "border-sun" : "border-border")}>
             <TopicArt kind={PROJECT_ART[p.id] ?? "table"} bg={c.soft} />
           </div>
         </div>

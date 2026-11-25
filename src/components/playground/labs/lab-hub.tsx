@@ -52,7 +52,7 @@ export function LabHub({ arts }: { arts: Record<string, ReactNode> }) {
                 style={on ? { background: `var(--${color})`, ["--press-shadow" as string]: `var(--${color}-shadow)` } : undefined}
               >
                 {t === "all" ? "All labs" : t}
-                <span className={cn("rounded-full px-1.5 text-xs", on ? "bg-white/25" : "bg-surface-2 text-muted-foreground")}>{count}</span>
+                <span className={cn("rounded-full px-1.5 text-xs", on ? "bg-black/15 dark:bg-white/35" : "bg-surface-2 text-muted-foreground")}>{count}</span>
               </button>
             );
           })}

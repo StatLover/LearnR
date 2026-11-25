@@ -126,7 +126,7 @@ export default async function ExercisePage({ params }: { params: Promise<{ id: s
               </span>
             </div>
           </div>
-          <div className="hidden w-48 shrink-0 rotate-2 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)] sm:block md:w-56 [&_svg]:block">{thumb}</div>
+          <div className="hidden w-48 shrink-0 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)] sm:block md:w-56 [&_svg]:block">{thumb}</div>
         </div>
       </header>
 

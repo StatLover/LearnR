@@ -156,7 +156,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
       <div className="mx-auto flex h-[var(--header-h)] max-w-[1400px] items-center gap-2 px-3 sm:px-5">
         <Link href="/" className="group mr-2 flex items-center gap-1.5" aria-label="R Academy home">
-          <Hexy size={36} className="transition-transform group-hover:-rotate-6 group-hover:scale-105" />
+          <Hexy size={36} className="transition-transform" />
           <span className="hidden font-display text-xl font-bold tracking-tight sm:inline">
             <span className="text-primary">R</span> Academy
           </span>

@@ -12,9 +12,8 @@ const CHIPS = [
 function Sticker({ x, y, label, fill, size = 64, rotate = 0 }: { x: number; y: number; label: string; fill: string; size?: number; rotate?: number }) {
   return (
     <g transform={`translate(${x} ${y}) rotate(${rotate}) scale(${size / 64})`}>
-      <path d="M32 2 L60 18 L60 50 L32 66 L4 50 L4 18 Z" transform="translate(0 4)" fill="#1f2933" opacity="0.15" />
-      <path d="M32 2 L60 18 L60 50 L32 66 L4 50 L4 18 Z" fill={fill} stroke="#ffffff" strokeWidth="3" strokeLinejoin="round" />
-      <text x="32" y="39" textAnchor="middle" fontFamily="var(--font-display)" fontWeight="700" fontSize={label.length > 3 ? 12 : 22} fill="#ffffff">
+            <path d="M32 2 L60 18 L60 50 L32 66 L4 50 L4 18 Z" style={{ fill, stroke: "var(--card)", strokeWidth: 3, strokeLinejoin: "round" }} />
+      <text x="32" y="39" textAnchor="middle" fontFamily="var(--font-display)" fontWeight="700" fontSize={label.length > 3 ? 12 : 22} style={{ fill: "var(--on-accent)" }}>
         {label}
       </text>
     </g>
@@ -48,9 +47,9 @@ export function PlaygroundHero() {
         </div>
         <div className="relative hidden h-36 w-72 shrink-0 md:block" aria-hidden>
           <svg viewBox="0 0 280 140" className="absolute inset-0 h-full w-full">
-            <Sticker x={8} y={22} label="R" fill="#5b8fc4" size={70} rotate={-8} />
-            <Sticker x={78} y={4} label="ggplot2" fill="#f3a3a6" size={58} rotate={6} />
-            <Sticker x={86} y={72} label="dplyr" fill="#f0a351" size={56} rotate={-4} />
+            <Sticker x={8} y={22} label="R" fill="var(--primary)" size={70} rotate={-8} />
+            <Sticker x={78} y={4} label="ggplot2" fill="var(--pink)" size={58} rotate={6} />
+            <Sticker x={86} y={72} label="dplyr" fill="var(--tangerine)" size={56} rotate={-4} />
           </svg>
           <div className="absolute -right-1 bottom-0">
             <Hexy mood="cool" size={118} animate />

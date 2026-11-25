@@ -41,12 +41,11 @@ function SectionTitle({ id, icon, children, className }: { id: string; icon: Rea
 function HeroCard({ f }: { f: RFunction }) {
   const Icon = fnCategory(f.category).icon;
   return (
-    <div aria-hidden className="relative hidden w-56 shrink-0 rotate-3 md:block">
-      <div className="absolute inset-0 -rotate-6 rounded-3xl border border-border bg-[var(--c-soft)]" />
+    <div aria-hidden className="relative hidden w-56 shrink-0 md:block">
+      <div className="absolute inset-0 rounded-3xl border border-border bg-[var(--c-soft)]" />
       <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-pop)]">
         <div className="relative overflow-hidden bg-[var(--c)] px-4 pb-4 pt-3 text-[var(--c-fg)]">
-          <div className="absolute -right-6 -top-8 size-24 rounded-full bg-white/15" />
-          <div className="relative flex items-center justify-between font-display text-sm font-semibold">
+                    <div className="relative flex items-center justify-between font-display text-sm font-semibold">
             <span>R Academy</span>
             <span>#{cardNo(f)}</span>
           </div>

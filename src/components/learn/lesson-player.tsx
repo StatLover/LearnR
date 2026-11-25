@@ -256,7 +256,7 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
                 )}
                 style={current ? { background: "var(--world)" } : undefined}
               >
-                <span className={cn("grid size-5 place-items-center rounded-full text-[10px]", current ? "bg-white/25" : done ? "text-on-accent" : "bg-surface-2")} style={done && !current ? { background: "var(--world)" } : undefined}>
+                <span className={cn("grid size-5 place-items-center rounded-full text-[10px]", current ? "bg-black/15 dark:bg-white/35" : done ? "text-on-accent" : "bg-surface-2")} style={done && !current ? { background: "var(--world)" } : undefined}>
                   {done ? <Check className="size-3" /> : <Icon className="size-3" />}
                 </span>
                 <span className={cn(i > 0 && !current && "hidden sm:inline")}>{p.label}</span>

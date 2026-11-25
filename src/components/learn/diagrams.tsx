@@ -146,7 +146,7 @@ const diagrams: Record<DiagramName, () => ReactNode> = {
         <T x={380} y={88} mono size={30} weight={650}>5</T>
       </Box>
       <rect x={340} y={22} width={80} height={26} rx={6} fill={C.blue} />
-      <T x={380} y={35} mono fill="#fff" weight={650}>x</T>
+      <T x={380} y={35} mono fill="var(--on-accent)" weight={650}>x</T>
       <T x={530} y={70} size={13} anchor="middle">the name (label)</T>
       <T x={530} y={95} size={13} anchor="middle" fill={C.muted}>points to the value</T>
       <T x={110} y={130} size={12} fill={C.muted}>&lt;- means “gets”: x gets 5</T>

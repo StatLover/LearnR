@@ -18,7 +18,7 @@
   --surface-3: #ebe3d6;
   --card: #ffffff;
   --foreground: #1f2933;
-  --muted-foreground: #5b6570;
+  --muted-foreground: #525b65;
   --border: #e6ded2;
   --border-strong: #d3c8b8;
   --art-line: #1f2933;
@@ -75,14 +75,14 @@
 
   /* code & console */
   --code-bg: #fcfaf6;
-  --code-gutter: #a39b8f;
+  --code-gutter: #746c60;
   --code-active-line: #f5efe6;
   --code-selection: #d9e7f5;
   --console-bg: #fbf9f5;
   --syn-keyword: #5a4fa2;
   --syn-string: #2d7a55;
   --syn-number: #a3561a;
-  --syn-comment: #857d70;
+  --syn-comment: #6f685d;
   --syn-function: #2d6597;
   --syn-atom: #a63e54;
   --syn-operator: #c62a29;
@@ -103,7 +103,7 @@
   --surface-3: #2a3036;
   --card: #191d21;
   --foreground: #eeeae2;
-  --muted-foreground: #a6adb4;
+  --muted-foreground: #b3b9bf;
   --border: #2c3238;
   --border-strong: #3c444b;
   --art-line: #d9d4ca;
@@ -155,14 +155,14 @@
   --info-soft: #1b2a38;
 
   --code-bg: #15191c;
-  --code-gutter: #5e666e;
+  --code-gutter: #8d959c;
   --code-active-line: #1c2125;
   --code-selection: #2b3d52;
   --console-bg: #111417;
   --syn-keyword: #c4bdf0;
   --syn-string: #8fcbaa;
   --syn-number: #f0a351;
-  --syn-comment: #7d858c;
+  --syn-comment: #949ba2;
   --syn-function: #98c1e9;
   --syn-atom: #f5b3b6;
   --syn-operator: #ef8a87;
@@ -522,7 +522,7 @@ html[data-reduce-motion="true"] .reveal {
 }
 
 /* =================================================================== */
-/* Prose (lesson text, AI answers)                                      */
+/* Prose (lesson text)                                                 */
 /* =================================================================== */
 /* In the components layer so utility classes passed to <Markdown> win. */
 @layer components {

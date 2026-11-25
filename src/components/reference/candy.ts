@@ -35,7 +35,7 @@ export function candy(c: Candy): CSSProperties {
     "--c": `var(--${c})`,
     "--c-soft": `var(--${c}-soft)`,
     "--c-shadow": `var(--${c}-shadow)`,
-    "--c-fg": c === "sun" ? "var(--on-sun)" : "#ffffff",
+    "--c-fg": c === "sun" ? "var(--on-sun)" : "var(--on-accent)",
     "--c-ink": c === "sun" ? "var(--warning)" : c === "primary" ? "var(--primary-strong)" : `var(--${c}-shadow)`,
   } as CSSProperties;
 }

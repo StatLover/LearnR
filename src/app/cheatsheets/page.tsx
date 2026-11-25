@@ -21,10 +21,10 @@ export const metadata: Metadata = { title: "R Cheat Sheets", description: "Quick
 const PRINT_CSS = `
 @media print {
   .cs-print {
-    --background: #fff; --card: #fff; --surface: #fff; --surface-2: #f4f5fa; --code-bg: #f7f7fb;
-    --foreground: #1f2933; --muted-foreground: #5b6570; --border: #c9cde0; --border-strong: #b0b5cf;
-    --syn-keyword: #6f2fd1; --syn-string: #0b7a48; --syn-number: #b33c0c; --syn-comment: #6b708f;
-    --syn-function: #2f40b8; --syn-atom: #b8285a; --syn-operator: #a81f50; --syn-variable: #1f2933; --syn-punct: #5b6570;
+    --background: #fff; --card: #fff; --surface: #fff; --surface-2: #f5efe6; --code-bg: #fcfaf6;
+    --foreground: #1f2933; --muted-foreground: #5b6570; --border: #e6ded2; --border-strong: #d3c8b8;
+    --syn-keyword: #5a4fa2; --syn-string: #2d7a55; --syn-number: #a3561a; --syn-comment: #857d70;
+    --syn-function: #2d6597; --syn-atom: #a63e54; --syn-operator: #c62a29; --syn-variable: #1f2933; --syn-punct: #5b6570;
     --shadow-card: none; --c-soft: #fff;
     color: var(--foreground);
   }
@@ -65,8 +65,7 @@ export default function CheatSheetsPage() {
               <li key={s.id} className="min-w-0">
                 <a href={`#${s.id}`} style={candy(s.meta.color)} className="group lift flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] hover:border-[var(--c)]">
                   <span className="relative flex items-center gap-3 overflow-hidden bg-[var(--c)] px-4 py-3.5 text-[var(--c-fg)]">
-                    <span aria-hidden className="absolute -right-4 -top-6 size-16 rounded-full bg-white/20" />
-                    <span aria-hidden className="grid size-10 place-items-center rounded-xl bg-white/25 [&_svg]:size-5">
+                                        <span aria-hidden className="grid size-10 place-items-center rounded-xl bg-black/15 dark:bg-white/35 [&_svg]:size-5">
                       <s.meta.icon />
                     </span>
                     <span className="relative font-display text-lg font-bold leading-tight">{s.title}</span>

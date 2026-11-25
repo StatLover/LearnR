@@ -51,7 +51,7 @@ export default function ResourcesPage() {
               <li key={r.href} className="min-w-0">
                 <Link href={r.href} style={candy(r.color)} className="group lift relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] hover:border-[var(--c)]">
                   <span aria-hidden className="absolute -right-8 -top-8 size-28 rounded-full bg-[var(--c-soft)]" />
-                  <span aria-hidden className="relative grid size-14 place-items-center rounded-2xl bg-[var(--c)] text-[var(--c-fg)] transition-transform group-hover:-rotate-6 [&_svg]:size-7">
+                  <span aria-hidden className="relative grid size-14 place-items-center rounded-2xl bg-[var(--c)] text-[var(--c-fg)] transition-transform [&_svg]:size-7">
                     <r.icon />
                   </span>
                   <span className="relative mt-4 font-display text-lg font-bold">{r.title}</span>

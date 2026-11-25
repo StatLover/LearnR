@@ -740,7 +740,7 @@ export function ErrorChecker() {
               style={accent(verdict.tone)}
             >
               <span
-                className="absolute right-4 top-4 hidden rotate-[-8deg] rounded-lg border-[3px] border-[var(--a)] px-2 py-0.5 font-display text-sm font-bold uppercase tracking-widest text-[var(--a)] opacity-80 sm:block"
+                className="absolute right-4 top-4 hidden rounded-md border border-[var(--a)] px-2 py-0.5 text-xs font-semibold uppercase tracking-wider text-[var(--a)] sm:block"
                 aria-hidden
               >
                 {verdict.stamp}

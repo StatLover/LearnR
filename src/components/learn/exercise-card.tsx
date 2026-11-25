@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CheckCircle2, Eye, FlaskConical, GitCompare, Lightbulb, Loader2, Play, RotateCcw, Sparkles, XCircle, Download, Trophy, Target } from "lucide-react";
+import { CheckCircle2, Eye, FlaskConical, GitCompare, Lightbulb, Loader2, Play, RotateCcw, XCircle, Download, Trophy, Target } from "lucide-react";
 import type { Exercise } from "@/content/types";
 import { CodeEditor, type CodeEditorHandle, type LineMark } from "@/components/code/code-editor";
 import { ConsoleView, PlotGallery } from "@/components/code/output-panels";
@@ -45,7 +45,6 @@ export interface ExerciseCardProps {
   passed?: boolean;
   onResult?: (passed: boolean, code: string) => void;
   onCodeChange?: (code: string) => void;
-  onAskTutor?: (code: string) => void;
   headerExtra?: React.ReactNode;
   /** Label shown above the title, e.g. "Challenge 1 of 2" or "Daily challenge". */
   eyebrow?: string;
@@ -53,7 +52,7 @@ export interface ExerciseCardProps {
   xp?: number;
 }
 
-export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, savedCode, passed: passedProp, onResult, onCodeChange, onAskTutor, headerExtra, eyebrow, xp }: ExerciseCardProps) {
+export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, savedCode, passed: passedProp, onResult, onCodeChange, headerExtra, eyebrow, xp }: ExerciseCardProps) {
   const state = useProgress();
   const ep = state.exercises[task.id];
   const [code, setCode] = useState(task.starterCode);
@@ -248,11 +247,6 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
           {(showSolution || allPass) && (
             <Button size="sm" variant="outline" onClick={() => setCompare((c) => !c)}>
               <GitCompare /> {compare ? "Hide comparison" : "Compare with solution"}
-            </Button>
-          )}
-          {onAskTutor && (
-            <Button size="sm" variant="outline" onClick={() => onAskTutor(editor.current?.getValue() ?? code)}>
-              <Sparkles /> Ask AI
             </Button>
           )}
         </div>

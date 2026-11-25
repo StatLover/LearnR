@@ -71,7 +71,7 @@ export interface ProgressState {
   notes: Record<string, { text: string; updatedAt: number }>;
   snippets: Snippet[];
   achievements: Record<string, number>;
-  stats: { codeRuns: number; errorsAnalyzed: number; fixesApplied: number; tutorMessages: number };
+  stats: { codeRuns: number; errorsAnalyzed: number; fixesApplied: number };
   /** Daily challenge per day (YYYY-MM-DD): which exercise, and when it was solved. */
   daily: Record<string, { exerciseId: string; completedAt?: number }>;
   /** Where the learner is inside each lesson (card index) and the furthest card reached. */
@@ -94,7 +94,7 @@ export const emptyProgress = (): ProgressState => ({
   notes: {},
   snippets: [],
   achievements: {},
-  stats: { codeRuns: 0, errorsAnalyzed: 0, fixesApplied: 0, tutorMessages: 0 },
+  stats: { codeRuns: 0, errorsAnalyzed: 0, fixesApplied: 0 },
   daily: {},
   lessonSteps: {},
   updatedAt: 0,
@@ -308,7 +308,7 @@ export const progress = {
   },
 
   bumpStat(key: keyof ProgressState["stats"]) {
-    update((s) => ({ ...s, stats: { ...s.stats, [key]: s.stats[key] + 1 } }), key !== "tutorMessages");
+    update((s) => ({ ...s, stats: { ...s.stats, [key]: (s.stats[key] ?? 0) + 1 } }));
   },
 
   grantAchievements(ids: string[]) {

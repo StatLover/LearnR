@@ -1,14 +1,12 @@
 "use client";
 
 import { Check, PartyPopper, Trophy, Zap } from "lucide-react";
-import { useRouter } from "next/navigation";
 import type { Project } from "@/content/types";
 import { ExerciseCard } from "@/components/learn/exercise-card";
 import { Markdown } from "@/components/content/markdown";
 import { Hexy } from "@/components/brand/mascot";
 import { FloatingHexes } from "@/components/brand/decor";
 import { progress, useProgress } from "@/lib/store/progress";
-import { tutor } from "@/lib/ai/tutor-store";
 import { XP } from "@/lib/game/xp";
 import { cn } from "@/lib/utils";
 import { projectStatus } from "./project-progress";
@@ -39,7 +37,6 @@ function StepNode({ n, state, small }: { n: number; state: "done" | "current" | 
  */
 export function ProjectSteps({ project }: { project: Project }) {
   const s = useProgress();
-  const router = useRouter();
   const st = projectStatus(
     s,
     project.id,
@@ -82,10 +79,6 @@ export function ProjectSteps({ project }: { project: Project }) {
                 passed={passed}
                 onCodeChange={(c) => progress.saveProjectCode(project.id, step.id, c)}
                 onResult={(ok, code) => progress.recordProjectStep(project.id, project.title, step.id, ok, code)}
-                onAskTutor={(code) => {
-                  tutor.queue(`I'm doing step ${i + 1} ("${step.title}") of the project "${project.title}". Instructions: ${step.instructions}\n\nMy code:\n\`\`\`r\n${code}\n\`\`\`\nPlease give me a hint, not the full solution.`);
-                  router.push("/tutor");
-                }}
                 headerExtra={i > 0 ? <span className="text-xs font-semibold text-muted-foreground">Earlier steps&apos; solutions run first automatically</span> : null}
               />
             </section>

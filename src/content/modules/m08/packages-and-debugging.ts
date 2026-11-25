@@ -490,7 +490,7 @@ summarise_values(c("1", "10", "100"))`,
             "**Inspect the inputs** with `print()`, `str()`, `class()`, `length()` and `head()`. Is each value the type and size you expect?",
             "**Shrink the problem.** Run the failing line on its own, or with a tiny example vector, until you see exactly which part misbehaves.",
             "**Check your assumptions** with `stopifnot()` so that the script stops at the first broken one.",
-            "**Fix one thing at a time** and run again. If you are stuck, copy the exact error message into a search engine or ask the AI tutor.",
+            "**Fix one thing at a time** and run again. If you are stuck, copy the exact error message into a search engine or the Error Detective.",
           ],
         },
         {

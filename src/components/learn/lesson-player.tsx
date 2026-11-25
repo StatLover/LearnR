@@ -17,14 +17,12 @@ import {
   MessageCircleQuestion,
   PencilLine,
   Play,
-  Sparkles,
   Target,
   Trophy,
   X,
   Zap,
   Bug,
-  Map as MapIcon,
-} from "lucide-react";
+  Map as MapIcon } from "lucide-react";
 import type { Exercise, Lesson } from "@/content/types";
 import type { World } from "@/lib/game/worlds";
 import { buildLessonCards, PHASES, type LessonCard, type Phase } from "./lesson-cards";
@@ -33,10 +31,9 @@ import { ExampleBlock } from "./example-block";
 import { ExerciseCard } from "./exercise-card";
 import { QuestionCard } from "./question-card";
 import { LessonNotes } from "./lesson-shell";
-import { CodeRunner, type CodeRunnerHandle } from "@/components/code/code-runner";
+import { CodeRunner } from "@/components/code/code-runner";
 import { CodeBlock } from "@/components/code/code-block";
 import { Markdown } from "@/components/content/markdown";
-import { TutorChat } from "@/components/tutor/tutor-chat";
 import { Hexy } from "@/components/brand/mascot";
 import { TopicArt } from "@/components/brand/topic-art";
 import { ThemeSwitch } from "@/components/layout/header";
@@ -46,7 +43,6 @@ import { ProgressBar } from "@/components/ui/progress";
 import { toast } from "@/components/ui/toast";
 import { useGame, useOutline } from "@/components/game/outline-context";
 import { fireConfetti } from "@/components/game/confetti";
-import { codeMessage, tutor } from "@/lib/ai/tutor-store";
 import { isLessonUnlocked, progress, useProgress } from "@/lib/store/progress";
 import { useSettings } from "@/lib/store/settings";
 import { exerciseXp, XP } from "@/lib/game/xp";
@@ -86,13 +82,10 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
   const router = useRouter();
   const mounted = useSyncExternalStore(noop, () => true, () => false);
   const [index, setIndex] = useState(0);
-  const [tutorOpen, setTutorOpen] = useState(false);
   const [outlineOpen, setOutlineOpen] = useState(false);
   const [quiz, setQuiz] = useState<Record<string, boolean>>({});
-  const [editCode, setEditCode] = useState<string | null>(null);
   const [tried, setTried] = useState<Record<number, boolean>>({});
   const [revealed, setRevealed] = useState<Record<number, boolean>>({});
-  const runner = useRef<CodeRunnerHandle>(null);
   const restored = useRef(false);
   const card = cards[Math.min(index, cards.length - 1)];
   const completed = Boolean(state.lessons[lesson.id]?.completedAt);
@@ -119,7 +112,6 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
     (i: number) => {
       const n = Math.max(0, Math.min(cards.length - 1, i));
       setIndex(n);
-      setEditCode(null);
       progress.setLessonStep(lesson.id, n);
       window.scrollTo({ top: 0, behavior: "smooth" });
       if (cards[n].kind === "complete" && !state.lessons[lesson.id]?.completedAt) {
@@ -153,22 +145,6 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
     setQuiz(n);
     // Record the score once every question has been answered (outside the state updater, which must stay pure).
     if (Object.keys(n).length === quizQuestions.length) progress.recordQuiz(lesson.id, quizQuestions.filter((q) => n[q.id]).length / quizQuestions.length);
-  };
-
-  const currentCode = (): { code: string; output: string | null } | null => {
-    if (card.kind === "watch") return { code: editCode ?? card.example.code, output: editCode ? null : (card.example.output ?? null) };
-    if (card.kind === "try") {
-      const code = runner.current?.getCode() ?? lesson.playground;
-      return { code, output: null };
-    }
-    if (card.kind === "challenge") return { code: state.exercises[card.exercise.id]?.code ?? card.exercise.starterCode, output: null };
-    if ((card.kind === "quiz" || card.kind === "check") && "code" in card.question && card.question.code) return { code: card.question.code, output: null };
-    return null;
-  };
-
-  const askTutor = (text?: string) => {
-    setTutorOpen(true);
-    if (text) void tutor.send(text, { lessonId: lesson.id, exerciseId: card.kind === "challenge" ? card.exercise.id : undefined });
   };
 
   const phaseIdx = PHASES.findIndex((p) => p.id === card.phase);
@@ -259,9 +235,6 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
             {bookmarked ? <BookmarkCheck className="text-primary" /> : <Bookmark />}
           </Button>
           <ThemeSwitch className="hidden md:inline-flex" />
-          <Button variant={tutorOpen ? "primary" : "outline"} size="sm" onClick={() => setTutorOpen((o) => !o)} aria-pressed={tutorOpen}>
-            <Sparkles /> <span className="hidden sm:inline">Ask AI</span>
-          </Button>
         </div>
         {/* Phase stepper */}
         <nav aria-label="Lesson steps" className="no-scrollbar mx-auto flex max-w-[1400px] gap-1 overflow-x-auto px-3 pb-2 sm:justify-center sm:px-5">
@@ -307,14 +280,11 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
               earnedXp={earnedXp}
               quiz={quiz}
               onQuizAnswer={onQuizAnswer}
-              runner={runner}
-              setEditCode={setEditCode}
               tryIdeas={tryIdeas}
               tried={tried}
               setTried={setTried}
               revealed={revealed}
               setRevealed={setRevealed}
-              askTutor={askTutor}
               terms={terms}
               next={next}
               completed={completed}
@@ -324,27 +294,13 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
           </div>
         </main>
 
-        {tutorOpen && (
-          <aside className="fixed inset-0 z-50 flex flex-col bg-background lg:sticky lg:top-[7.25rem] lg:z-auto lg:h-[calc(100vh-7.25rem)] lg:w-[420px] lg:shrink-0 lg:border-l-2 lg:border-border xl:w-[460px]" aria-label="AI tutor">
-            <div className="flex items-center gap-2 border-b-2 border-border px-4 py-2 lg:hidden">
-              <span className="font-display font-semibold">Ask Hexy</span>
-              <Button size="icon-sm" variant="ghost" className="ml-auto" onClick={() => setTutorOpen(false)} aria-label="Close the AI tutor">
-                <X />
-              </Button>
-            </div>
-            <TutorChat compact lessonId={lesson.id} lessonTitle={lesson.title} exerciseId={card.kind === "challenge" ? card.exercise.id : undefined} getCode={currentCode} className="h-full min-h-0 flex-1" />
-          </aside>
-        )}
       </div>
 
       {/* Bottom action bar */}
-      <div className={cn("fixed inset-x-0 bottom-0 z-40 border-t-2 border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur", tutorOpen && "lg:right-[420px] xl:right-[460px]")}>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 py-3 sm:px-6">
           <Button variant="outline" size="lg" onClick={() => go(index - 1)} disabled={index === 0} aria-label="Previous step">
             <ArrowLeft /> <span className="hidden sm:inline">Previous</span>
-          </Button>
-          <Button variant="ghost" size="lg" onClick={() => askTutor()} className="hidden sm:inline-flex">
-            <Sparkles /> Ask AI
           </Button>
           <div className="ml-auto" />
           <Button variant={nextIsSkip ? "outline" : card.kind === "complete" ? "primary" : "success"} size="lg" onClick={onNext} className="min-w-36">
@@ -415,14 +371,11 @@ interface CardViewProps {
   earnedXp: number;
   quiz: Record<string, boolean>;
   onQuizAnswer: (id: string, ok: boolean) => void;
-  runner: React.RefObject<CodeRunnerHandle | null>;
-  setEditCode: (c: string | null) => void;
   tryIdeas: string[];
   tried: Record<number, boolean>;
   setTried: React.Dispatch<React.SetStateAction<Record<number, boolean>>>;
   revealed: Record<number, boolean>;
   setRevealed: React.Dispatch<React.SetStateAction<Record<number, boolean>>>;
-  askTutor: (text?: string) => void;
   terms: { slug: string; term: string }[];
   next?: LessonPlayerProps["next"];
   completed: boolean;
@@ -430,7 +383,7 @@ interface CardViewProps {
   exercisesTotal: number;
 }
 
-function CardView({ runner, ...p }: CardViewProps) {
+function CardView(p: CardViewProps) {
   const { card, lesson, world } = p;
   switch (card.kind) {
     case "intro":
@@ -501,7 +454,7 @@ function CardView({ runner, ...p }: CardViewProps) {
             </div>
           )}
           <div className="mt-4">
-            <ExampleBlock example={card.example} lessonId={lesson.id} lessonTitle={lesson.title} onEditChange={p.setEditCode} />
+            <ExampleBlock example={card.example} lessonId={lesson.id} lessonTitle={lesson.title} />
           </div>
           {card.follow.length > 0 && (
             <div className="mt-4 text-[1.02rem]">
@@ -536,15 +489,12 @@ function CardView({ runner, ...p }: CardViewProps) {
           </div>
           <div className="mt-4">
             <CodeRunner
-              ref={runner}
               workspace={`lesson:${lesson.id}`}
               variant="panel"
               initialCode={lesson.playground}
               storageKey={`lesson:${lesson.id}`}
               downloadName={`${lesson.id}.R`}
               title={lesson.title}
-              onCodeChange={(c) => p.setEditCode(c)}
-              onAskTutor={(code, r) => p.askTutor(codeMessage(code, r && r.code === code ? r.lines.map((l) => l.text).join("\n") : null))}
               editorMinHeight={200}
             />
           </div>
@@ -609,7 +559,6 @@ function CardView({ runner, ...p }: CardViewProps) {
             <ExerciseCard
               task={card.exercise}
               eyebrow={`Challenge ${card.index + 1} of ${card.total}`}
-              onAskTutor={(code) => p.askTutor(`I'm working on the challenge "${card.exercise.title}". Please give me a hint, not the solution.\n\nMy attempt:\n\`\`\`r\n${code}\n\`\`\``)}
             />
           </div>
         </article>

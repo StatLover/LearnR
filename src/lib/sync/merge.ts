@@ -64,7 +64,6 @@ export function mergeProgress(local: ProgressState, remote: ProgressState): Prog
       codeRuns: Math.max(local.stats.codeRuns, remote.stats.codeRuns),
       errorsAnalyzed: Math.max(local.stats.errorsAnalyzed, remote.stats.errorsAnalyzed),
       fixesApplied: Math.max(local.stats.fixesApplied, remote.stats.fixesApplied),
-      tutorMessages: Math.max(local.stats.tutorMessages, remote.stats.tutorMessages),
     },
     daily: mergeRecord(local.daily ?? {}, remote.daily ?? {}, (x, y) => ({ exerciseId: (x ?? y)!.exerciseId, completedAt: minDefined(x?.completedAt, y?.completedAt) })),
     lessonSteps: mergeRecord(local.lessonSteps ?? {}, remote.lessonSteps ?? {}, (x, y) => ((x?.max ?? 0) >= (y?.max ?? 0) ? x! : y!)),

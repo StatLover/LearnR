@@ -1,21 +1,19 @@
 import type { NextConfig } from "next";
 
 /**
- * Two ways to run the site:
+ * Two ways to run the site – no API keys or other secrets are needed for
+ * either:
  *
- * 1. As a Node.js server (`next build && next start`, or a host such as
- *    Vercel). Everything works, including the AI tutor endpoints, and the
- *    security headers below are sent.
+ * 1. As a Node.js app (`next build && next start`, or a host such as
+ *    Vercel). The security headers below are sent, including the ones that
+ *    make the page cross-origin isolated (faster R, interruptible code).
  *
- * 2. As a static export for GitHub Pages (`npm run build:pages`, used by
- *    .github/workflows/pages.yml). Set NEXT_PUBLIC_STATIC_EXPORT=true and,
- *    when the site lives in a sub-path, NEXT_PUBLIC_BASE_PATH=/LearnR. The
- *    output in `out/` is plain HTML/CSS/JS. A static host has no server, so:
- *    - the AI endpoints (named `route.server.ts`) are left out and the AI
- *      features explain that they need a server;
- *    - custom headers can't be sent, so the page is not cross-origin
- *      isolated. webR then uses its slower PostMessage channel and long-
- *      running code is stopped by restarting R (see src/lib/r/session.ts).
+ * 2. As a static export for GitHub Pages (`.github/workflows/pages.yml`).
+ *    Set NEXT_PUBLIC_STATIC_EXPORT=true and, when the site lives in a
+ *    sub-path, NEXT_PUBLIC_BASE_PATH=/LearnR. The output in `out/` is plain
+ *    HTML/CSS/JS. A static host can't send custom headers, so the page is not
+ *    cross-origin isolated: webR then uses its slower PostMessage channel
+ *    and long-running code is stopped by restarting R (src/lib/r/session.ts).
  */
 const staticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
 const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/+$/, "");
@@ -38,8 +36,6 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   ...(basePath ? { basePath } : {}),
-  // Route files that need a server are named `route.server.ts`; the static export skips them.
-  pageExtensions: staticExport ? ["tsx", "ts"] : ["server.ts", "tsx", "ts"],
   ...(staticExport
     ? {
         output: "export",

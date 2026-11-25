@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, Bug, Code2, Dumbbell, FolderKanban, Lightbulb, MessageCircleQuestion, PencilLine, Play, Search, ShieldCheck, Shuffle, Sparkles, Sprout, Target, Zap, CalendarCheck, CheckCircle2, Wand2 } from "lucide-react";
+import { ArrowRight, BookOpen, Bug, Code2, Dumbbell, FolderKanban, Lightbulb, MessageCircleQuestion, PencilLine, Play, ShieldCheck, Shuffle, Sprout, Target, Zap, CalendarCheck, CheckCircle2, Wand2 } from "lucide-react";
 import { modules } from "@/content/curriculum";
 import { projects } from "@/content/projects";
 import { rFunctions } from "@/content/functions";
 import { HomeCta } from "@/components/home/home-cta";
 import { ErrorDemo } from "@/components/home/error-demo";
 import { CodeRunner } from "@/components/code/code-runner";
-import { StaticCode } from "@/components/code/static-code";
-import { Hexy, HexyAvatar } from "@/components/brand/mascot";
+import { Hexy } from "@/components/brand/mascot";
 import { TopicArt } from "@/components/brand/topic-art";
 import { FloatingHexes, SectionTitle } from "@/components/brand/decor";
 import { Reveal } from "@/components/brand/reveal";
@@ -80,7 +79,7 @@ export default function HomePage() {
               <span className="text-gradient">Unlock Your Potential.</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg font-semibold text-muted-foreground">
-              A playful, hands-on adventure through R and data analysis – from your very first line of code to statistics and real projects. Real R runs right in your browser, with an AI tutor at your side.
+              A hands-on course in R and data analysis – from your very first line of code to statistics and real projects. Real R runs right in your browser.
             </p>
             <HomeCta className="mt-8" />
             <ul className="mt-7 flex flex-wrap gap-2">
@@ -191,89 +190,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ---------------------------------------------------------- AI tutor + Error detective */}
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:py-20" aria-labelledby="helpers-title">
-        <SectionTitle eyebrow="Never stuck for long" title="Two helpers on every page" description="Hexy, your AI tutor, explains things your way. The Error Detective turns scary red messages into clear, tested fixes." align="center" />
-        <h2 id="helpers-title" className="sr-only">
-          AI tutor and Error Detective
-        </h2>
-        <div className="mt-12 grid gap-8 lg:grid-cols-2">
-          {/* Tutor preview */}
-          <Reveal className="flex flex-col">
-            <div className="flex items-center gap-3">
-              <span className="grid size-12 place-items-center rounded-2xl bg-grape text-white shadow-[0_4px_0_var(--grape-shadow)]">
-                <Sparkles className="size-6" />
-              </span>
-              <div>
-                <h3 className="font-display text-2xl font-bold">AI Tutor</h3>
-                <p className="text-sm font-semibold text-muted-foreground">Answers at your level – and runs code in real R before it tells you what it prints.</p>
-              </div>
-            </div>
-            <div className="mt-5 flex-1 overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
-              <div className="flex items-center gap-2 border-b-2 border-border bg-surface-2/60 px-4 py-2.5">
-                <HexyAvatar size={28} />
-                <span className="font-display font-semibold">Ask Hexy</span>
-                <span className="ml-auto rounded-full bg-sun-soft px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-warning">Example conversation</span>
-              </div>
-              <div className="space-y-4 p-4">
-                <div className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-4 py-3 text-sm font-semibold text-white">
-                  Why does this say <code className="rounded bg-white/20 px-1">object &apos;score&apos; not found</code>?
-                  <StaticCode code={"scores <- c(80, 90, 100)\nmean(score)"} className="mt-2 rounded-xl bg-white/95 py-2 text-[13px] text-[#1c1f3a]" />
-                </div>
-                <div className="flex max-w-[92%] gap-2">
-                  <HexyAvatar size={32} mood="think" className="mt-1 shrink-0" />
-                  <div className="rounded-2xl rounded-bl-sm border-2 border-border bg-surface-2/50 px-4 py-3 text-sm font-semibold">
-                    <p>
-                      Good question! You created a variable called <code className="rounded bg-code px-1">scores</code> (with an <strong>s</strong>), but then asked for <code className="rounded bg-code px-1">score</code>. R names must match exactly, so R can&apos;t find it.
-                    </p>
-                    <p className="mt-2">
-                      Fix: <code className="rounded bg-code px-1">mean(scores)</code> – which gives <code className="rounded bg-code px-1">[1] 90</code>.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="border-t-2 border-border p-4">
-                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">One-tap help</p>
-                <ul className="flex flex-wrap gap-2">
-                  {TUTOR_ACTIONS.map((a) => (
-                    <li key={a.label}>
-                      <span className="flex items-center gap-1.5 rounded-full border-2 px-3 py-1 text-xs font-bold" style={{ borderColor: `var(--${a.color})`, background: `var(--${a.color}-soft)` }}>
-                        <a.icon className="size-3.5" style={{ color: `var(--${a.color})` }} /> {a.label}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <Button asChild variant="grape" size="lg" className="mt-5 self-start">
-              <Link href="/tutor">
-                <Sparkles /> Chat with Hexy
-              </Link>
-            </Button>
-          </Reveal>
-
-          {/* Error detective */}
-          <Reveal className="flex flex-col" delay={120}>
-            <div className="flex items-center gap-3">
-              <span className="grid size-12 place-items-center rounded-2xl bg-coral text-white shadow-[0_4px_0_var(--coral-shadow)]">
-                <Search className="size-6" />
-              </span>
-              <div>
-                <h3 className="font-display text-2xl font-bold">R Error Detective</h3>
-                <p className="text-sm font-semibold text-muted-foreground">Finds the line, explains the message, and only shows fixes that real R has tested.</p>
-              </div>
-            </div>
-            <div className="mt-5 flex-1">
-              <ErrorDemo />
-            </div>
-            <ul className="mt-4 grid gap-2 text-sm font-semibold sm:grid-cols-2">
-              {["The actual error, in plain English", "Where it happened (when R says so)", "Why it happened and how to fix it", "Corrected code you can apply and re-run"].map((t) => (
-                <li key={t} className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" /> {t}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+      {/* ---------------------------------------------------------- Error detective */}
+      <section className="mx-auto max-w-4xl px-5 py-16 sm:py-20" aria-labelledby="detective-title">
+        <h2 id="detective-title" className="font-display text-3xl font-bold tracking-tight">R Error Detective</h2>
+        <div className="mt-6">
+          <ErrorDemo />
         </div>
       </section>
 

@@ -1,7 +1,6 @@
 import { createPersistedStore, useStore } from "./create-store";
 
 export type ThemePref = "system" | "light" | "dark";
-export type TutorMode = "beginner" | "step-by-step" | "debugging" | "practice" | "quiz" | "statistics";
 
 export interface Settings {
   theme: ThemePref;
@@ -13,7 +12,6 @@ export interface Settings {
   plotTheme: "auto" | "light";
   /** guided = lessons unlock in order; free = everything open */
   learningMode: "guided" | "free";
-  tutorMode: TutorMode;
   /** Seconds before running code is stopped automatically. */
   runTimeout: number;
   reduceMotion: "system" | "on";
@@ -31,7 +29,6 @@ export const defaultSettings: Settings = {
   autoCloseBrackets: true,
   plotTheme: "auto",
   learningMode: "guided",
-  tutorMode: "beginner",
   runTimeout: 30,
   reduceMotion: "system",
   dailyGoalXp: 50,

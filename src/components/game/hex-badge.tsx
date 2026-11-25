@@ -1,4 +1,4 @@
-import { BookOpen, Bug, Calendar, CalendarCheck, CheckCircle2, Crown, Dumbbell, Flag, Flame, Map, MessageCircle, Mountain, Play, Search, Star, Trophy, Zap, Lock, type LucideIcon } from "lucide-react";
+import { BookOpen, Bug, Calendar, CalendarCheck, CheckCircle2, Crown, Dumbbell, Flag, Flame, Map, Mountain, NotebookPen, Play, Search, Star, Trophy, Zap, Lock, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ICONS: Record<string, LucideIcon> = {
@@ -6,7 +6,7 @@ const ICONS: Record<string, LucideIcon> = {
   "book-open": BookOpen,
   "check-circle": CheckCircle2,
   bug: Bug,
-  "message-circle": MessageCircle,
+  "notebook-pen": NotebookPen,
   map: Map,
   flame: Flame,
   dumbbell: Dumbbell,

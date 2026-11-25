@@ -6,7 +6,7 @@ import { isFocusRoute } from "./header";
 
 const COLS = [
   { title: "Learn", links: [["/learn", "Learning map"], ["/exercises", "Practice & daily challenge"], ["/projects", "Projects"], ["/dashboard", "My dashboard"]] },
-  { title: "Tools", links: [["/playground", "R Playground"], ["/error-checker", "Error Detective"], ["/tutor", "AI Tutor"], ["/visualize", "R Labs"]] },
+  { title: "Tools", links: [["/playground", "R Playground"], ["/error-checker", "Error Detective"], ["/visualize", "R Labs"]] },
   { title: "Reference", links: [["/reference", "Functions"], ["/cheatsheets", "Cheat sheets"], ["/glossary", "Glossary"], ["/datasets", "Datasets"]] },
 ];
 
@@ -20,7 +20,7 @@ export function Footer() {
           <Link href="/" className="flex items-center gap-2 font-display text-2xl font-bold">
             <Hexy size={44} mood="wave" /> <span><span className="text-primary">R</span> Academy</span>
           </Link>
-          <p className="mt-3 max-w-xs text-sm text-muted-foreground">Learn R by playing with it: bite-sized lessons, real R in your browser, challenges, XP and a friendly AI tutor.</p>
+          <p className="mt-3 max-w-xs text-sm text-muted-foreground">Learn R step by step: short lessons, real R in your browser, tested exercises, projects and an Error Detective.</p>
         </div>
         {COLS.map((c) => (
           <div key={c.title}>

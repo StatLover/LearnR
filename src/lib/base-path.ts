@@ -10,9 +10,6 @@
  */
 export const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/+$/, "");
 
-/** True for the static build (GitHub Pages), which has no server – so no AI endpoints. */
-export const STATIC_EXPORT = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
-
 /** Prefix a root-relative URL ("/data/x.csv") with the base path. */
 export function withBase(path: string): string {
   if (!path.startsWith("/")) return path;

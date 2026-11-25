@@ -211,7 +211,7 @@ export function SearchDialog() {
             <div className="flex flex-col items-center px-4 py-8 text-center">
               <Hexy mood="oops" size={64} />
               <p className="mt-3 font-semibold">No results for “{q}”.</p>
-              <p className="text-sm font-semibold text-muted-foreground">Try a different word, or ask the AI tutor.</p>
+              <p className="text-sm font-semibold text-muted-foreground">Try a different or shorter word.</p>
             </div>
           )}
 

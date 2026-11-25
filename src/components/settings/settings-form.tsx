@@ -1,23 +1,19 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useId, useRef, useState, type ReactNode } from "react";
 import {
-  Bug,
   Check,
   ChevronDown,
-  CircleHelp,
   Cloud,
   Coffee,
   Cpu,
   Database,
   Download,
-  Dumbbell,
   Flame,
   Footprints,
   GraduationCap,
   Keyboard,
   Leaf,
-  ListOrdered,
   LockOpen,
   LogOut,
   Monitor,
@@ -29,9 +25,7 @@ import {
   Rocket,
   RotateCcw,
   Route,
-  Sigma,
   SlidersHorizontal,
-  Sparkles,
   Sprout,
   Sun,
   TreeDeciduous,
@@ -39,8 +33,7 @@ import {
   Upload,
   UserRound,
   Zap,
-  type LucideIcon,
-} from "lucide-react";
+  type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Select } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -50,7 +43,6 @@ import { toast } from "@/components/ui/toast";
 import { HexyAvatar } from "@/components/brand/mascot";
 import { StaticCode } from "@/components/code/static-code";
 import { ShortcutTable } from "@/components/code/code-runner";
-import { MODES } from "@/components/tutor/tutor-chat";
 import { useGame } from "@/components/game/outline-context";
 import { fireConfetti } from "@/components/game/confetti";
 import { candy, INK, type Candy } from "@/components/reference/candy";
@@ -59,7 +51,6 @@ import { progress, progressStore, useProgress, type Profile } from "@/lib/store/
 import { account, syncConfigured, useSyncState } from "@/lib/sync/sync-manager";
 import { rSession } from "@/lib/r/session";
 import { useRSession } from "@/hooks/use-r-session";
-import { AI_NEEDS_SERVER, aiStatus } from "@/lib/ai/tutor-store";
 import { cn, downloadText } from "@/lib/utils";
 
 /* ------------------------------------------------------------------ */
@@ -70,7 +61,6 @@ const SECTIONS: { id: string; title: string; icon: LucideIcon; color: Candy }[] 
   { id: "appearance", title: "Appearance", icon: Palette, color: "pink" },
   { id: "learning", title: "Learning", icon: GraduationCap, color: "mint" },
   { id: "editor", title: "Code editor", icon: Keyboard, color: "sky" },
-  { id: "tutor", title: "AI tutor", icon: Sparkles, color: "grape" },
   { id: "r", title: "R in your browser", icon: Cpu, color: "teal" },
   { id: "account", title: "Account & sync", icon: Cloud, color: "primary" },
   { id: "data", title: "Your data", icon: Database, color: "coral" },
@@ -390,7 +380,6 @@ const GOALS: { xp: number; label: string; hint: string; icon: LucideIcon }[] = [
   { xp: 150, label: "Intense", hint: "≈ 45 min a day", icon: Rocket },
 ];
 
-const MODE_ICONS: Record<string, LucideIcon> = { beginner: Sprout, "step-by-step": ListOrdered, debugging: Bug, practice: Dumbbell, quiz: CircleHelp, statistics: Sigma };
 
 const PROGRAMMING: TileOption<NonNullable<Profile["programming"]>>[] = [
   { value: "none", label: "Brand new to coding", icon: <Sprout /> },
@@ -411,12 +400,8 @@ export function SettingsForm() {
   const p = useProgress();
   const r = useRSession();
   const game = useGame();
-  const [ai, setAi] = useState<{ configured: boolean; model: string | null } | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
   const file = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    aiStatus().then(setAi);
-  }, []);
   const set = (patch: Partial<Settings>) => updateSettings(patch);
 
   const setTheme = (theme: ThemePref) => {
@@ -653,42 +638,6 @@ export function SettingsForm() {
                 <ShortcutTable />
               </div>
             </details>
-          </Block>
-        </Section>
-
-        {/* AI tutor */}
-        <Section id="tutor" description="How the tutor answers when you open it.">
-          <Block>
-            <TileGroup<Settings["tutorMode"]>
-              legend="Default tutor mode"
-              value={s.tutorMode}
-              onChange={(v) => set({ tutorMode: v })}
-              className="sm:grid-cols-2 xl:grid-cols-3"
-              align="start"
-              options={MODES.map((m) => {
-                const Icon = MODE_ICONS[m.value] ?? Sparkles;
-                return { value: m.value, label: m.label, hint: m.desc, icon: <Icon /> };
-              })}
-            />
-          </Block>
-          <Block className="space-y-3">
-            <p className="flex flex-wrap items-center gap-2 text-sm font-bold">
-              Status:
-              {ai === null ? (
-                <span className="rounded-full bg-surface-2 px-2.5 py-0.5 text-muted-foreground">checking…</span>
-              ) : ai.configured ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-mint-soft px-2.5 py-0.5 text-success">
-                  <span aria-hidden className="size-2 rounded-full bg-mint" /> available{ai.model ? ` (model ${ai.model})` : ""}
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-sun-soft px-2.5 py-0.5 text-warning">
-                  <TriangleAlert className="size-3.5" aria-hidden /> {AI_NEEDS_SERVER ? "needs a server – this copy is a static site" : "not configured on this server (ANTHROPIC_API_KEY is not set)"}
-                </span>
-              )}
-            </p>
-            <p className="text-xs font-semibold text-muted-foreground">
-              Your questions and code are sent to the AI service through this site&apos;s server when you use the tutor or “Explain My Error”. Conversations are stored only in this browser.
-            </p>
           </Block>
         </Section>
 

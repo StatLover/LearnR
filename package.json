@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "R Academy – Learn R from Zero. An interactive R programming course with in-browser R (webR) and an AI tutor.",
+  "description": "R Academy – Learn R from Zero. An interactive R programming course with real R running in the browser (webR).",
   "scripts": {
     "postinstall": "node scripts/copy-webr.mjs",
     "dev": "next dev",
@@ -16,7 +16,6 @@
     "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^1.6.0",
     "@codemirror/autocomplete": "^6.20.4",
     "@codemirror/commands": "^6.11.1",
     "@codemirror/language": "^6.13.1",
@@ -43,8 +42,7 @@
     "remark-gfm": "^4.0.1",
     "server-only": "^0.0.1",
     "tailwind-merge": "^3.7.0",
-    "webr": "0.6.0",
-    "zod": "^4.6.7"
+    "webr": "0.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.5",

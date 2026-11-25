@@ -221,7 +221,7 @@ export function GlossaryList({ terms }: { terms: GlossaryTerm[] }) {
         <div className="flex flex-col items-center rounded-3xl border-2 border-dashed border-border bg-card px-6 py-12 text-center">
           <Hexy mood="think" size={96} />
           <h2 className="mt-3 font-display text-xl font-bold">No terms match “{q.trim()}”</h2>
-          <p className="mt-1 max-w-md text-sm font-semibold text-muted-foreground">Try a shorter word or another spelling – or ask the AI tutor to explain it.</p>
+          <p className="mt-1 max-w-md text-sm font-semibold text-muted-foreground">Try a shorter word or another spelling.</p>
           <Button variant="outline" className="mt-4" onClick={() => { setQ(""); setCat(null); }}>
             Show all terms
           </Button>

@@ -13,7 +13,7 @@ import { withBase } from "@/lib/base-path";
 export const metadata: Metadata = {
   title: { default: "R Academy – Learn R. Write Code. Unlock Your Potential.", template: "%s · R Academy" },
   description:
-    "Learn R programming as an adventure: bite-sized interactive lessons, real R running in your browser, XP and levels, daily challenges, an Error Detective and a friendly AI tutor.",
+    "Learn R programming as an adventure: bite-sized interactive lessons, real R running in your browser, XP and levels, daily challenges and an Error Detective that explains R errors.",
   applicationName: "R Academy",
   icons: { icon: withBase("/icon.svg") },
 };

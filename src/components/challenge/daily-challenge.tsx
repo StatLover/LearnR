@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { BookOpen, CalendarDays, Check, CheckCircle2, CircleDashed, Flame, History, Map as MapIcon, PartyPopper, RefreshCw, Timer, Trophy, Zap } from "lucide-react";
 import type { Exercise } from "@/content/types";
 import { Hexy } from "@/components/brand/mascot";
@@ -12,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useGame, useOutline } from "@/components/game/outline-context";
 import { WorldChip } from "@/components/exercises/world-chip";
-import { tutor } from "@/lib/ai/tutor-store";
 import { progress, useProgress } from "@/lib/store/progress";
 import { exerciseXp, XP } from "@/lib/game/xp";
 import { cn, todayKey } from "@/lib/utils";
@@ -80,7 +78,6 @@ export function DailyChallenge() {
   const outline = useOutline();
   const s = useProgress();
   const mounted = useMounted();
-  const router = useRouter();
   const daily = g.daily;
   const id = mounted ? daily.exerciseId : null;
   const meta = id ? exerciseMeta(outline, id) : null;
@@ -251,10 +248,6 @@ export function DailyChallenge() {
                 task={current.exercise}
                 eyebrow="Daily challenge"
                 xp={exerciseXp(current.exercise.difficulty) + XP.daily}
-                onAskTutor={(code) => {
-                  tutor.queue(`I'm working on today's daily challenge, "${current.exercise!.title}". Please give me a hint, not the solution.\n\nMy attempt:\n\`\`\`r\n${code}\n\`\`\``);
-                  router.push("/tutor");
-                }}
               />
             </>
           ) : (

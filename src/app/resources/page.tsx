@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, BookA, BookOpen, BookText, Bug, Code2, Database, FileText, FlaskConical, Globe, Library, Monitor, Sparkles, ChartScatter, Wrench, type LucideIcon } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BookA, BookOpen, BookText, Bug, Code2, Database, FileText, FlaskConical, Globe, Library, Monitor, ChartScatter, Wrench, type LucideIcon } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { Hexy } from "@/components/brand/mascot";
 import { candy, INK, type Candy } from "@/components/reference/candy";
@@ -16,7 +16,6 @@ const INTERNAL: { href: string; icon: LucideIcon; title: string; desc: string; c
   { href: "/playground", icon: Code2, title: "R Playground", desc: "Write and run any R code – with a console, plots, data and variables.", color: "mint" },
   { href: "/visualize", icon: FlaskConical, title: "R Labs", desc: "Interactive simulations and charts powered by real R code.", color: "sky" },
   { href: "/error-checker", icon: Bug, title: "Error Detective", desc: "Paste code that fails – understand the R error message and fix it.", color: "coral" },
-  { href: "/tutor", icon: Sparkles, title: "AI Tutor", desc: "Ask questions about R and statistics in your own words.", color: "primary" },
 ];
 
 const EXTERNAL: { href: string; icon: LucideIcon; title: string; desc: string; color: Candy }[] = [

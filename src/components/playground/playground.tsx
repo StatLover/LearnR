@@ -9,8 +9,6 @@ import { TopicArt } from "@/components/brand/topic-art";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/toast";
-import { codeMessage, tutor } from "@/lib/ai/tutor-store";
-import { transcript } from "@/lib/r/console";
 import { progress, useProgress } from "@/lib/store/progress";
 import type { DatasetInfo } from "@/content/types";
 import { timeAgo } from "@/lib/utils";
@@ -76,10 +74,6 @@ export function Playground({ datasets }: { datasets: DatasetInfo[] }) {
           downloadName="playground.R"
           editorMinHeight={340}
           outputMaxHeight={460}
-          onAskTutor={(code, r) => {
-            tutor.queue(codeMessage(code, r && r.code === code ? transcript(r.lines) : null));
-            router.push("/tutor");
-          }}
           extraToolbar={
             <Button
               size="sm"

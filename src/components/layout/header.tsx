@@ -15,7 +15,6 @@ import {
   Map as MapIcon,
   Search,
   Settings,
-  Sparkles,
   Zap,
   FileText,
   BookA,
@@ -38,7 +37,6 @@ export const NAV = [
   { href: "/exercises", label: "Practice", icon: Dumbbell },
   { href: "/playground", label: "Playground", icon: Code2 },
   { href: "/error-checker", label: "Error Detective", short: "Debug", icon: Bug },
-  { href: "/tutor", label: "AI Tutor", short: "Tutor", icon: Sparkles },
 ];
 
 export const MORE = [

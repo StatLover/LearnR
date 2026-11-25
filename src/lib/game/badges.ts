@@ -28,7 +28,7 @@ export const badges: BadgeDef[] = [
   { id: "first-lesson", title: "Hello, R!", description: "Completed your first lesson.", icon: "book-open", color: "sky", group: "Getting started", check: (s) => completed(s) >= 1 },
   { id: "first-exercise", title: "Problem Solver", description: "Passed your first challenge.", icon: "check-circle", color: "grape", group: "Getting started", check: (s) => passed(s) >= 1 },
   { id: "debugger", title: "Bug Hunter", description: "Investigated an error with the Error Detective.", icon: "bug", color: "coral", group: "Getting started", check: (s) => s.stats.errorsAnalyzed >= 1 },
-  { id: "curious", title: "Curious Mind", description: "Asked the AI tutor a question.", icon: "message-circle", color: "pink", group: "Getting started", check: (s) => s.stats.tutorMessages >= 1 },
+  { id: "note-taker", title: "Note Taker", description: "Wrote your first lesson note.", icon: "notebook-pen", color: "pink", group: "Getting started", check: (s) => Object.values(s.notes).some((n) => n.text.trim().length > 0) },
   ...worlds.map<BadgeDef>((w) => ({
     id: `world-${w.id}`,
     title: w.name,

@@ -4,11 +4,13 @@
  */
 import { settingsStore } from "@/lib/store/settings";
 
-const COLORS = ["#5b5bf6", "#18b874", "#ffbd14", "#ff5a5f", "#1e9bf0", "#9a5cf0", "#f2559d", "#ff8433"];
+const COLORS = ["#5b8fc4", "#5ba881", "#fed57d", "#c62a29", "#6fb3c6", "#8f86cf", "#f3a3a6", "#f0a351"];
 
 export function fireConfetti({ x = 0.5, y = 0.35, count = 120, spread = 70 }: { x?: number; y?: number; count?: number; spread?: number } = {}) {
   if (typeof window === "undefined") return;
   if (!settingsStore.get().celebrations) return;
+  // Keep celebrations brief and understated.
+  count = Math.min(count, 60);
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.reduceMotion === "true") return;
   const canvas = document.createElement("canvas");
   canvas.setAttribute("aria-hidden", "true");

@@ -101,7 +101,7 @@ export function VizLab() {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
       <form
-        className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]"
+        className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]"
         aria-labelledby="vz-heading"
         onSubmit={(e) => {
           e.preventDefault();
@@ -109,8 +109,8 @@ export function VizLab() {
           setTimeout(() => void runner.current?.run(), 50);
         }}
       >
-        <div className="flex items-center gap-2 border-b-2 border-border bg-surface-2/60 px-4 py-2.5">
-          <span className="grid size-8 place-items-center rounded-xl bg-pink text-white [&_svg]:size-4.5" aria-hidden>
+        <div className="flex items-center gap-2 border-b border-border bg-surface-2/60 px-4 py-2.5">
+          <span className="grid size-8 place-items-center rounded-xl bg-pink text-on-accent [&_svg]:size-4.5" aria-hidden>
             <Palette />
           </span>
           <h2 id="vz-heading" className="font-display text-base font-semibold">
@@ -140,8 +140,8 @@ export function VizLab() {
                     key={c.id}
                     title={ok ? `${c.label}: needs ${c.needs}` : `This dataset has no ${c.id === "line" ? "date column" : "categorical column"}`}
                     className={cn(
-                      "press flex items-center gap-2 rounded-2xl border-2 px-3 py-2 has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[var(--ring)]",
-                      on ? "border-pink bg-pink-soft [--press-shadow:var(--pink)]" : "border-border bg-surface [--press-shadow:var(--border)] hover:bg-surface-2",
+                      "press flex items-center gap-2 rounded-2xl border px-3 py-2 has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[var(--ring)]",
+                      on ? "border-pink bg-pink-soft" : "border-border bg-surface hover:bg-surface-2",
                       ok ? "cursor-pointer" : "cursor-not-allowed opacity-45",
                     )}
                   >
@@ -151,7 +151,7 @@ export function VizLab() {
                     </span>
                     <span className="min-w-0">
                       <span className="block text-sm font-bold leading-tight">{c.label}</span>
-                      <span className="block text-[11px] font-semibold leading-tight text-muted-foreground">{c.needs}</span>
+                      <span className="block text-[11px] leading-tight text-muted-foreground">{c.needs}</span>
                     </span>
                   </label>
                 );
@@ -218,7 +218,7 @@ export function VizLab() {
                     key={c.name}
                     title={c.name}
                     className={cn(
-                      "grid size-10 cursor-pointer place-items-center rounded-full border-2 transition-transform has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[var(--ring)]",
+                      "grid size-10 cursor-pointer place-items-center rounded-full border transition-transform has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[var(--ring)]",
                       on ? "scale-110 border-foreground" : "border-border hover:scale-105",
                     )}
                   >

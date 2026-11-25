@@ -1,71 +1,80 @@
-# R Academy – Design System ("Hex Adventure")
+# R Academy – Design System
 
-R Academy should feel like **Duolingo meets DataCamp**: a playful, colourful coding adventure that is still a serious, accurate R course. Inspiration for the illustration style is PhET's interactive simulations: bright illustrated thumbnails, hands-on play, friendly but never childish.
+R Academy should feel **clean, calm and professional** – a serious R course that is still friendly and motivating. Colour comes from a soft, warm palette; structure comes from clear typography, generous spacing and consistent cards. Avoid excessive colour, gradients, motion and decoration.
 
-**Identity:** the R community's hex stickers. The mascot **Hexy** is a friendly hexagon. Hexagons appear in badges, the level chip, map nodes and decorations.
+**Identity:** the R community's hex stickers. The mascot **Hexy** is a minimal hexagon mark (no limbs, no speech bubbles, no animation). It is a brand element, not an assistant: use it sparingly – page heroes, empty states, the lesson-complete screen.
 
-## 1. Foundations
+## 1. Palette
 
-- **Fonts**
-  - `font-display` (Fredoka) for headings, buttons, numbers and badges.
-  - `font-sans` (Nunito) for body text.
-  - `font-mono` (JetBrains Mono, ligatures off) for code.
-  - Body text is `font-semibold` or medium. Headings use `font-display font-bold`.
-- **Colours:** always use tokens, never raw hex. They live in `src/app/globals.css` and are designed separately for light and dark.
-  - Surfaces: `bg-background`, `bg-surface`, `bg-surface-2`, `bg-surface-3`, `bg-card`, `text-foreground`, `text-muted-foreground`, `border-border`, `border-border-strong`.
-  - Brand: `primary` (indigo), plus `primary-soft`, `primary-strong` and `primary-shadow`.
-  - Candy accents, each with `-soft` and `-shadow` variants: `mint`, `sun`, `coral`, `sky`, `grape`, `tangerine`, `pink`, `teal`. Example: `bg-mint-soft text-success`.
-  - Semantic: `success`, `warning`, `danger`, `info`, each with `-soft`.
-  - World colours come from `src/lib/game/worlds.ts`: `world.color.main`, `.soft` and `.shadow` are CSS `var()` strings, so use them in `style={{ background: world.color.main }}`.
-- **Shape:**
-  - Cards are `rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]`.
-  - Inner panels are `rounded-2xl`; small chips are `rounded-xl` or `rounded-full`.
-  - 2px borders everywhere, never hairlines.
-- **3D press:** the `press` class gives a solid bottom edge and press-down. Set the edge colour with `[--press-shadow:var(--mint-shadow)]`. Buttons already do this. Use it for selectable tiles too, as in `question-card.tsx`.
-- **Hover:**
-  - The `lift` class makes a card rise on hover.
-  - `animate-pop-in`, `animate-fade-up`, `animate-slide-up`, `animate-shake` (wrong answer), `animate-float`, `animate-bob` and `animate-wiggle` are available.
-  - Always respect reduced motion. Global CSS handles this, so never force animations.
-- **Backgrounds:**
-  - `<PageHeader>` gives every page a coloured gradient hero.
-  - `<FloatingHexes/>` adds decoration.
-  - `.blob` gives blurred colour circles.
-  - `.text-gradient` gives gradient headline text.
-- **Spacing:** page container `mx-auto max-w-7xl px-5`, section gap `py-8` to `py-12`, card padding `p-5` or `p-6`.
+| Name | Hex | Used for |
+| --- | --- | --- |
+| Latte | `#F7F1E8` | page background (lightened), secondary surfaces |
+| Wisteria | `#E6E3F7` | soft panels (`grape-soft`), deep shade for text |
+| Milk shake | `#FCEDED` | error/danger panels (`coral-soft`) |
+| Attic window | `#98C1E9` | brand blue: deep shade `#2D6597` in light mode, the colour itself in dark mode |
+| Butter yellow | `#FED57D` | XP, highlights, the "sun" accent (always with dark text) |
+| Clover | `#5BA881` | success, Run/Check buttons (deep shade `#2D7A55` in light mode) |
+| Seafoam | `#E7F5F9` | info panels (`sky-soft`) |
+| Apricot jam | `#F0A351` | streaks, the "tangerine" accent |
+| Rainy day | `#B3DFE8` | the "sky" accent in dark mode |
+| Matcha | `#9CA362` | the "teal" accent (statistics) |
+| Ballet slipper | `#FDD0D0` | the "pink" accent (visualisation) |
+| Cherry | `#C62A29` | errors and destructive actions |
 
-## 2. Components to use
+Pastels are surfaces; **deeper shades of the same hues carry text and filled buttons**, so every pairing meets WCAG AA (4.5:1) in both themes. In dark mode the palette's own tones are used as accents on a dark neutral background, and text on coloured fills turns dark.
+
+## 2. Tokens (use these, never raw hex)
+
+All tokens live in `src/app/globals.css` (`:root` and `.dark`).
+
+- **Surfaces:** `bg-background`, `bg-surface`, `bg-surface-2`, `bg-surface-3`, `bg-card`, `text-foreground`, `text-muted-foreground`, `border-border`, `border-border-strong`.
+- **Brand:** `primary` (attic-window blue) with `primary-soft`.
+- **Accents** (token name → palette hue), each with `-soft`: `mint` → clover, `sun` → butter yellow, `coral` → cherry, `sky` → rainy day, `grape` → wisteria, `tangerine` → apricot jam, `pink` → ballet slipper, `teal` → matcha.
+- **Text on fills:** `text-on-accent` on any coloured fill (white in light mode, dark in dark mode); `text-on-sun` on butter yellow.
+- **Semantic:** `success`, `warning`, `danger`, `info`, each with `-soft`.
+- **Worlds:** `src/lib/game/worlds.ts` gives each world `color.main / .soft / .shadow` as CSS `var()` strings.
+
+## 3. Typography
+
+- `font-display` – **Plus Jakarta Sans**: headings and large numbers, `font-bold` or `font-semibold`, slightly tight tracking.
+- `font-sans` – **Inter**: body text at regular weight; `font-semibold` only for labels and emphasis.
+- `font-mono` – JetBrains Mono (ligatures off) for code.
+- Section eyebrows: `text-xs font-semibold uppercase tracking-[0.14em]` in an accent colour.
+
+## 4. Shape and surfaces
+
+- Cards: `rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]` (the radius scale is reduced in `@theme`, so `rounded-3xl` is 14px).
+- 1px borders; quiet shadows (`--shadow-card`, `--shadow-pop` on hover via `.lift`).
+- Page heroes (`PageHeader`) use a flat soft accent band – no gradients.
+- Buttons (`@/components/ui/button`): solid fills for actions (`primary`, `success`, `sun`, `danger`, …), `outline`/`ghost` for secondary actions. `.press` adds a subtle hover/press feedback.
+
+## 5. Motion
+
+- Only short, functional transitions: `animate-fade-up`, `animate-pop-in`, `animate-slide-up`, `animate-shake` (wrong answer).
+- Decorative looping motion (`float`, `bob`, `wiggle`, `pulse-ring`) is switched off in the theme.
+- Confetti is brief and capped, only on real achievements, and respects the Celebrations and reduced-motion settings.
+
+## 6. Components
 
 | Need | Component |
 | --- | --- |
-| Buttons | `@/components/ui/button`. Variants: `primary` (main action), `success` (Run / Check / Continue), `sun` (Hint, XP), `grape`, `accent`, `danger`, `outline` (secondary), `secondary`, `ghost`, `link`. Sizes: `sm`, `md`, `lg`, `xl`, `icon`, `icon-sm`. |
-| Cards | `@/components/ui/card` (`Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`) |
-| Badges | `Badge`, `DifficultyBadge`, `XpBadge` from `@/components/ui/badge` |
-| Progress | `ProgressBar` (supports `color={world.color.main}`, size `sm`/`md`/`lg`) and `ProgressRing` from `@/components/ui/progress` |
-| Page hero | `PageHeader` from `@/components/layout/page-header`: `title`, `description`, `icon`, `color` (accent name), `eyebrow`, `art` (e.g. `<Hexy mood="wave" size={120}/>`) |
-| Mascot | `Hexy` and `HexyAvatar` from `@/components/brand/mascot`. Moods: `happy`, `wave`, `celebrate`, `think`, `oops`, `cool`, `sleep`, `point`. |
-| Topic illustrations | `TopicArt kind=… bg=…` from `@/components/brand/topic-art`. Lesson kinds are in `LESSON_ART`, project kinds in `PROJECT_ART` (`src/lib/game/worlds.ts`). Use these as PhET-style card thumbnails. |
-| Badges / medals | `HexBadge` from `@/components/game/hex-badge`. Definitions are in `src/lib/game/badges.ts`. |
-| Decoration | `FloatingHexes`, `SectionTitle` from `@/components/brand/decor`; `Reveal` (scroll-in) from `@/components/brand/reveal` |
-| Gamification data | `useGame()` from `@/components/game/outline-context` returns `xp`, `level`, `todayXp`, `goalXp`, `goalPct`, `week`, `streak` and `daily`. `useOutline()` returns the course outline. |
-| Celebrations | `fireConfetti()` from `@/components/game/confetti`. XP gains, level-ups and badges are celebrated globally by `CelebrationLayer`, so don't duplicate them. |
-| Code | `CodeRunner` (full editor, console, plots, data, variables), `CodeBlock` (read-only with Run), `StaticCode`, `CodeEditor` |
-| Exercises & quizzes | `ExerciseCard`, `QuestionCard`, `Quiz` from `@/components/learn/*` |
-| Copy | `praise()` and `encourage()` from `@/lib/game/xp` for friendly feedback |
+| Page hero | `PageHeader` (`@/components/layout/page-header`): `title`, `description`, `icon`, `color`, `eyebrow`, `art` |
+| Mascot | `Hexy`, `HexyAvatar` (`@/components/brand/mascot`); moods only change the face slightly |
+| Illustrations | `TopicArt kind=… bg=…` (`@/components/brand/topic-art`), drawn in palette tones |
+| Cards / badges / progress | `@/components/ui/card`, `badge` (`Badge`, `DifficultyBadge`, `XpBadge`), `progress` (`ProgressBar`, `ProgressRing`) |
+| Code | `CodeRunner`, `CodeBlock`, `StaticCode`, `CodeEditor` |
+| Exercises & quizzes | `ExerciseCard`, `QuestionCard`, `Quiz` |
+| Gamification data | `useGame()` (`@/components/game/outline-context`) |
 
-## 3. Tone
+## 7. Writing
 
-- Friendly, encouraging and specific: "Almost! …", "Brilliant!". Celebrate success. After mistakes, encourage and explain; never blame.
-- Never childish. Emojis only as small accents in labels, at most one per heading.
-- Never fake anything:
-  - Every button works.
-  - Every output shown as "your output" comes from real R (webR).
-  - Illustrative examples must be labelled as examples.
+- Clear, encouraging and specific. Explain mistakes; never blame.
+- No emoji in headings or labels.
+- Never fake anything: every button works, every output shown as R output comes from real R (webR), and illustrations are labelled as illustrations.
 
-## 4. Accessibility
+## 8. Accessibility
 
-- All interactive elements are real buttons or links with visible focus. The global focus ring is 3px.
-- Icon-only buttons need an `aria-label`.
-- Tiles that act as radio buttons use `role="radio"` and `aria-checked`.
-- Live regions announce results.
-- Contrast: text on candy colours uses white, except `sun`, which uses dark text (`text-[#3b2600]`).
-- Every page must work at phone width (320–430px). The mobile tab bar covers the bottom 64px, and the footer already pads for it.
+- Real buttons and links with a visible focus ring; icon-only buttons need an `aria-label`.
+- Tiles that act as radio buttons use `role="radio"` and `aria-checked`; results are announced with live regions.
+- Check contrast when adding colour: text must reach 4.5:1 in both themes.
+- Every page must work from 320px phones to wide desktops.

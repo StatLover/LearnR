@@ -10,11 +10,12 @@ import { progress, useProgress, type Profile } from "@/lib/store/progress";
 import { updateSettings } from "@/lib/store/settings";
 import { useOutline } from "@/components/game/outline-context";
 import { cn } from "@/lib/utils";
+import { Leaf, Sprout, TreePine, type LucideIcon } from "lucide-react";
 
-const PROGRAMMING: { value: NonNullable<Profile["programming"]>; label: string; hint: string; emoji: string }[] = [
-  { value: "none", label: "Brand new to coding", hint: "Perfect – we start from zero.", emoji: "🌱" },
-  { value: "some", label: "I've tried a little", hint: "Spreadsheet formulas, a tutorial…", emoji: "🌿" },
-  { value: "experienced", label: "I already program", hint: "Every lesson will be unlocked.", emoji: "🌳" },
+const PROGRAMMING: { value: NonNullable<Profile["programming"]>; label: string; hint: string; icon: LucideIcon }[] = [
+  { value: "none", label: "Brand new to coding", hint: "Perfect – we start from zero.", icon: Sprout },
+  { value: "some", label: "I've tried a little", hint: "Spreadsheet formulas, a tutorial…", icon: Leaf },
+  { value: "experienced", label: "I already program", hint: "Every lesson will be unlocked.", icon: TreePine },
 ];
 const STATS: { value: NonNullable<Profile["statistics"]>; label: string }[] = [
   { value: "none", label: "New to statistics" },
@@ -36,8 +37,8 @@ function Choice({ on, onClick, children, className }: { on: boolean; onClick: ()
       aria-checked={on}
       onClick={onClick}
       className={cn(
-        "press w-full rounded-2xl border-2 px-4 py-3 text-left text-sm font-semibold cursor-pointer",
-        on ? "border-primary bg-primary-soft [--press-shadow:var(--primary)]" : "border-border bg-surface [--press-shadow:var(--border)] hover:bg-surface-2",
+        "press w-full rounded-2xl border px-4 py-3 text-left text-sm font-semibold cursor-pointer",
+        on ? "border-primary bg-primary-soft" : "border-border bg-surface hover:bg-surface-2",
         className,
       )}
     >
@@ -87,8 +88,8 @@ export function Onboarding() {
         {step === 0 && (
           <div className="mt-4 space-y-4">
             <div className="text-center">
-              <h2 className="font-display text-2xl font-bold">Hi, I&apos;m Hexy! 👋</h2>
-              <p className="mt-1 text-sm text-muted-foreground">I&apos;ll guide you through your R adventure. First – what should I call you?</p>
+              <h2 className="font-display text-2xl font-bold">Welcome to R Academy</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Three quick questions so the course fits you. What should we call you?</p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="ob-name">Your name (optional)</Label>
@@ -107,7 +108,7 @@ export function Onboarding() {
               {PROGRAMMING.map((o) => (
                 <Choice key={o.value} on={p.programming === o.value} onClick={() => setP({ ...p, programming: o.value })}>
                   <span className="flex items-center gap-3">
-                    <span className="text-2xl" aria-hidden>{o.emoji}</span>
+                    <o.icon className="size-6 shrink-0 text-primary" aria-hidden />
                     <span>
                       <span className="block font-display text-base">{o.label}</span>
                       <span className="block text-xs text-muted-foreground">{o.hint}</span>
@@ -154,7 +155,7 @@ export function Onboarding() {
         )}
         {step === 3 && (
           <div className="mt-4 space-y-4 text-center">
-            <h2 className="font-display text-2xl font-bold">You&apos;re all set{p.name ? `, ${p.name}` : ""}! 🎉</h2>
+            <h2 className="font-display text-2xl font-bold">You&apos;re all set{p.name ? `, ${p.name}` : ""}</h2>
             <p className="text-sm text-muted-foreground">
               {p.programming === "experienced"
                 ? "Every world is unlocked – jump to whatever you need."

@@ -17,7 +17,7 @@ export default function ErrorCheckerPage() {
         color="coral"
         eyebrow="Debugging · solve the case"
         title="R Error Detective"
-        description="Every bug leaves clues. Paste your R code and Hexy runs it in real R inside your browser, finds the exact line, explains the error in plain English and suggests corrected code – shown as working only after R has actually run it."
+        description="Every bug leaves clues. Paste your R code: it runs in real R inside your browser, the detective finds the exact line, explains the error in plain English and suggests corrected code – shown as working only after R has actually run it."
         art={<DetectiveHexy mood="point" size={130} animate className="mr-6" />}
       />
       <div className="mx-auto max-w-7xl px-5 py-8 sm:py-10">

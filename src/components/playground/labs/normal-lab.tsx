@@ -58,7 +58,7 @@ function RuleDiagram() {
     return `M${sx(a)},96 L${pts.join(" L")} L${sx(b)},96 Z`;
   };
   return (
-    <figure className="rounded-2xl border-2 border-border bg-surface p-3">
+    <figure className="rounded-2xl border border-border bg-surface p-3">
       <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="Illustration: a bell curve with the middle band (±1 sd) holding 68%, ±2 sd holding 95% and ±3 sd holding 99.7% of the values.">
         <path d={path(-3, 3)} fill="var(--teal-soft)" />
         <path d={path(-2, 2)} fill="var(--teal)" opacity="0.35" />

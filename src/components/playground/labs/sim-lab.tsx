@@ -63,7 +63,7 @@ export function Slider({
         <label htmlFor={id} className="text-sm font-bold">
           {label}
         </label>
-        <output htmlFor={id} className="min-w-12 rounded-lg px-2 py-0.5 text-center font-mono text-sm font-bold text-white" style={{ background: `var(--${color})`, color: color === "sun" ? "#3b2600" : undefined }}>
+        <output htmlFor={id} className="min-w-12 rounded-lg px-2 py-0.5 text-center font-mono text-sm font-bold text-on-accent" style={{ background: `var(--${color})`, color: color === "sun" ? "var(--on-sun)" : undefined }}>
           {shown}
         </output>
       </div>
@@ -81,8 +81,8 @@ export function Slider({
         }}
         className={cn(
           "h-3 w-full cursor-pointer appearance-none rounded-full",
-          "[&::-webkit-slider-thumb]:size-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-[var(--c)] [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[0_2px_0_var(--c-shadow)] [&::-webkit-slider-thumb]:transition-transform active:[&::-webkit-slider-thumb]:scale-110",
-          "[&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-[var(--c)] [&::-moz-range-thumb]:bg-white",
+          "[&::-webkit-slider-thumb]:size-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--c)] [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:transition-transform active:[&::-webkit-slider-thumb]:scale-110",
+          "[&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[var(--c)] [&::-moz-range-thumb]:bg-white",
         )}
         style={{
           ["--c" as string]: `var(--${color})`,
@@ -90,7 +90,7 @@ export function Slider({
           background: `linear-gradient(to right, var(--${color}) 0%, var(--${color}) ${pct}%, var(--surface-3) ${pct}%, var(--surface-3) 100%)`,
         }}
       />
-      <div className="mt-1 flex justify-between font-mono text-[11px] font-semibold text-muted-foreground" aria-hidden>
+      <div className="mt-1 flex justify-between font-mono text-[11px] text-muted-foreground" aria-hidden>
         <span>{format(values ? values[0] : lo)}</span>
         <span>{format(values ? values[values.length - 1] : hi)}</span>
       </div>
@@ -102,7 +102,7 @@ export function Slider({
 /** An on/off option shown as a switch-style checkbox. */
 export function Toggle({ id, label, checked, onChange, hint }: { id: string; label: string; checked: boolean; onChange: (v: boolean) => void; hint?: string }) {
   return (
-    <label htmlFor={id} className="flex cursor-pointer items-start gap-3 rounded-2xl border-2 border-border bg-surface px-3 py-2.5 hover:bg-surface-2 has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[var(--ring)]">
+    <label htmlFor={id} className="flex cursor-pointer items-start gap-3 rounded-2xl border border-border bg-surface px-3 py-2.5 hover:bg-surface-2 has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[var(--ring)]">
       <input id={id} type="checkbox" className="peer sr-only" checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <span aria-hidden className={cn("relative mt-0.5 inline-flex h-6 w-10 shrink-0 items-center rounded-full transition-colors", checked ? "bg-mint" : "bg-surface-3")}>
         <span className={cn("block size-4.5 rounded-full bg-white shadow transition-transform", checked ? "translate-x-[19px]" : "translate-x-[3px]")} />
@@ -142,8 +142,8 @@ export function Choice<T extends string>({
             <label
               key={o.value}
               className={cn(
-                "press flex cursor-pointer items-start gap-2 rounded-2xl border-2 px-3 py-2 text-left has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[var(--ring)]",
-                on ? "border-[var(--c)] bg-[var(--c-soft)] [--press-shadow:var(--c)]" : "border-border bg-surface [--press-shadow:var(--border)] hover:bg-surface-2",
+                "press flex cursor-pointer items-start gap-2 rounded-2xl border px-3 py-2 text-left has-[:focus-visible]:outline has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[var(--ring)]",
+                on ? "border-[var(--c)] bg-[var(--c-soft)]" : "border-border bg-surface hover:bg-surface-2",
               )}
               style={{ ["--c" as string]: `var(--${color})`, ["--c-soft" as string]: `var(--${color}-soft)` }}
             >
@@ -151,7 +151,7 @@ export function Choice<T extends string>({
               {o.icon && <span className="mt-0.5 shrink-0 [&_svg]:size-4" style={{ color: `var(--${color})` }}>{o.icon}</span>}
               <span className="min-w-0">
                 <span className="block text-sm font-bold leading-tight">{o.label}</span>
-                {o.hint && <span className="mt-0.5 block text-[11px] font-semibold leading-tight text-muted-foreground">{o.hint}</span>}
+                {o.hint && <span className="mt-0.5 block text-[11px] leading-tight text-muted-foreground">{o.hint}</span>}
               </span>
             </label>
           );
@@ -239,9 +239,9 @@ export function useLabRun(code: string, workspace: string, delay = 450) {
 export function Panel({ icon, title, color = "primary", actions, children, className }: { icon: ReactNode; title: string; color?: string; actions?: ReactNode; children: ReactNode; className?: string }) {
   const id = useId();
   return (
-    <section className={cn("overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]", className)} aria-labelledby={id}>
-      <div className="flex flex-wrap items-center gap-2 border-b-2 border-border bg-surface-2/60 px-4 py-2.5">
-        <span className="grid size-8 place-items-center rounded-xl text-white [&_svg]:size-4.5" style={{ background: `var(--${color})` }} aria-hidden>
+    <section className={cn("overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]", className)} aria-labelledby={id}>
+      <div className="flex flex-wrap items-center gap-2 border-b border-border bg-surface-2/60 px-4 py-2.5">
+        <span className="grid size-8 place-items-center rounded-xl text-on-accent [&_svg]:size-4.5" style={{ background: `var(--${color})` }} aria-hidden>
           {icon}
         </span>
         <h2 id={id} className="font-display text-base font-semibold">{title}</h2>
@@ -258,7 +258,7 @@ export function ExploreList({ items }: { items: ReactNode[] }) {
     <ol className="space-y-3 p-5">
       {items.map((q, i) => (
         <li key={i} className="flex gap-3 text-sm font-semibold">
-          <span className="relative grid size-7 shrink-0 place-items-center font-display text-sm font-bold text-[#3b2600]" aria-hidden>
+          <span className="relative grid size-7 shrink-0 place-items-center font-display text-sm font-bold text-on-sun" aria-hidden>
             <svg viewBox="0 0 24 26" className="absolute size-7" aria-hidden>
               <path d="M12 1 L23 7 L23 19 L12 25 L1 19 L1 7 Z" fill="var(--sun)" />
             </svg>
@@ -329,7 +329,7 @@ export function SimLab({ workspace, code, color, controls, onReset, explore, con
         </Panel>
 
         <Panel icon={<Sparkles />} title={concept.title} color="grape" className="order-5">
-          <div className="space-y-3 p-5 text-sm font-semibold leading-relaxed text-muted-foreground [&_strong]:text-foreground">{concept.body}</div>
+          <div className="space-y-3 p-5 text-sm leading-relaxed text-muted-foreground [&_strong]:text-foreground">{concept.body}</div>
         </Panel>
       </div>
 
@@ -345,7 +345,7 @@ export function SimLab({ workspace, code, color, controls, onReset, explore, con
             </span>
           }
         >
-          {caption && <div className="border-b-2 border-border px-4 py-2 text-sm font-semibold text-muted-foreground">{caption}</div>}
+          {caption && <div className="border-b border-border px-4 py-2 text-sm text-muted-foreground">{caption}</div>}
           <div className="relative grid min-h-60 place-items-center bg-surface p-2 sm:p-3">
             {img ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -353,7 +353,7 @@ export function SimLab({ workspace, code, color, controls, onReset, explore, con
             ) : (
               <div className="flex flex-col items-center gap-3 p-6 text-center">
                 <Hexy mood={failed ? "oops" : "think"} size={84} animate={!failed} />
-                <p className="max-w-sm text-sm font-semibold text-muted-foreground">
+                <p className="max-w-sm text-sm text-muted-foreground">
                   {failed
                     ? "R did not draw a plot this time – read the console below."
                     : session.status === "loading"
@@ -391,7 +391,7 @@ export function SimLab({ workspace, code, color, controls, onReset, explore, con
               </>
             }
           >
-            <p className="border-b-2 border-border px-4 py-2 text-xs font-semibold text-muted-foreground">The controls write this code. It runs exactly as shown.</p>
+            <p className="border-b border-border px-4 py-2 text-xs font-semibold text-muted-foreground">The controls write this code. It runs exactly as shown.</p>
             <StaticCode code={code} className="max-h-[340px] text-[13px]" />
           </Panel>
         </div>

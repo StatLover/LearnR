@@ -45,17 +45,17 @@ export default function ResourcesPage() {
           <h2 id="internal" className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
             On R Academy
           </h2>
-          <p className="mt-1 font-semibold text-muted-foreground">Reference pages and hands-on tools – all running real R in your browser.</p>
+          <p className="mt-1 text-muted-foreground">Reference pages and hands-on tools – all running real R in your browser.</p>
           <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {INTERNAL.map((r) => (
               <li key={r.href} className="min-w-0">
-                <Link href={r.href} style={candy(r.color)} className="group lift relative flex h-full flex-col overflow-hidden rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)] hover:border-[var(--c)]">
+                <Link href={r.href} style={candy(r.color)} className="group lift relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] hover:border-[var(--c)]">
                   <span aria-hidden className="absolute -right-8 -top-8 size-28 rounded-full bg-[var(--c-soft)]" />
-                  <span aria-hidden className="relative grid size-14 place-items-center rounded-2xl bg-[var(--c)] text-[var(--c-fg)] shadow-[0_4px_0_var(--c-shadow)] transition-transform group-hover:-rotate-6 [&_svg]:size-7">
+                  <span aria-hidden className="relative grid size-14 place-items-center rounded-2xl bg-[var(--c)] text-[var(--c-fg)] transition-transform group-hover:-rotate-6 [&_svg]:size-7">
                     <r.icon />
                   </span>
                   <span className="relative mt-4 font-display text-lg font-bold">{r.title}</span>
-                  <span className="relative mt-1 flex-1 text-sm font-semibold text-muted-foreground">{r.desc}</span>
+                  <span className="relative mt-1 flex-1 text-sm text-muted-foreground">{r.desc}</span>
                   <span className={cn("relative mt-4 inline-flex items-center gap-1 font-display text-sm font-semibold", INK)}>
                     Open <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
                   </span>
@@ -69,11 +69,11 @@ export default function ResourcesPage() {
           <h2 id="external" className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
             Trusted external resources
           </h2>
-          <p className="mt-1 font-semibold text-muted-foreground">Official sites and free books for when you continue with R on your own computer.</p>
+          <p className="mt-1 text-muted-foreground">Official sites and free books for when you continue with R on your own computer.</p>
           <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {EXTERNAL.map((r) => (
               <li key={r.href} className="min-w-0">
-                <a href={r.href} target="_blank" rel="noreferrer noopener" style={candy(r.color)} className="group lift flex h-full items-start gap-4 rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)] hover:border-[var(--c)]">
+                <a href={r.href} target="_blank" rel="noreferrer noopener" style={candy(r.color)} className="group lift flex h-full items-start gap-4 rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] hover:border-[var(--c)]">
                   <span aria-hidden className={cn("grid size-12 shrink-0 place-items-center rounded-2xl bg-[var(--c-soft)] [&_svg]:size-6", INK)}>
                     <r.icon />
                   </span>
@@ -82,7 +82,7 @@ export default function ResourcesPage() {
                       {r.title}
                       <ArrowUpRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
                     </span>
-                    <span className="mt-1 block text-sm font-semibold text-muted-foreground">{r.desc}</span>
+                    <span className="mt-1 block text-sm text-muted-foreground">{r.desc}</span>
                     <span className={cn("mt-2 block truncate font-mono text-xs font-bold", INK)}>{host(r.href)}</span>
                     <span className="sr-only"> (opens in a new tab)</span>
                   </span>

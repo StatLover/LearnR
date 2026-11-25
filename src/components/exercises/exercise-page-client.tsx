@@ -30,13 +30,13 @@ export function ExercisePageClient({ exercise, lessonId, lessonTitle, lessonThum
     <div className="mx-auto max-w-4xl space-y-5">
       <ExerciseCard task={exercise} />
       {lessonId && (
-        <div className="flex flex-wrap items-center gap-4 rounded-3xl border-2 border-border bg-card p-4 shadow-[var(--shadow-card)]">
-          {lessonThumb && <div className="hidden w-24 shrink-0 overflow-hidden rounded-2xl border-2 border-border sm:block [&_svg]:block">{lessonThumb}</div>}
+        <div className="flex flex-wrap items-center gap-4 rounded-3xl border border-border bg-card p-4 shadow-[var(--shadow-card)]">
+          {lessonThumb && <div className="hidden w-24 shrink-0 overflow-hidden rounded-2xl border border-border sm:block [&_svg]:block">{lessonThumb}</div>}
           <div className="min-w-0 flex-1 basis-48">
             <p className="flex items-center gap-1.5 font-display text-xs font-semibold uppercase tracking-wider text-primary">
               <BookOpen className="size-4" aria-hidden /> Need a refresher?
             </p>
-            <p className="mt-0.5 text-sm font-semibold text-muted-foreground">
+            <p className="mt-0.5 text-sm text-muted-foreground">
               This exercise practises the lesson <strong className="text-foreground">{lessonTitle}</strong>.
             </p>
           </div>

@@ -46,7 +46,7 @@ export function LineExcerpt({ code, lineStart, lineEnd, token, kind = "error" }:
   const tone = kind === "error" ? "bg-danger-soft shadow-[inset_3px_0_0_var(--danger)]" : kind === "warning" ? "bg-warning-soft shadow-[inset_3px_0_0_var(--sun)]" : "bg-info-soft shadow-[inset_3px_0_0_var(--info)]";
   if (lineStart > lines.length) return null;
   return (
-    <pre className="code-static overflow-x-auto rounded-2xl border-2 border-border bg-code py-2 text-[13px] scrollbar-thin">
+    <pre className="code-static overflow-x-auto rounded-2xl border border-border bg-code py-2 text-[13px] scrollbar-thin">
       <code>
         {lines.slice(from - 1, to).map((spans, i) => {
           const n = from + i;

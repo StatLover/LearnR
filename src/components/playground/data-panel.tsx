@@ -54,14 +54,14 @@ export function DatasetList({ datasets, onInsert }: { datasets: DatasetInfo[]; o
       {datasets.map((d) => {
         const art = DATASET_ART[d.id] ?? { kind: "table" as TopicKind, color: "primary" };
         return (
-          <li key={d.id} className="flex items-center gap-3 rounded-2xl border-2 border-border bg-surface p-2.5">
-            <span className="w-16 shrink-0 overflow-hidden rounded-xl border-2 border-border">
+          <li key={d.id} className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-2.5">
+            <span className="w-16 shrink-0 overflow-hidden rounded-xl border border-border">
               <TopicArt kind={art.kind} bg={`var(--${art.color}-soft)`} className="block" />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-bold">{d.name}</span>
-              <span className="block truncate font-mono text-[11px] font-semibold text-muted-foreground">{d.path}</span>
-              <span className="block text-[11px] font-semibold text-muted-foreground">
+              <span className="block truncate font-mono text-[11px] text-muted-foreground">{d.path}</span>
+              <span className="block text-[11px] text-muted-foreground">
                 {d.rows.toLocaleString("en-US")} rows · {d.columns.length} columns
               </span>
             </span>
@@ -120,9 +120,9 @@ export function UploadPanel({ onInsert }: { onInsert: (code: string) => void }) 
           setDrag(false);
           void upload(e.dataTransfer.files?.[0]);
         }}
-        className={cn("flex flex-col items-center gap-3 rounded-3xl border-2 border-dashed px-4 py-6 text-center transition-colors", drag ? "border-sky bg-sky-soft" : "border-border-strong bg-surface")}
+        className={cn("flex flex-col items-center gap-3 rounded-3xl border border-dashed px-4 py-6 text-center transition-colors", drag ? "border-sky bg-sky-soft" : "border-border-strong bg-surface")}
       >
-        <span className="grid size-14 place-items-center rounded-2xl bg-sky text-white shadow-[0_4px_0_var(--sky-shadow)]">
+        <span className="grid size-14 place-items-center rounded-2xl bg-sky text-on-accent">
           <FileSpreadsheet className="size-7" />
         </span>
         <p className="font-display text-base font-semibold">Drop a CSV file here</p>
@@ -144,7 +144,7 @@ export function UploadPanel({ onInsert }: { onInsert: (code: string) => void }) 
           <p className="mb-1.5 font-display text-sm font-semibold">Your files</p>
           <ul className="space-y-1.5">
             {uploads.map((u) => (
-              <li key={u} className="flex items-center gap-2 rounded-xl border-2 border-border bg-surface px-3 py-1.5">
+              <li key={u} className="flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-1.5">
                 <span className="min-w-0 flex-1 truncate font-mono text-xs font-semibold">data/{u}</span>
                 <Button size="icon-sm" variant="ghost" aria-label={`Insert code that loads ${u}`} onClick={() => onInsert(code(u))}>
                   <Plus />

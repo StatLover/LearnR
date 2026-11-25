@@ -3,7 +3,6 @@ import { Map as MapIcon } from "lucide-react";
 import { modules } from "@/content/curriculum";
 import { projects } from "@/content/projects";
 import { PageHeader } from "@/components/layout/page-header";
-import { FloatingHexes } from "@/components/brand/decor";
 import { MapSummary, WorldChips, WorldMap } from "@/components/path/world-map";
 import { worlds } from "@/lib/game/worlds";
 
@@ -27,7 +26,6 @@ export default function LearnPage() {
         <MapSummary />
       </PageHeader>
       <div className="relative">
-        <FloatingHexes className="opacity-50" count={9} />
         <div className="relative mx-auto max-w-7xl px-5 py-8">
           <h2 className="sr-only">Worlds</h2>
           <WorldChips />

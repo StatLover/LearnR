@@ -31,11 +31,11 @@ export function DashCard({
   className?: string;
 }) {
   return (
-    <section aria-labelledby={id} className={cn("rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)] sm:p-6", className)}>
+    <section aria-labelledby={id} className={cn("rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] sm:p-6", className)}>
       <div className="mb-4 flex flex-wrap items-center gap-2.5">
         <span
-          className="grid size-9 shrink-0 place-items-center rounded-xl text-white [&_svg]:size-5"
-          style={{ background: `var(--${color})`, boxShadow: `0 3px 0 var(--${color}-shadow, var(--primary-shadow))`, color: color === "sun" ? "#3b2600" : undefined }}
+          className="grid size-9 shrink-0 place-items-center rounded-xl text-on-accent [&_svg]:size-5"
+          style={{ background: `var(--${color})`, boxShadow: `0 3px 0 var(--${color}-shadow, var(--primary-shadow))`, color: color === "sun" ? "var(--on-sun)" : undefined }}
           aria-hidden
         >
           {icon}
@@ -59,7 +59,7 @@ export function LevelHex({ level, size = 64 }: { level: number; size?: number })
         <path d="M20 3 L36 12 L36 31 L20 40 L4 31 L4 12 Z" fill="var(--primary)" stroke="var(--primary-shadow)" strokeWidth="1.5" strokeLinejoin="round" />
         <path d="M20 6 L33 13.5 L33 19 Q20 15 7 19 L7 13.5 Z" fill="#ffffff" opacity="0.22" />
       </svg>
-      <span className="relative -mt-1 font-display font-bold text-white" style={{ fontSize: size * 0.38 }}>
+      <span className="relative -mt-1 font-display font-bold text-on-accent" style={{ fontSize: size * 0.38 }}>
         {level}
       </span>
     </span>
@@ -69,14 +69,14 @@ export function LevelHex({ level, size = 64 }: { level: number; size?: number })
 /** Small stat tile: big number, label, optional sub-line. */
 export function StatTile({ icon, label, value, sub, color }: { icon: ReactNode; label: string; value: ReactNode; sub?: string; color: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border-2 border-border bg-surface p-3">
+    <div className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-3">
       <span className="grid size-10 shrink-0 place-items-center rounded-xl [&_svg]:size-5" style={{ background: `var(--${color}-soft)`, color: `var(--${color})` }} aria-hidden>
         {icon}
       </span>
       <div className="min-w-0">
         <p className="font-display text-2xl font-bold leading-none">{value}</p>
         <p className="mt-1 text-xs font-bold text-muted-foreground">{label}</p>
-        {sub && <p className="text-[11px] font-semibold text-muted-foreground">{sub}</p>}
+        {sub && <p className="text-[11px] text-muted-foreground">{sub}</p>}
       </div>
     </div>
   );
@@ -96,17 +96,17 @@ export function WeekChart({ week, goal }: { week: { day: string; label: string; 
     <div>
       <div className="relative ml-9 h-48" role="img" aria-label={label}>
         {/* recessive grid: 0 and max */}
-        <div className="absolute inset-x-0 bottom-0 border-b-2 border-border" aria-hidden />
-        <span className="absolute -left-9 bottom-0 w-7 translate-y-1/2 text-right font-mono text-[10px] font-semibold text-muted-foreground" aria-hidden>
+        <div className="absolute inset-x-0 bottom-0 border-b border-border" aria-hidden />
+        <span className="absolute -left-9 bottom-0 w-7 translate-y-1/2 text-right font-mono text-[10px] text-muted-foreground" aria-hidden>
           0
         </span>
         {/* goal line */}
-        <div className="absolute inset-x-0 border-t-2 border-dashed border-sun" style={{ bottom: `${goalPos}%` }} aria-hidden />
-        <span className="absolute -left-9 w-7 translate-y-1/2 text-right font-mono text-[10px] font-semibold text-muted-foreground" style={{ bottom: `${goalPos}%` }} aria-hidden>
+        <div className="absolute inset-x-0 border-t border-dashed border-sun" style={{ bottom: `${goalPos}%` }} aria-hidden />
+        <span className="absolute -left-9 w-7 translate-y-1/2 text-right font-mono text-[10px] text-muted-foreground" style={{ bottom: `${goalPos}%` }} aria-hidden>
           {goal}
         </span>
         {total === 0 && (
-          <p className="absolute inset-x-4 top-1/3 z-10 mx-auto max-w-xs rounded-2xl border-2 border-dashed border-border bg-card/90 px-4 py-2 text-center text-sm font-semibold text-muted-foreground" aria-hidden>
+          <p className="absolute inset-x-4 top-1/3 z-10 mx-auto max-w-xs rounded-2xl border border-dashed border-border bg-card/90 px-4 py-2 text-center text-sm text-muted-foreground" aria-hidden>
             No XP yet this week – finish a lesson or a challenge to grow your first bar!
           </p>
         )}
@@ -135,7 +135,7 @@ export function WeekChart({ week, goal }: { week: { day: string; label: string; 
           </span>
         ))}
       </div>
-      <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm font-semibold text-muted-foreground">
+      <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
         <span>
           <strong className="font-display text-foreground">{total.toLocaleString()} XP</strong> this week
         </span>
@@ -152,7 +152,7 @@ export function WeekChart({ week, goal }: { week: { day: string; label: string; 
         <span className="flex items-center gap-1.5"><span className="size-2.5 rounded-sm bg-primary" /> Today</span>
         <span className="flex items-center gap-1.5"><span className="size-2.5 rounded-sm bg-mint" /> Goal reached</span>
         <span className="flex items-center gap-1.5"><span className="size-2.5 rounded-sm bg-sky/60" /> Other days</span>
-        <span className="flex items-center gap-1.5"><span className="w-4 border-t-2 border-dashed border-sun" /> Daily goal ({goal} XP)</span>
+        <span className="flex items-center gap-1.5"><span className="w-4 border-t border-dashed border-sun" /> Daily goal ({goal} XP)</span>
       </div>
     </div>
   );

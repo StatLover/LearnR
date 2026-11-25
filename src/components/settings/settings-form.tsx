@@ -70,16 +70,16 @@ const section = (id: string) => SECTIONS.find((s) => s.id === id)!;
 function Section({ id, description, children }: { id: string; description?: string; children: ReactNode }) {
   const s = section(id);
   return (
-    <section id={id} aria-labelledby={`${id}-title`} style={candy(s.color)} className="scroll-mt-24 overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
-      <div className="flex items-center gap-3.5 border-b-2 border-border bg-[var(--c-soft)] px-5 py-4 sm:px-6">
-        <span aria-hidden className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[var(--c)] text-[var(--c-fg)] shadow-[0_4px_0_var(--c-shadow)] [&_svg]:size-5">
+    <section id={id} aria-labelledby={`${id}-title`} style={candy(s.color)} className="scroll-mt-24 overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+      <div className="flex items-center gap-3.5 border-b border-border bg-[var(--c-soft)] px-5 py-4 sm:px-6">
+        <span aria-hidden className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[var(--c)] text-[var(--c-fg)] [&_svg]:size-5">
           <s.icon />
         </span>
         <div className="min-w-0">
           <h2 id={`${id}-title`} className="font-display text-xl font-bold tracking-tight">
             {s.title}
           </h2>
-          {description && <p className="text-sm font-semibold text-muted-foreground">{description}</p>}
+          {description && <p className="text-sm text-muted-foreground">{description}</p>}
         </div>
       </div>
       <div className="divide-y-2 divide-border/60">{children}</div>
@@ -95,7 +95,7 @@ function Row({ label, hint, htmlFor, children }: { label: string; hint?: ReactNo
         <Label htmlFor={htmlFor} className="font-display text-base font-semibold">
           {label}
         </Label>
-        {hint && <p className="mt-0.5 text-sm font-semibold text-muted-foreground">{hint}</p>}
+        {hint && <p className="mt-0.5 text-sm text-muted-foreground">{hint}</p>}
       </div>
       {children}
     </div>
@@ -138,7 +138,7 @@ function TileGroup<T extends string | number>({
   return (
     <fieldset>
       <legend className="font-display text-base font-semibold">{legend}</legend>
-      {hint && <p className="mt-0.5 text-sm font-semibold text-muted-foreground">{hint}</p>}
+      {hint && <p className="mt-0.5 text-sm text-muted-foreground">{hint}</p>}
       <div className={cn("mt-3 grid gap-3", className)}>
         {options.map((o) => {
           const on = o.value === value;
@@ -146,9 +146,9 @@ function TileGroup<T extends string | number>({
             <label
               key={String(o.value)}
               className={cn(
-                "press relative flex min-w-0 cursor-pointer flex-col gap-1 rounded-2xl border-2 p-3 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
+                "press relative flex min-w-0 cursor-pointer flex-col gap-1 rounded-2xl border p-3 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
                 align === "center" ? "items-center text-center" : "items-start text-left",
-                on ? "border-[var(--c)] bg-[var(--c-soft)] [--press-shadow:var(--c)]" : "border-border bg-surface [--press-shadow:var(--border)] hover:bg-surface-2",
+                on ? "border-[var(--c)] bg-[var(--c-soft)]" : "border-border bg-surface hover:bg-surface-2",
               )}
             >
               <input type="radio" name={name} value={String(o.value)} checked={on} onChange={() => onChange(o.value)} className="sr-only" />
@@ -174,8 +174,8 @@ function TileGroup<T extends string | number>({
 /* Little illustrations (SVG, so raw colours are fine here)            */
 /* ------------------------------------------------------------------ */
 
-const LIGHT = { bg: "#f5f6ff", card: "#ffffff", line: "#dde1f4", text: "#1b1e3d", primary: "#5b5bf6", mint: "#18b874", sun: "#ffbd14", pink: "#f2559d" };
-const DARK = { bg: "#0c0f24", card: "#151937", line: "#2a3062", text: "#eef0ff", primary: "#7d7dff", mint: "#2fd68f", sun: "#ffcc3d", pink: "#ff74b5" };
+const LIGHT = { bg: "#f5f6ff", card: "#ffffff", line: "#dde1f4", text: "#1f2933", primary: "#5b8fc4", mint: "#5ba881", sun: "#fed57d", pink: "#f3a3a6" };
+const DARK = { bg: "#121518", card: "#151937", line: "#2a3062", text: "#eef0ff", primary: "#98c1e9", mint: "#2fd68f", sun: "#ffcc3d", pink: "#ff74b5" };
 
 function MiniSite({ c }: { c: typeof LIGHT }) {
   return (
@@ -202,7 +202,7 @@ function MiniSite({ c }: { c: typeof LIGHT }) {
 function ThemeArt({ kind }: { kind: ThemePref }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, "");
   return (
-    <svg viewBox="0 0 120 72" className="w-full overflow-hidden rounded-xl border-2 border-border" aria-hidden>
+    <svg viewBox="0 0 120 72" className="w-full overflow-hidden rounded-xl border border-border" aria-hidden>
       {kind === "light" && <MiniSite c={LIGHT} />}
       {kind === "dark" && <MiniSite c={DARK} />}
       {kind === "system" && (
@@ -238,7 +238,7 @@ function PlotArt({ mode }: { mode: Settings["plotTheme"] }) {
     </g>
   );
   return (
-    <svg viewBox="0 0 120 48" className="w-full overflow-hidden rounded-xl border-2 border-border" aria-hidden>
+    <svg viewBox="0 0 120 48" className="w-full overflow-hidden rounded-xl border border-border" aria-hidden>
       {mode === "auto" ? (
         <>
           {bars(LIGHT, 0)}
@@ -251,7 +251,7 @@ function PlotArt({ mode }: { mode: Settings["plotTheme"] }) {
           <rect x="60" width="60" height="48" fill={DARK.bg} opacity="0.12" />
         </>
       )}
-      <line x1="60" y1="0" x2="60" y2="48" stroke="#a0a6c8" strokeWidth="1" strokeDasharray="3 2" />
+      <line x1="60" y1="0" x2="60" y2="48" stroke="#c9bfb0" strokeWidth="1" strokeDasharray="3 2" />
     </svg>
   );
 }
@@ -438,7 +438,7 @@ export function SettingsForm() {
         <ul className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 no-scrollbar lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0">
           {SECTIONS.map((x) => (
             <li key={x.id} className="shrink-0">
-              <a href={`#${x.id}`} style={candy(x.color)} className="group flex items-center gap-2.5 rounded-2xl border-2 border-border bg-card px-3 py-2 font-display text-[15px] font-semibold hover:border-[var(--c)] lg:border-transparent lg:bg-transparent lg:hover:bg-[var(--c-soft)]">
+              <a href={`#${x.id}`} style={candy(x.color)} className="group flex items-center gap-2.5 rounded-2xl border border-border bg-card px-3 py-2 font-display text-[15px] font-semibold hover:border-[var(--c)] lg:border-transparent lg:bg-transparent lg:hover:bg-[var(--c-soft)]">
                 <span aria-hidden className="grid size-8 place-items-center rounded-xl bg-[var(--c)] text-[var(--c-fg)] [&_svg]:size-4">
                   <x.icon />
                 </span>
@@ -557,7 +557,7 @@ export function SettingsForm() {
                 icon: <g.icon />,
                 extra: (
                   <span className="inline-flex items-center gap-1 font-display text-xl font-bold">
-                    <Zap className="size-4 fill-sun text-sun" aria-hidden /> {g.xp} XP
+                    <Zap className="size-4 fill-sun text-warning" aria-hidden /> {g.xp} XP
                   </span>
                 ),
               }))}
@@ -577,7 +577,7 @@ export function SettingsForm() {
               <Label htmlFor="pname" className="font-display text-base font-semibold">
                 Your name
               </Label>
-              <Input id="pname" value={p.profile.name ?? ""} onChange={(e) => progress.setProfile({ name: e.target.value })} placeholder="Optional – Hexy uses it to cheer you on" />
+              <Input id="pname" value={p.profile.name ?? ""} onChange={(e) => progress.setProfile({ name: e.target.value })} placeholder="Optional – used in greetings" />
             </div>
             <TileGroup<NonNullable<Profile["programming"]>>
               legend="Programming experience"
@@ -610,7 +610,7 @@ export function SettingsForm() {
           <Block className="pt-0">
             <p className="mb-1.5 text-xs font-extrabold uppercase tracking-wider text-muted-foreground">Preview</p>
             <div style={{ fontSize: s.editorFontSize }}>
-              <StaticCode code={PREVIEW_CODE} lineNumbers={s.lineNumbers} className="rounded-2xl border-2 border-border text-[1em]!" />
+              <StaticCode code={PREVIEW_CODE} lineNumbers={s.lineNumbers} className="rounded-2xl border border-border text-[1em]!" />
             </div>
           </Block>
           <Row label="Line numbers" htmlFor="ln">
@@ -713,12 +713,12 @@ export function SettingsForm() {
             </Button>
           </Row>
           <Block>
-            <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-coral/40 bg-coral-soft px-4 py-4">
+            <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-coral/40 bg-coral-soft px-4 py-4">
               <div className="min-w-0 flex-1 basis-56">
                 <p className="flex items-center gap-2 font-display text-base font-semibold text-danger">
                   <TriangleAlert className="size-5" aria-hidden /> Danger zone
                 </p>
-                <p className="mt-0.5 text-sm font-semibold text-muted-foreground">Delete all progress, scores, notes, bookmarks and saved code from this browser.</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">Delete all progress, scores, notes, bookmarks and saved code from this browser.</p>
               </div>
               <Button variant="danger" onClick={() => setConfirmReset(true)}>
                 <UserRound /> Reset all progress

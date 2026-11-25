@@ -27,7 +27,7 @@ export function LevelBadge({ level, className }: { level: Level; className?: str
     <span
       className={cn(
         "inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-display text-xs font-semibold uppercase tracking-wider [&_svg]:size-3.5",
-        level === "capstone" ? "text-[#3b2600]" : "text-white",
+        level === "capstone" ? "text-on-sun" : "text-on-accent",
         className,
       )}
       style={{ background: c.main, boxShadow: `0 2px 0 ${c.shadow}` }}

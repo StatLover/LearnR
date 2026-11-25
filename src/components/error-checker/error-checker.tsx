@@ -73,7 +73,7 @@ const KIND_STYLE = {
 } as const;
 
 const accent = (color: string) => ({ "--a": `var(--${color})`, "--a-soft": `var(--${color}-soft)`, "--a-shadow": `var(--${color}-shadow)` }) as CSSProperties;
-const onAccent = (color: string) => (color === "sun" ? "text-[#3b2600]" : "text-white");
+const onAccent = (color: string) => (color === "sun" ? "text-on-sun" : "text-on-accent");
 const isError = (d: Diagnosis) => d.kind === "syntax" || d.kind === "runtime";
 
 function identifierNames(code: string) {
@@ -85,7 +85,7 @@ function Clue({ n, icon: Icon, color, title, children, extra }: { n: number; ico
   return (
     <li className="relative flex gap-3 animate-fade-up" style={{ ...accent(color), animationDelay: `${n * 60}ms` }}>
       <span className="flex flex-col items-center">
-        <span className={cn("grid size-9 shrink-0 place-items-center rounded-xl bg-[var(--a)] shadow-[0_3px_0_var(--a-shadow)]", onAccent(color))} aria-hidden>
+        <span className={cn("grid size-9 shrink-0 place-items-center rounded-xl bg-[var(--a)]", onAccent(color))} aria-hidden>
           <Icon className="size-[18px]" />
         </span>
         <span className="mt-1.5 w-0.5 flex-1 rounded-full bg-border" aria-hidden />
@@ -399,9 +399,9 @@ export function ErrorChecker() {
     const before = analyzedCode ?? code;
     let n = 0;
     return (
-      <article key={d.id} className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] animate-fade-up" aria-labelledby={`case-${d.id}`} style={accent(k.tone)}>
-        <header className="flex flex-wrap items-start gap-3 border-b-2 border-border bg-gradient-to-r from-[var(--a-soft)] to-transparent px-5 py-4">
-          <span className={cn("grid size-11 shrink-0 place-items-center rounded-2xl bg-[var(--a)] shadow-[0_3px_0_var(--a-shadow)]", onAccent(k.tone))} aria-hidden>
+      <article key={d.id} className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] animate-fade-up" aria-labelledby={`case-${d.id}`} style={accent(k.tone)}>
+        <header className="flex flex-wrap items-start gap-3 border-b border-border bg-[var(--a-soft)] px-5 py-4">
+          <span className={cn("grid size-11 shrink-0 place-items-center rounded-2xl bg-[var(--a)]", onAccent(k.tone))} aria-hidden>
             <k.icon className="size-6" />
           </span>
           <div className="min-w-0 flex-1">
@@ -423,7 +423,7 @@ export function ErrorChecker() {
           {(d.message || isError(d)) && (
             <Clue n={++n} icon={MessageSquareQuote} color="coral" title="The exact R message">
               {d.message ? (
-                <pre className="code-static whitespace-pre-wrap rounded-2xl border-2 border-coral/30 bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger">{d.message}</pre>
+                <pre className="code-static whitespace-pre-wrap rounded-2xl border border-coral/30 bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger">{d.message}</pre>
               ) : (
                 <p className="text-muted-foreground">R hasn&apos;t printed a message yet – this was spotted by checking the code without running it. Press Find My Error to see R&apos;s real message.</p>
               )}
@@ -461,7 +461,7 @@ export function ErrorChecker() {
               <p className="text-muted-foreground">R didn&apos;t point to one specific line for this.</p>
             )}
             <div className="rounded-2xl bg-surface-2/70 px-3.5 py-2.5 text-xs text-muted-foreground">
-              <span className="font-display font-semibold text-foreground">🔎 How we know: </span>
+              <span className="font-display font-semibold text-foreground">How we know: </span>
               <Markdown runnableCode={false} className="inline [&>p]:inline">
                 {d.evidence}
               </Markdown>
@@ -492,7 +492,7 @@ export function ErrorChecker() {
           <Clue n={++n} icon={Wrench} color="tangerine" title="How to fix it">
             <Markdown runnableCode={false}>{d.howToFix}</Markdown>
             {d.tips.length > 0 && (
-              <div className="rounded-2xl border-2 border-dashed border-border px-3.5 py-2.5">
+              <div className="rounded-2xl border border-dashed border-border px-3.5 py-2.5">
                 <p className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">Avoid it next time</p>
                 <ul className="mt-1 list-disc space-y-1 pl-5">
                   {d.tips.map((t) => (
@@ -523,13 +523,13 @@ export function ErrorChecker() {
                 <div ref={fixRef} className="scroll-mt-24 space-y-2">
                   <DiffView before={before} after={dFix.code} />
                   <p className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">What R printed when it ran the corrected code</p>
-                  <div className="overflow-hidden rounded-2xl border-2 border-border">
+                  <div className="overflow-hidden rounded-2xl border border-border">
                     <ConsoleView lines={dFix.result.lines} empty="(The corrected code printed nothing.)" maxHeight={220} />
                     {dFix.result.images.length > 0 && <PlotGallery images={dFix.result.images} />}
                   </div>
                 </div>
               ) : verifying && fixFor === d.id ? (
-                <p className="flex items-center gap-2 font-semibold text-muted-foreground">
+                <p className="flex items-center gap-2 text-muted-foreground">
                   <Loader2 className="size-4 animate-spin text-primary" /> Testing a possible fix in R…
                 </p>
               ) : d.fix && !result ? (
@@ -592,7 +592,7 @@ export function ErrorChecker() {
         <div className="min-w-0 space-y-4 lg:self-start lg:[@media(min-height:860px)]:sticky lg:[@media(min-height:860px)]:top-[calc(var(--header-h)+1rem)]">
           <div>
             <p id="cases-label" className="mb-2 font-display text-sm font-semibold text-muted-foreground">
-              🗂️ Pick a case to crack – each one has a classic beginner mistake:
+              Pick a case to crack – each one has a classic beginner mistake:
             </p>
             <div role="group" aria-labelledby="cases-label" className="flex flex-wrap gap-2">
               {EXAMPLES.map((e, i) => {
@@ -605,8 +605,8 @@ export function ErrorChecker() {
                     onClick={() => loadCode(e.code)}
                     style={accent(e.color)}
                     className={cn(
-                      "press flex cursor-pointer items-center gap-1.5 rounded-full border-2 py-1 pl-1 pr-3 font-display text-[13px] font-semibold",
-                      on ? "border-[var(--a)] bg-[var(--a-soft)] [--press-shadow:var(--a)]" : "border-border bg-surface [--press-shadow:var(--border)] hover:border-[var(--a)]",
+                      "press flex cursor-pointer items-center gap-1.5 rounded-full border py-1 pl-1 pr-3 font-display text-[13px] font-semibold",
+                      on ? "border-[var(--a)] bg-[var(--a-soft)]" : "border-border bg-surface hover:border-[var(--a)]",
                     )}
                   >
                     <span className={cn("grid size-6 place-items-center rounded-full bg-[var(--a)]", onAccent(e.color))} aria-hidden>
@@ -620,8 +620,8 @@ export function ErrorChecker() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
-            <div className="flex flex-wrap items-center gap-2 border-b-2 border-border bg-surface-2/70 px-3 py-2">
+          <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+            <div className="flex flex-wrap items-center gap-2 border-b border-border bg-surface-2/70 px-3 py-2">
               <span className="mr-1 hidden items-center gap-1.5 sm:flex" aria-hidden>
                 <span className="size-3 rounded-full bg-coral" />
                 <span className="size-3 rounded-full bg-sun" />
@@ -651,7 +651,7 @@ export function ErrorChecker() {
               ariaLabel="Paste or write the R code to check"
               placeholder="Paste your R code here…"
             />
-            <div className="space-y-2.5 border-t-2 border-border bg-surface-2/50 p-3">
+            <div className="space-y-2.5 border-t border-border bg-surface-2/50 p-3">
               <Button size="lg" className="w-full text-[17px]" onClick={() => void findError()} disabled={working || !code.trim()}>
                 {busy === "run" && !fixing ? <Loader2 className="animate-spin" /> : <Search />} Find My Error
               </Button>
@@ -680,16 +680,16 @@ export function ErrorChecker() {
           </p>
 
           {stale && diagnoses && (
-            <p className="flex items-center gap-2 rounded-2xl border-2 border-sun/50 bg-sun-soft px-4 py-2.5 text-sm font-semibold">
+            <p className="flex items-center gap-2 rounded-2xl border border-sun/50 bg-sun-soft px-4 py-2.5 text-sm font-semibold">
               <AlertTriangle className="size-4 shrink-0 text-warning" aria-hidden /> The code has changed since it was investigated – press Find My Error again to update the clues.
             </p>
           )}
 
           {!diagnoses && !busy && (
-            <div className="rounded-3xl border-2 border-dashed border-border-strong bg-card/70 p-6 text-center sm:p-8">
+            <div className="rounded-3xl border border-dashed border-border-strong bg-card/70 p-6 text-center sm:p-8">
               <DetectiveHexy mood="point" size={112} className="mx-auto" />
               <p className="mt-4 font-display text-2xl font-bold">Ready to investigate!</p>
-              <p className="mx-auto mt-1 max-w-md text-sm font-semibold text-muted-foreground">
+              <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
                 Paste your code (or pick a case) and press <strong className="text-foreground">Find My Error</strong>. Your code runs in real R and the report collects the clues:
               </p>
               <ol className="mx-auto mt-5 grid max-w-md grid-cols-2 gap-2 text-left text-[13px] font-semibold">
@@ -703,7 +703,7 @@ export function ErrorChecker() {
                 ].map(([label, Icon, color], i) => {
                   const I = Icon as LucideIcon;
                   return (
-                    <li key={label as string} className="flex items-center gap-2 rounded-2xl border-2 border-border bg-surface px-2.5 py-2" style={accent(color as string)}>
+                    <li key={label as string} className="flex items-center gap-2 rounded-2xl border border-border bg-surface px-2.5 py-2" style={accent(color as string)}>
                       <span className={cn("grid size-7 shrink-0 place-items-center rounded-lg bg-[var(--a)]", onAccent(color as string))} aria-hidden>
                         <I className="size-4" />
                       </span>
@@ -719,11 +719,11 @@ export function ErrorChecker() {
           )}
 
           {busy && !diagnoses && (
-            <div className="flex items-center gap-4 rounded-3xl border-2 border-border bg-card p-6 shadow-[var(--shadow-card)]">
+            <div className="flex items-center gap-4 rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
               <DetectiveHexy mood="think" size={84} animate />
               <div>
                 <p className="font-display text-xl font-semibold">Investigating…</p>
-                <p className="mt-0.5 text-sm font-semibold text-muted-foreground">{busyText}</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">{busyText}</p>
                 <span className="mt-2 flex gap-1" aria-hidden>
                   <span className="typing-dot size-2 rounded-full bg-primary" />
                   <span className="typing-dot size-2 rounded-full bg-primary" />
@@ -736,7 +736,7 @@ export function ErrorChecker() {
           {verdict && (
             <div
               ref={reportRef}
-              className="relative scroll-mt-24 overflow-hidden rounded-3xl border-2 border-[var(--a)] bg-[var(--a-soft)] p-5 shadow-[var(--shadow-card)] animate-pop-in"
+              className="relative scroll-mt-24 overflow-hidden rounded-3xl border border-[var(--a)] bg-[var(--a-soft)] p-5 shadow-[var(--shadow-card)] animate-pop-in"
               style={accent(verdict.tone)}
             >
               <span
@@ -750,7 +750,7 @@ export function ErrorChecker() {
                 <div className="min-w-0 flex-1 sm:pr-28">
                   <p className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">Case report</p>
                   <p className="font-display text-xl font-bold leading-tight sm:text-2xl">{verdict.title}</p>
-                  <p className="mt-1 text-sm font-semibold text-muted-foreground">{verdict.text}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{verdict.text}</p>
                 </div>
               </div>
               {(diagnoses?.length ?? 0) > 0 && (
@@ -776,8 +776,8 @@ export function ErrorChecker() {
           )}
 
           {result && (
-            <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
-              <p className="flex items-center gap-2 border-b-2 border-border bg-surface-2/70 px-4 py-2 font-display text-sm font-semibold">
+            <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+              <p className="flex items-center gap-2 border-b border-border bg-surface-2/70 px-4 py-2 font-display text-sm font-semibold">
                 <Bug className="size-4 text-primary" aria-hidden /> Evidence: what R printed
               </p>
               <ConsoleView lines={result.lines} empty="(Your code printed nothing.)" maxHeight={240} />
@@ -801,12 +801,12 @@ export function ErrorChecker() {
             { icon: ClipboardCheck, color: "sky", title: "Check without running", text: "Asks R to read (parse) your code without running it, and looks for common mistakes." },
             { icon: Wand2, color: "mint", title: "Fix it for me", text: "Suggests corrected code – only shown as working after R has run it successfully." },
           ].map((tool) => (
-            <div key={tool.title} className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)]" style={accent(tool.color)}>
-              <span className={cn("grid size-11 place-items-center rounded-2xl bg-[var(--a)] shadow-[0_3px_0_var(--a-shadow)]", onAccent(tool.color))} aria-hidden>
+            <div key={tool.title} className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)]" style={accent(tool.color)}>
+              <span className={cn("grid size-11 place-items-center rounded-2xl bg-[var(--a)]", onAccent(tool.color))} aria-hidden>
                 <tool.icon className="size-6" />
               </span>
               <h3 className="mt-3 font-display text-lg font-semibold">{tool.title}</h3>
-              <p className="mt-1 text-sm font-semibold text-muted-foreground">{tool.text}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{tool.text}</p>
             </div>
           ))}
         </div>

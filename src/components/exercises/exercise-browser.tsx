@@ -83,9 +83,9 @@ function FilterCheck({
       <span
         aria-hidden
         className={cn(
-          "grid size-5 shrink-0 place-items-center rounded-md border-2 transition-colors peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring",
+          "grid size-5 shrink-0 place-items-center rounded-md border transition-colors peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring",
           !on && "border-border-strong bg-surface",
-          on && (darkInk ? "text-[#3b2600]" : "text-white"),
+          on && (darkInk ? "text-on-sun" : "text-on-accent"),
         )}
         style={on ? { background: color ?? "var(--primary)", borderColor: color ?? "var(--primary)" } : undefined}
       >
@@ -99,7 +99,7 @@ function FilterCheck({
 
 function FilterGroup({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <fieldset className="border-t-2 border-border pt-3 first-of-type:border-t-0 first-of-type:pt-0">
+    <fieldset className="border-t border-border pt-3 first-of-type:border-t-0 first-of-type:pt-0">
       <legend className="sr-only">{title}</legend>
       <p aria-hidden className="mb-1 px-2 font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">
         {title}
@@ -117,24 +117,24 @@ function ExerciseTile({ e, world, solved, daily }: { e: ExerciseSummary; world: 
   return (
     <Link
       href={`/exercises/${e.id}`}
-      className="group lift relative flex h-full overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] hover:border-[var(--wc)] sm:flex-col"
+      className="group lift relative flex h-full overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] hover:border-[var(--wc)] sm:flex-col"
       style={{ ["--wc" as string]: world.color.main }}
     >
-      <div className="relative w-28 shrink-0 overflow-hidden border-r-2 border-border sm:w-auto sm:border-b-2 sm:border-r-0" style={{ background: world.color.soft }}>
+      <div className="relative w-28 shrink-0 overflow-hidden border-r border-border sm:w-auto sm:border-b sm:border-r-0" style={{ background: world.color.soft }}>
         <div className="flex h-full items-center transition-transform duration-300 group-hover:scale-[1.05] [&_svg]:block">{e.thumb}</div>
         {daily && (
-          <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-sun px-2 py-0.5 font-display text-[11px] font-semibold text-[#3b2600] shadow-[0_2px_0_var(--sun-shadow)] sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-xs">
+          <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-sun px-2 py-0.5 font-display text-[11px] font-semibold text-on-sun sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-xs">
             <Sun className="size-3.5" aria-hidden /> <span className="sr-only sm:not-sr-only">Today&apos;s challenge</span>
             <span className="sm:hidden">Today</span>
           </span>
         )}
         {solved && (
-          <span className="absolute -right-10 top-9 hidden w-44 rotate-45 items-center justify-center gap-1 bg-mint py-1 font-display text-xs font-semibold uppercase tracking-wider text-white shadow-[0_2px_0_var(--mint-shadow)] sm:flex">
+          <span className="absolute -right-10 top-9 hidden w-44 rotate-45 items-center justify-center gap-1 bg-mint py-1 font-display text-xs font-semibold uppercase tracking-wider text-on-accent sm:flex">
             Solved
           </span>
         )}
         {solved && (
-          <span className="absolute bottom-2 left-2 grid size-7 place-items-center rounded-full bg-mint text-white shadow-[0_2px_0_var(--mint-shadow)] sm:hidden" aria-hidden>
+          <span className="absolute bottom-2 left-2 grid size-7 place-items-center rounded-full bg-mint text-on-accent sm:hidden" aria-hidden>
             <Check className="size-4" strokeWidth={3} />
           </span>
         )}
@@ -265,7 +265,7 @@ export function ExerciseBrowser({ exercises }: { exercises: ExerciseSummary[] })
             <button
               key={c.key}
               onClick={c.remove}
-              className="inline-flex items-center gap-1 rounded-full border-2 border-border bg-surface py-0.5 pl-2.5 pr-1.5 text-xs font-bold hover:bg-surface-2 cursor-pointer"
+              className="inline-flex items-center gap-1 rounded-full border border-border bg-surface py-0.5 pl-2.5 pr-1.5 text-xs font-bold hover:bg-surface-2 cursor-pointer"
               aria-label={`Remove filter: ${c.label}`}
             >
               {c.world && <WorldHex world={c.world} className="size-3" />}
@@ -283,7 +283,7 @@ export function ExerciseBrowser({ exercises }: { exercises: ExerciseSummary[] })
 
       {/* filter sidebar / collapsible panel */}
       <aside id="practice-filters" aria-label="Exercise filters" className={cn("[grid-area:filters] lg:sticky lg:top-20 lg:block lg:self-start", open ? "block animate-fade-up" : "hidden")}>
-        <div className="space-y-3 rounded-3xl border-2 border-border bg-card p-4 shadow-[var(--shadow-card)] lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
+        <div className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-[var(--shadow-card)] lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
           <div className="flex items-center justify-between px-2">
             <h2 className="flex items-center gap-2 font-display text-lg font-semibold">
               <SlidersHorizontal className="size-4 text-primary" aria-hidden /> Filters
@@ -311,7 +311,7 @@ export function ExerciseBrowser({ exercises }: { exercises: ExerciseSummary[] })
                   </span>
                 </FilterCheck>
                 {wm.length > 1 && sel > 0 && (
-                  <div className="mb-1 ml-5 border-l-2 border-border pl-2">
+                  <div className="mb-1 ml-5 border-l border-border pl-2">
                     {wm.map((n) => (
                       <FilterCheck key={n} small color={w.color.main} checked={mods.includes(n)} count={byModule.get(n)?.count} onChange={(on) => setMods((m) => toggle(m, n, on))}>
                         <span className="line-clamp-1">
@@ -358,7 +358,7 @@ export function ExerciseBrowser({ exercises }: { exercises: ExerciseSummary[] })
       {/* results */}
       <section aria-label="Exercises" className="min-w-0 [grid-area:results]">
         {list.length === 0 ? (
-          <div className="flex flex-col items-center rounded-3xl border-2 border-dashed border-border bg-card/60 px-6 py-12 text-center">
+          <div className="flex flex-col items-center rounded-3xl border border-dashed border-border bg-card/60 px-6 py-12 text-center">
             <Hexy mood="think" size={110} />
             <h2 className="mt-3 font-display text-xl font-semibold">No exercises match these filters</h2>
             <p className="mt-1 max-w-sm text-sm text-muted-foreground">Try removing a filter or searching for a different word.</p>

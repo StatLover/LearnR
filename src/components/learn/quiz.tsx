@@ -123,13 +123,13 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
   const otherConcepts = missedConcepts.filter((c) => !reviewLinks[c]);
 
   return (
-    <div ref={rootRef} className="scroll-mt-24 overflow-clip rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
+    <div ref={rootRef} className="scroll-mt-24 overflow-clip rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
       {/* ---------------------------- intro ---------------------------- */}
       {phase === "intro" && (
         <div className="relative flex flex-col items-center px-5 py-8 text-center sm:px-8 sm:py-10">
           <Hexy mood={cp?.passedAt ? "cool" : "think"} size={110} animate />
           <h3 className="mt-3 font-display text-2xl font-bold sm:text-3xl">{cp?.passedAt ? "Checkpoint cleared – go again?" : "Ready for the checkpoint?"}</h3>
-          <p className="mt-2 max-w-lg text-[15px] font-semibold text-muted-foreground">
+          <p className="mt-2 max-w-lg text-[15px] text-muted-foreground">
             {total} questions about the whole module, one at a time. Score {Math.round(PASS * 100)}% or more to pass. If you miss something, you will get a link to the lesson to review.
           </p>
           <ul className="mt-5 flex flex-wrap justify-center gap-2 text-sm font-bold">
@@ -145,7 +145,7 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
           </ul>
           {best !== undefined && (
             <p className="mt-4 flex items-center gap-1.5 text-sm font-bold text-muted-foreground">
-              <Star className="size-4 fill-sun text-sun" aria-hidden /> Your best: {Math.round(best * 100)}%{cp?.passedAt ? " · passed" : ""}
+              <Star className="size-4 fill-sun text-warning" aria-hidden /> Your best: {Math.round(best * 100)}%{cp?.passedAt ? " · passed" : ""}
             </p>
           )}
           <Button size="xl" className="mt-6" onClick={start}>
@@ -157,7 +157,7 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
       {/* ---------------------------- play ----------------------------- */}
       {phase === "play" && (
         <>
-          <div className="flex items-center gap-3 border-b-2 border-border bg-surface-2/60 px-4 py-3 sm:px-5">
+          <div className="flex items-center gap-3 border-b border-border bg-surface-2/60 px-4 py-3 sm:px-5">
             <span className="shrink-0 font-display text-sm font-semibold tabular-nums">
               <span className="sr-only">Question </span>
               {index + 1}
@@ -195,7 +195,7 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
           {/* Once answered, the Continue bar sticks to the bottom of the screen (above the phone tab bar). */}
           <div
             className={cn(
-              "z-10 flex flex-wrap items-center justify-between gap-3 border-t-2 px-4 py-3 transition-colors sm:px-6",
+              "z-10 flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3 transition-colors sm:px-6",
               currentAnswered ? "sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] lg:bottom-0" : "",
               currentAnswered ? (results[q.id] ? "border-mint/50 bg-mint-soft" : "border-coral/50 bg-coral-soft") : "border-border bg-surface-2",
             )}
@@ -235,7 +235,7 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
               <h3 className="mt-0.5 font-display text-3xl font-bold leading-tight">
                 {score === 1 ? "Flawless – every answer right!" : passed ? "Great work!" : score >= 0.5 ? `So close – ${Math.round(PASS * 100)}% passes` : "Not quite yet – keep going!"}
               </h3>
-              <p className="mt-1.5 text-[15px] font-semibold text-muted-foreground">
+              <p className="mt-1.5 text-[15px] text-muted-foreground">
                 You got <strong className="text-foreground">{correct}</strong> of {total} right.{" "}
                 {passed
                   ? kind === "checkpoint"
@@ -251,7 +251,7 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
                 )}
                 {best !== undefined && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-3 py-1 text-muted-foreground">
-                    <Star className="size-4 fill-sun text-sun" aria-hidden /> Best: {Math.round(best * 100)}%
+                    <Star className="size-4 fill-sun text-warning" aria-hidden /> Best: {Math.round(best * 100)}%
                   </span>
                 )}
               </div>
@@ -262,7 +262,7 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
             {questions.map((x, i) => {
               const ok = results[x.id];
               return (
-                <li key={x.id} className={cn("flex items-start gap-2.5 rounded-2xl border-2 px-3 py-2 text-sm", ok ? "border-mint/40 bg-mint-soft/60" : "border-coral/40 bg-coral-soft/60")}>
+                <li key={x.id} className={cn("flex items-start gap-2.5 rounded-2xl border px-3 py-2 text-sm", ok ? "border-mint/40 bg-mint-soft/60" : "border-coral/40 bg-coral-soft/60")}>
                   {ok ? <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" aria-label="Correct" /> : <XCircle className="mt-0.5 size-4 shrink-0 text-danger" aria-label="Incorrect" />}
                   <span className="min-w-0">
                     <span className="font-bold">Q{i + 1}.</span> <span className="line-clamp-2 inline font-semibold">{plain(x.prompt)}</span>
@@ -273,14 +273,14 @@ export function Quiz({ questions, kind, lessonId, moduleNumber, reviewLinks = {}
           </ol>
 
           {missedConcepts.length > 0 && (
-            <div className="mt-6 rounded-2xl border-2 border-dashed border-border p-4">
+            <div className="mt-6 rounded-2xl border border-dashed border-border p-4">
               <p className="flex items-center gap-2 font-display font-semibold">
                 <BookOpen className="size-5 text-primary" aria-hidden /> Review {reviewLessons.length === 1 ? "this lesson" : "these lessons"}
               </p>
               <ul className="mt-2 flex flex-wrap gap-2">
                 {reviewLessons.map((l) => (
                   <li key={l.id}>
-                    <Link href={`/learn/${l.id}`} className="press inline-flex items-center gap-1.5 rounded-xl border-2 border-border bg-surface px-3 py-1.5 text-sm font-bold hover:bg-surface-2 [--press-shadow:var(--border)]">
+                    <Link href={`/learn/${l.id}`} className="press inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-1.5 text-sm font-bold hover:bg-surface-2">
                       {l.title} <ArrowRight className="size-4" aria-hidden />
                     </Link>
                   </li>

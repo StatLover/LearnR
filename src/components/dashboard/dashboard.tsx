@@ -28,14 +28,12 @@ import {
   Trash2,
   TrendingUp,
   Trophy,
-  Zap,
-} from "lucide-react";
+  Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProgressBar, ProgressRing } from "@/components/ui/progress";
 import { Badge, DifficultyBadge, XpBadge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Hexy } from "@/components/brand/mascot";
-import { FloatingHexes } from "@/components/brand/decor";
 import { TopicArt } from "@/components/brand/topic-art";
 import { HexBadge } from "@/components/game/hex-badge";
 import { useGame, useOutline } from "@/components/game/outline-context";
@@ -60,13 +58,13 @@ export interface DashboardProps {
 function DashboardSkeleton() {
   return (
     <>
-      <div className="relative overflow-hidden border-b-2 border-border" style={{ background: "linear-gradient(135deg, var(--primary-soft) 0%, var(--background) 70%)" }}>
+      <div className="relative overflow-hidden border-b border-border" style={{ background: "var(--primary-soft)" }}>
         <div className="relative mx-auto flex max-w-7xl items-center gap-5 px-5 py-10">
           <Hexy mood="think" size={96} animate />
           <div>
             <p className="font-display text-sm font-semibold uppercase tracking-wider text-primary">My adventure</p>
             <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Your dashboard</h1>
-            <p className="mt-2 text-[15px] font-semibold text-muted-foreground" role="status">
+            <p className="mt-2 text-[15px] text-muted-foreground" role="status">
               Loading your progress…
             </p>
           </div>
@@ -74,7 +72,7 @@ function DashboardSkeleton() {
       </div>
       <div className="mx-auto grid max-w-7xl gap-6 px-5 py-8 lg:grid-cols-3" aria-hidden>
         {[0, 1, 2].map((i) => (
-          <div key={i} className={cn("h-56 animate-pulse rounded-3xl border-2 border-border bg-card", i === 0 && "lg:col-span-2")} />
+          <div key={i} className={cn("h-56 animate-pulse rounded-3xl border border-border bg-card", i === 0 && "lg:col-span-2")} />
         ))}
       </div>
     </>
@@ -125,18 +123,15 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
   return (
     <>
       {/* ------------------------------ hero ------------------------------ */}
-      <div className="relative overflow-hidden border-b-2 border-border" style={{ background: "linear-gradient(135deg, var(--primary-soft) 0%, var(--grape-soft) 40%, var(--background) 80%)" }}>
-        <FloatingHexes count={6} className="max-md:hidden" />
-        <div className="blob -left-16 -top-24 size-72" style={{ background: "var(--primary)" }} />
-        <div className="blob -right-10 top-10 size-56" style={{ background: "var(--sun)", opacity: 0.25 }} />
+      <div className="relative overflow-hidden border-b border-border" style={{ background: "var(--primary-soft)" }}>
         <div className="relative mx-auto grid max-w-7xl items-center gap-6 px-5 py-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)]">
           <div className="flex items-center gap-4 sm:gap-5">
             <Hexy mood={goalDone ? "celebrate" : "wave"} size={104} animate className="max-sm:w-20 shrink-0" />
             <div className="min-w-0">
               <p className="font-display text-sm font-semibold uppercase tracking-wider text-primary">My adventure</p>
               <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{greeting}</h1>
-              <p className="mt-1.5 text-[15px] font-semibold text-muted-foreground">{nudge}</p>
-              <p className="mt-1 text-sm font-semibold text-muted-foreground">
+              <p className="mt-1.5 text-[15px] text-muted-foreground">{nudge}</p>
+              <p className="mt-1 text-sm text-muted-foreground">
                 {completion.done} of {completion.total} lessons completed
                 {next && nextModule ? (
                   <>
@@ -148,25 +143,25 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
           </div>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto]">
-            <div className="col-span-2 flex items-center gap-3 rounded-3xl border-2 border-border bg-card/90 p-4 shadow-[var(--shadow-card)] backdrop-blur sm:col-span-1">
+            <div className="col-span-2 flex items-center gap-3 rounded-3xl border border-border bg-card/90 p-4 shadow-[var(--shadow-card)] backdrop-blur sm:col-span-1">
               <LevelHex level={g.level.level} size={56} />
               <div className="min-w-0 flex-1">
                 <p className="font-display text-lg font-semibold leading-tight">Level {g.level.level}</p>
                 <p className="truncate text-xs font-bold text-muted-foreground">{g.level.title}</p>
                 <ProgressBar value={g.level.pct} tone="sun" size="md" className="mt-2" label={`${g.level.pct}% of the way to level ${g.level.level + 1}`} />
                 <p className="mt-1 flex items-center gap-1 text-xs font-bold text-muted-foreground">
-                  <Zap className="size-3.5 fill-sun text-sun" aria-hidden />
+                  <Zap className="size-3.5 fill-sun text-warning" aria-hidden />
                   {g.xp.toLocaleString()} / {g.level.next.toLocaleString()} XP · {(g.level.next - g.xp).toLocaleString()} to level {g.level.level + 1}
                 </p>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-border bg-card/90 px-4 py-3 text-center shadow-[var(--shadow-card)] backdrop-blur">
+            <div className="flex flex-col items-center justify-center rounded-3xl border border-border bg-card/90 px-4 py-3 text-center shadow-[var(--shadow-card)] backdrop-blur">
               <Flame className={cn("size-9", g.streak ? "fill-tangerine text-tangerine animate-wiggle" : "text-muted-foreground")} aria-hidden />
               <p className="font-display text-2xl font-bold leading-none">{g.streak}</p>
               <p className="mt-0.5 text-xs font-bold text-muted-foreground">{g.streak === 1 ? "day streak" : "day streak"}</p>
               <span className="sr-only">{`Current learning streak: ${plural(g.streak, "day")}. Longest: ${plural(longest, "day")}.`}</span>
             </div>
-            <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-border bg-card/90 px-4 py-3 text-center shadow-[var(--shadow-card)] backdrop-blur">
+            <div className="flex flex-col items-center justify-center rounded-3xl border border-border bg-card/90 px-4 py-3 text-center shadow-[var(--shadow-card)] backdrop-blur">
               <ProgressRing value={g.goalPct} size={64} stroke={8} color={goalDone ? "var(--mint)" : "var(--sun)"} label={`Daily goal: ${g.todayXp} of ${g.goalXp} XP`}>
                 {goalDone ? <CheckCircle2 className="size-6 text-success" aria-hidden /> : <span className="text-sm">{g.todayXp}</span>}
               </ProgressRing>
@@ -181,12 +176,12 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
       <div className="mx-auto max-w-7xl space-y-6 px-5 py-8">
         {/* ----------------------- continue + daily ----------------------- */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <section aria-labelledby="continue-title" className="flex flex-col overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] lg:col-span-2">
+          <section aria-labelledby="continue-title" className="flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] lg:col-span-2">
             {next ? (
               <div className="grid flex-1 sm:grid-cols-[minmax(0,260px)_minmax(0,1fr)]">
-                <div className="relative grid place-items-center border-b-2 border-border sm:border-b-0 sm:border-r-2" style={{ background: nextWorld.color.soft }}>
+                <div className="relative grid place-items-center border-b border-border sm:border-b-0 sm:border-r" style={{ background: nextWorld.color.soft }}>
                   <TopicArt kind={LESSON_ART[next.id] ?? nextWorld.art} bg={nextWorld.color.soft} className="block max-h-56 w-full" />
-                  <span className="absolute left-3 top-3 rounded-full px-2.5 py-1 font-display text-xs font-semibold text-white shadow-sm" style={{ background: nextWorld.color.main, color: nextWorld.id === "r-pro" ? "#3b2600" : undefined }}>
+                  <span className="absolute left-3 top-3 rounded-full px-2.5 py-1 font-display text-xs font-semibold text-on-accent shadow-sm" style={{ background: nextWorld.color.main, color: nextWorld.id === "r-pro" ? "var(--on-sun)" : undefined }}>
                     World {nextWorld.number} · {nextWorld.name}
                   </span>
                 </div>
@@ -195,7 +190,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
                   <h2 id="continue-title" className="font-display text-2xl font-bold leading-tight">
                     {next.title}
                   </h2>
-                  <p className="text-sm font-semibold text-muted-foreground">{next.summary}</p>
+                  <p className="text-sm text-muted-foreground">{next.summary}</p>
                   <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-muted-foreground">
                     {nextModule && (
                       <span>
@@ -225,7 +220,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
                 <Hexy mood="celebrate" size={96} />
                 <div className="min-w-0 flex-1">
                   <h2 id="continue-title" className="font-display text-2xl font-bold">You have completed every lesson!</h2>
-                  <p className="mt-1 text-sm font-semibold text-muted-foreground">Amazing work. Put your skills to the test with the capstone project.</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Amazing work. Put your skills to the test with the capstone project.</p>
                 </div>
                 <Button asChild size="lg">
                   <Link href="/projects">
@@ -236,9 +231,9 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
             )}
           </section>
 
-          <section aria-labelledby="daily-title" className="flex flex-col overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
-            <div className="relative flex items-center gap-3 border-b-2 border-border px-5 py-4" style={{ background: "linear-gradient(120deg, var(--sun-soft), var(--tangerine-soft))" }}>
-              <span className="grid size-11 place-items-center rounded-2xl bg-sun text-[#3b2600] shadow-[0_3px_0_var(--sun-shadow)]">
+          <section aria-labelledby="daily-title" className="flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+            <div className="relative flex items-center gap-3 border-b border-border px-5 py-4" style={{ background: "var(--sun-soft)" }}>
+              <span className="grid size-11 place-items-center rounded-2xl bg-sun text-on-sun">
                 <Target className="size-6" aria-hidden />
               </span>
               <div className="min-w-0 flex-1">
@@ -262,9 +257,9 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
                   <DifficultyBadge difficulty={dailyEx.difficulty as "easy" | "medium" | "challenge"} />
                 </>
               ) : (
-                <p className="text-sm font-semibold text-muted-foreground">Today&apos;s challenge is waiting for you.</p>
+                <p className="text-sm text-muted-foreground">Today&apos;s challenge is waiting for you.</p>
               )}
-              <p className="text-sm font-semibold text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {g.daily.completed ? "Solved today – brilliant! A fresh challenge appears tomorrow." : `Solve it today for a bonus +${XP.daily} XP and keep your streak glowing.`}
               </p>
               <Button asChild variant={g.daily.completed ? "outline" : "sun"} className="mt-auto w-full">
@@ -324,11 +319,11 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
               const pct = ls.length ? Math.round((done / ls.length) * 100) : 0;
               const current = next && w.modules.includes(next.module);
               return (
-                <li key={w.id} className={cn("flex flex-col overflow-hidden rounded-2xl border-2 bg-surface", current ? "border-[var(--w)] shadow-[0_0_0_3px_var(--w-soft)]" : "border-border")} style={{ ["--w" as string]: w.color.main, ["--w-soft" as string]: w.color.soft }}>
+                <li key={w.id} className={cn("flex flex-col overflow-hidden rounded-2xl border bg-surface", current ? "border-[var(--w)] shadow-[0_0_0_3px_var(--w-soft)]" : "border-border")} style={{ ["--w" as string]: w.color.main, ["--w-soft" as string]: w.color.soft }}>
                   <div className="relative flex justify-center" style={{ background: w.color.soft }}>
                     <TopicArt kind={w.art} bg={w.color.soft} className="block max-h-28 w-full" />
                     {pct === 100 && (
-                      <span className="absolute right-2 top-2 grid size-7 place-items-center rounded-full bg-mint text-white shadow" aria-label="World complete">
+                      <span className="absolute right-2 top-2 grid size-7 place-items-center rounded-full bg-mint text-on-accent shadow" aria-label="World complete">
                         <CheckCircle2 className="size-4" />
                       </span>
                     )}
@@ -349,7 +344,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
                     <p className="text-xs font-bold text-muted-foreground">
                       {done}/{ls.length} lessons · {pct}%
                     </p>
-                    <ul className="mt-auto space-y-1 border-t-2 border-border pt-2">
+                    <ul className="mt-auto space-y-1 border-t border-border pt-2">
                       {mods.map((m) => {
                         const c = moduleCompletion(m, s);
                         const cp = s.checkpoints[String(m.number)]?.passedAt;
@@ -375,12 +370,12 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
 
         {/* ------------------------- revision ------------------------- */}
         {weak.length > 0 && (
-          <DashCard id="revision-title" title="Suggested revision" icon={<RefreshCw />} color="sun" className="border-sun/60 bg-gradient-to-br from-sun-soft/70 to-card">
-            <p className="-mt-2 mb-3 text-sm font-semibold text-muted-foreground">Based on your quiz answers, these topics could use another look. Everyone needs a second pass sometimes!</p>
+          <DashCard id="revision-title" title="Suggested revision" icon={<RefreshCw />} color="sun" className="border-sun/60 bg-sun-soft/70">
+            <p className="-mt-2 mb-3 text-sm text-muted-foreground">Based on your quiz answers, these topics could use another look. Everyone needs a second pass sometimes!</p>
             <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
               {weak.map((w) => (
                 <li key={w.concept}>
-                  <Link href={`/learn/${conceptLessons[w.concept].id}`} className="press flex items-center justify-between gap-2 rounded-2xl border-2 border-border bg-card p-3 text-sm [--press-shadow:var(--border)] hover:bg-surface-2">
+                  <Link href={`/learn/${conceptLessons[w.concept].id}`} className="press flex items-center justify-between gap-2 rounded-2xl border border-border bg-card p-3 text-sm hover:bg-surface-2">
                     <span className="min-w-0">
                       <span className="block font-bold capitalize">{w.concept.replace(/-/g, " ")}</span>
                       <span className="block truncate text-xs font-semibold text-muted-foreground">Review: {conceptLessons[w.concept].title}</span>
@@ -407,7 +402,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
               </TabsList>
               <TabsContent value="visited">
                 {s.recent.length === 0 ? (
-                  <p className="text-sm font-semibold text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     Nothing yet –{" "}
                     <Link href="/learn" className="font-bold text-primary underline">
                       start your first lesson
@@ -430,7 +425,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
               </TabsContent>
               <TabsContent value="xp">
                 {xpLog.length === 0 ? (
-                  <p className="text-sm font-semibold text-muted-foreground">Complete lessons, answer questions and pass challenges to earn XP.</p>
+                  <p className="text-sm text-muted-foreground">Complete lessons, answer questions and pass challenges to earn XP.</p>
                 ) : (
                   <ul className="space-y-1">
                     {xpLog.map((e, i) => (
@@ -448,7 +443,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
 
           <DashCard id="quiz-title" title="Quiz scores" icon={<Target />} color="pink">
             {quizScores.length === 0 ? (
-              <p className="text-sm font-semibold text-muted-foreground">Take the quiz at the end of a lesson to see your scores here.</p>
+              <p className="text-sm text-muted-foreground">Take the quiz at the end of a lesson to see your scores here.</p>
             ) : (
               <ul className="space-y-2.5">
                 {quizScores.slice(-8).map(({ l, best }) => (
@@ -503,10 +498,10 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
                     {list.map((b) => {
                       const at = s.achievements[b.id];
                       return (
-                        <li key={b.id} className={cn("flex flex-col items-center rounded-2xl border-2 p-3 text-center", at ? "border-border bg-surface" : "border-dashed border-border bg-transparent")}>
+                        <li key={b.id} className={cn("flex flex-col items-center rounded-2xl border p-3 text-center", at ? "border-border bg-surface" : "border-dashed border-border bg-transparent")}>
                           <HexBadge icon={b.icon} color={b.color} size={52} locked={!at} className={cn(!at && "opacity-70")} />
                           <p className={cn("mt-2 font-display text-sm font-semibold leading-tight", !at && "text-muted-foreground")}>{b.title}</p>
-                          <p className="mt-0.5 text-[11px] font-semibold leading-snug text-muted-foreground">{b.description}</p>
+                          <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{b.description}</p>
                           <p className={cn("mt-auto pt-1.5 text-[11px] font-bold", at ? "text-success" : "text-muted-foreground")}>{at ? `Earned ${new Date(at).toLocaleDateString()}` : "Not earned yet"}</p>
                         </li>
                       );
@@ -522,15 +517,15 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <DashCard id="saved-title" title={`Saved code (${s.snippets.length})`} icon={<Code2 />} color="primary">
             {s.snippets.length === 0 ? (
-              <p className="text-sm font-semibold text-muted-foreground">Use the save button (or Ctrl+S) in any code editor to keep code here.</p>
+              <p className="text-sm text-muted-foreground">Use the save button (or Ctrl+S) in any code editor to keep code here.</p>
             ) : (
               <ul className="space-y-2">
                 {s.snippets.slice(0, 10).map((sn) => (
-                  <li key={sn.id} className="overflow-hidden rounded-2xl border-2 border-border bg-surface">
+                  <li key={sn.id} className="overflow-hidden rounded-2xl border border-border bg-surface">
                     <div className="flex items-center gap-1 px-3 py-2">
                       <button className="min-w-0 flex-1 cursor-pointer truncate text-left text-sm font-bold hover:text-primary" onClick={() => setOpenSnippet(openSnippet === sn.id ? null : sn.id)} aria-expanded={openSnippet === sn.id}>
                         {sn.title}
-                        <span className="block text-[11px] font-semibold text-muted-foreground">{timeAgo(sn.updatedAt)}</span>
+                        <span className="block text-[11px] text-muted-foreground">{timeAgo(sn.updatedAt)}</span>
                       </button>
                       <Button
                         size="icon-sm"
@@ -547,7 +542,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
                         <Trash2 />
                       </Button>
                     </div>
-                    {openSnippet === sn.id && <StaticCode code={sn.code} className="max-h-60 border-t-2 border-border text-[13px]" />}
+                    {openSnippet === sn.id && <StaticCode code={sn.code} className="max-h-60 border-t border-border text-[13px]" />}
                   </li>
                 ))}
               </ul>
@@ -556,7 +551,7 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
 
           <DashCard id="bookmarks-title" title={`Bookmarks (${s.bookmarks.length})`} icon={<Bookmark />} color="coral">
             {s.bookmarks.length === 0 ? (
-              <p className="text-sm font-semibold text-muted-foreground">Bookmark lessons, examples, projects and functions to find them here.</p>
+              <p className="text-sm text-muted-foreground">Bookmark lessons, examples, projects and functions to find them here.</p>
             ) : (
               <ul className="space-y-1">
                 {s.bookmarks.map((b) => (
@@ -578,12 +573,12 @@ function DashboardBody({ conceptLessons, lessonTitles }: DashboardProps) {
 
           <DashCard id="notes-title" title={`My notes (${notes.length})`} icon={<NotebookPen />} color="teal">
             {notes.length === 0 ? (
-              <p className="text-sm font-semibold text-muted-foreground">Write notes inside any lesson – they will be collected here.</p>
+              <p className="text-sm text-muted-foreground">Write notes inside any lesson – they will be collected here.</p>
             ) : (
               <ul className="space-y-1.5">
                 {notes.map(([id, n]) => (
                   <li key={id}>
-                    <Link href={`/learn/${id}`} className="block rounded-xl border-2 border-border bg-surface px-3 py-2 text-sm hover:bg-surface-2">
+                    <Link href={`/learn/${id}`} className="block rounded-xl border border-border bg-surface px-3 py-2 text-sm hover:bg-surface-2">
                       <span className="block truncate font-bold">{lessonTitles[id] ?? id}</span>
                       <span className="line-clamp-2 block text-xs font-semibold text-muted-foreground">{n.text}</span>
                     </Link>

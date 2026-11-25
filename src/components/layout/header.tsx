@@ -68,11 +68,11 @@ export function ThemeSwitch({ className }: { className?: string }) {
       role="switch"
       aria-checked={dark}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className={cn("relative inline-flex h-9 w-16 shrink-0 items-center rounded-full border-2 border-border bg-surface-2 p-0.5 transition-colors cursor-pointer", className)}
+      className={cn("relative inline-flex h-9 w-16 shrink-0 items-center rounded-full border border-border bg-surface-2 p-0.5 transition-colors cursor-pointer", className)}
     >
       <Sun className={cn("absolute left-2 size-4 transition-opacity", dark ? "opacity-40" : "opacity-0")} aria-hidden />
       <Moon className={cn("absolute right-2 size-4 transition-opacity", dark ? "opacity-0" : "opacity-40")} aria-hidden />
-      <span className={cn("grid size-7 place-items-center rounded-full shadow-md transition-all duration-300", dark ? "translate-x-7 bg-grape text-white" : "translate-x-0 bg-sun text-[#3b2600]")}>
+      <span className={cn("grid size-7 place-items-center rounded-full shadow-md transition-all duration-300", dark ? "translate-x-7 bg-grape text-on-accent" : "translate-x-0 bg-sun text-on-sun")}>
         {dark ? <Moon className="size-4" aria-hidden /> : <Sun className="size-4" aria-hidden />}
       </span>
     </button>
@@ -91,7 +91,7 @@ function StatChips() {
       </Tooltip>
       <Tooltip content={`${g.todayXp} of ${g.goalXp} XP today`}>
         <Link href="/dashboard" className="flex h-9 items-center gap-1 rounded-xl px-2 font-display text-sm font-semibold text-warning hover:bg-surface-2" aria-label={`${g.xp} XP in total`}>
-          <Zap className="size-5 fill-sun text-sun" />
+          <Zap className="size-5 fill-sun text-warning" />
           {g.xp.toLocaleString()}
         </Link>
       </Tooltip>
@@ -107,7 +107,7 @@ function ProfileMenu() {
         <svg viewBox="0 0 40 44" className="absolute inset-0 size-10" aria-hidden>
           <path d="M20 3 L36 12 L36 32 L20 41 L4 32 L4 12 Z" fill="var(--primary)" stroke="var(--primary-shadow)" strokeWidth="2.5" strokeLinejoin="round" />
         </svg>
-        <span className="relative font-display text-sm font-bold text-white">{g.level.level}</span>
+        <span className="relative font-display text-sm font-bold text-on-accent">{g.level.level}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64">
         <DropdownMenuLabel className="px-3 py-2">
@@ -153,7 +153,7 @@ export function Header() {
   const active = (href: string) => pathname === href || pathname.startsWith(href + "/");
   const moreActive = MORE.some((m) => active(m.href));
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
       <div className="mx-auto flex h-[var(--header-h)] max-w-[1400px] items-center gap-2 px-3 sm:px-5">
         <Link href="/" className="group mr-2 flex items-center gap-1.5" aria-label="R Academy home">
           <Hexy size={36} className="transition-transform group-hover:-rotate-6 group-hover:scale-105" />
@@ -196,7 +196,7 @@ export function Header() {
           </DropdownMenu>
         </nav>
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
-          <button onClick={openSearch} className="flex h-9 items-center gap-2 rounded-xl px-2 text-muted-foreground hover:bg-surface-2 hover:text-foreground cursor-pointer xl:border-2 xl:border-border xl:bg-surface xl:px-3" aria-label="Search (Ctrl+K)">
+          <button onClick={openSearch} className="flex h-9 items-center gap-2 rounded-xl px-2 text-muted-foreground hover:bg-surface-2 hover:text-foreground cursor-pointer xl:border xl:border-border xl:bg-surface xl:px-3" aria-label="Search (Ctrl+K)">
             <Search className="size-[18px]" />
             <span className="hidden text-sm font-semibold xl:inline">Search</span>
             <kbd className="hidden rounded-md bg-surface-2 px-1.5 font-mono text-[11px] xl:inline">Ctrl K</kbd>
@@ -217,7 +217,7 @@ export function MobileNav() {
   if (isFocusRoute(pathname)) return null;
   const active = (href: string) => pathname === href || pathname.startsWith(href + "/");
   return (
-    <nav aria-label="Mobile navigation" className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
+    <nav aria-label="Mobile navigation" className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
       <ul className="mx-auto grid max-w-lg grid-cols-5">
         {NAV.map((n) => (
           <li key={n.href}>

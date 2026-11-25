@@ -7,8 +7,7 @@ import { TOPIC_CLASS, type LabInfo } from "./lab-list";
 /** Compact, colourful hero at the top of a single lab. */
 export function LabHero({ lab }: { lab: LabInfo }) {
   return (
-    <div className="relative overflow-hidden border-b-2 border-border" style={{ background: `linear-gradient(135deg, var(--${lab.color}-soft) 0%, var(--background) 75%)` }}>
-      <div className="blob -left-20 -top-24 size-72" style={{ background: `var(--${lab.color})` }} />
+    <div className="relative overflow-hidden border-b border-border" style={{ background: `var(--${lab.color}-soft)` }}>
       <div className="relative mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-5 py-6 sm:py-8">
         <div className="min-w-0 flex-1 basis-80">
           <nav aria-label="Breadcrumb">
@@ -17,7 +16,7 @@ export function LabHero({ lab }: { lab: LabInfo }) {
             </Link>
           </nav>
           <h1 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">{lab.title}</h1>
-          <p className="mt-2 max-w-2xl text-[15px] font-semibold text-muted-foreground">{lab.description}</p>
+          <p className="mt-2 max-w-2xl text-[15px] text-muted-foreground">{lab.description}</p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {lab.topics.map((t) => (
               <span key={t} className={cn("rounded-full px-2.5 py-0.5 text-xs font-bold", TOPIC_CLASS[t])}>
@@ -35,7 +34,7 @@ export function LabHero({ lab }: { lab: LabInfo }) {
             )}
           </div>
         </div>
-        <div className="hidden w-56 shrink-0 overflow-hidden rounded-3xl border-2 border-border shadow-[var(--shadow-card)] md:block">
+        <div className="hidden w-56 shrink-0 overflow-hidden rounded-3xl border border-border shadow-[var(--shadow-card)] md:block">
           <LabArt lab={lab} className="block" />
         </div>
       </div>

@@ -55,7 +55,7 @@ export function JumpNav({ items, label }: { items: JumpItem[]; label: string }) 
   }, [active]);
 
   return (
-    <nav aria-label={label} className="sticky top-[var(--header-h)] z-30 border-b-2 border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70 print:hidden">
+    <nav aria-label={label} className="sticky top-[var(--header-h)] z-30 border-b border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70 print:hidden">
       <ul ref={list} className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 py-2.5 no-scrollbar">
         {items.map((i) => {
           const on = active === i.id;
@@ -67,7 +67,7 @@ export function JumpNav({ items, label }: { items: JumpItem[]; label: string }) 
                 aria-current={on ? "location" : undefined}
                 style={candy(i.color)}
                 className={cn(
-                  "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border-2 px-3 py-1.5 font-display text-sm font-semibold transition-colors [&_svg]:size-4",
+                  "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 font-display text-sm font-semibold transition-colors [&_svg]:size-4",
                   on ? "border-[var(--c)] bg-[var(--c)] text-[var(--c-fg)]" : "border-transparent bg-[var(--c-soft)] text-foreground hover:border-[var(--c)]",
                 )}
               >

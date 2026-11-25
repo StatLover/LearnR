@@ -243,7 +243,7 @@ class RSession {
             width: opts.plotWidth ?? 900,
             height: opts.plotHeight ?? 600,
             pointsize: 15,
-            bg: dark ? "#0f172a" : "white",
+            bg: dark ? "#191d21" : "white",
             capture: true,
           },
         },

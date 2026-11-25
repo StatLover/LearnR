@@ -4,166 +4,173 @@
 
 /* =================================================================== */
 /* R Academy design tokens                                              */
-/* A playful "hex sticker" identity: vivid indigo brand, candy accents, */
-/* chunky 3D buttons and soft rounded cards. Light and dark themes are  */
-/* designed separately, not inverted.                                   */
+/* Palette: latte, wisteria, milk shake, attic window, butter yellow,   */
+/* clover, seafoam, apricot jam, rainy day, matcha, ballet slipper and  */
+/* cherry. Pastels are used for surfaces and soft panels; deeper shades */
+/* of the same hues carry text and buttons so every pairing meets WCAG  */
+/* AA (4.5:1) in both themes. Dark mode uses the palette's own tones.   */
 /* =================================================================== */
 :root {
-  /* surfaces */
-  --background: #f5f6ff;
+  /* surfaces (latte) */
+  --background: #faf7f2;
   --surface: #ffffff;
-  --surface-2: #eef0fd;
-  --surface-3: #e2e6fa;
+  --surface-2: #f5efe6;
+  --surface-3: #ebe3d6;
   --card: #ffffff;
-  --foreground: #1b1e3d;
-  --muted-foreground: #5c6189;
-  --border: #dde1f4;
-  --border-strong: #c9cfec;
-  --art-line: #1b1e3d;
-  --ring: #5b5bf6;
+  --foreground: #1f2933;
+  --muted-foreground: #5b6570;
+  --border: #e6ded2;
+  --border-strong: #d3c8b8;
+  --art-line: #1f2933;
+  --ring: #2d6597;
 
-  /* brand (indigo) */
-  --primary: #5b5bf6;
-  --primary-strong: #4343d4;
-  --primary-shadow: #3d3dbf;
-  --primary-soft: #ececff;
+  /* text/icons placed on a coloured fill */
+  --on-accent: #ffffff;
+  --on-sun: #3a2a06;
+
+  /* brand – attic window blue */
+  --primary: #2d6597;
+  --primary-strong: #24547f;
+  --primary-shadow: #24547f;
+  --primary-soft: #e6eff8;
   --primary-foreground: #ffffff;
 
-  /* candy accents */
-  --mint: #18b874;
-  --mint-shadow: #0f9258;
-  --mint-soft: #e2f8ee;
-  --sun: #ffbd14;
-  --sun-shadow: #d99a00;
-  --sun-soft: #fff4d1;
-  --coral: #ff5a5f;
-  --coral-shadow: #d63c42;
-  --coral-soft: #ffe5e6;
-  --sky: #1e9bf0;
-  --sky-shadow: #137ac2;
-  --sky-soft: #e0f2ff;
-  --grape: #9a5cf0;
-  --grape-shadow: #7840c9;
-  --grape-soft: #f1e8ff;
-  --tangerine: #ff8433;
-  --tangerine-shadow: #db6517;
-  --tangerine-soft: #ffeedd;
-  --pink: #f2559d;
-  --pink-shadow: #cc3a7d;
-  --pink-soft: #ffe6f2;
-  --teal: #10b3b0;
-  --teal-shadow: #0b8c8a;
-  --teal-soft: #ddf7f6;
+  /* accents (main = text-safe shade, soft = palette pastel) */
+  --mint: #2d7a55; /* clover */
+  --mint-shadow: #24654a;
+  --mint-soft: #e4f2ea;
+  --sun: #f6c453; /* butter yellow */
+  --sun-shadow: #d9a53a;
+  --sun-soft: #fff3d6;
+  --coral: #c62a29; /* cherry */
+  --coral-shadow: #a52121;
+  --coral-soft: #fceded; /* milk shake */
+  --sky: #26717f; /* rainy day */
+  --sky-shadow: #1f5d68;
+  --sky-soft: #e7f5f9; /* seafoam */
+  --grape: #5a4fa2; /* wisteria */
+  --grape-shadow: #4a4187;
+  --grape-soft: #e6e3f7;
+  --tangerine: #a3561a; /* apricot jam */
+  --tangerine-shadow: #874715;
+  --tangerine-soft: #fcebd7;
+  --pink: #a63e54; /* ballet slipper */
+  --pink-shadow: #8a3346;
+  --pink-soft: #fce4e4;
+  --teal: #5a652e; /* matcha */
+  --teal-shadow: #4a5326;
+  --teal-soft: #eef0df;
 
   /* semantic */
-  --accent: #1e9bf0;
-  --accent-soft: #e0f2ff;
-  --success: #12a865;
-  --success-soft: #e2f8ee;
-  --warning: #c27c00;
-  --warning-soft: #fff4d1;
-  --danger: #e5383e;
-  --danger-soft: #ffe5e6;
-  --info: #1e86d6;
-  --info-soft: #e0f2ff;
+  --accent: #26717f;
+  --accent-soft: #e7f5f9;
+  --success: #2d7a55;
+  --success-soft: #e4f2ea;
+  --warning: #8a5a0b;
+  --warning-soft: #fff3d6;
+  --danger: #c62a29;
+  --danger-soft: #fceded;
+  --info: #2d6597;
+  --info-soft: #e6eff8;
 
   /* code & console */
-  --code-bg: #fbfbff;
-  --code-gutter: #a0a6c8;
-  --code-active-line: #f0f1ff;
-  --code-selection: #d7d9ff;
-  --console-bg: #f7f8ff;
-  --syn-keyword: #8a3ffc;
-  --syn-string: #0b8a52;
-  --syn-number: #d9480f;
-  --syn-comment: #8b90b3;
-  --syn-function: #3a4fd8;
-  --syn-atom: #d6336c;
-  --syn-operator: #c2255c;
-  --syn-variable: #1b1e3d;
-  --syn-punct: #5c6189;
+  --code-bg: #fcfaf6;
+  --code-gutter: #a39b8f;
+  --code-active-line: #f5efe6;
+  --code-selection: #d9e7f5;
+  --console-bg: #fbf9f5;
+  --syn-keyword: #5a4fa2;
+  --syn-string: #2d7a55;
+  --syn-number: #a3561a;
+  --syn-comment: #857d70;
+  --syn-function: #2d6597;
+  --syn-atom: #a63e54;
+  --syn-operator: #c62a29;
+  --syn-variable: #1f2933;
+  --syn-punct: #5b6570;
 
-  --shadow-card: 0 1px 2px rgb(27 30 61 / 0.04), 0 8px 24px -12px rgb(27 30 61 / 0.12);
-  --shadow-pop: 0 18px 40px -16px rgb(61 61 191 / 0.35);
-  --radius: 1rem;
+  --shadow-card: 0 1px 2px rgb(31 41 51 / 0.04), 0 1px 3px rgb(31 41 51 / 0.05);
+  --shadow-pop: 0 8px 24px -8px rgb(31 41 51 / 0.16);
+  --radius: 0.75rem;
   --header-h: 4rem;
-  --hex-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98' viewBox='0 0 56 98'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66zm0 32L0 82V66l28 16 28-16v16L28 98z' fill='none' stroke='%235b5bf6' stroke-opacity='0.05' stroke-width='1.2'/%3E%3C/svg%3E");
   color-scheme: light;
 }
 
 .dark {
-  --background: #0c0f24;
-  --surface: #151937;
-  --surface-2: #1c2146;
-  --surface-3: #262c5c;
-  --card: #151937;
-  --foreground: #eef0ff;
-  --muted-foreground: #a2a8d6;
-  --border: #2a3062;
-  --border-strong: #39407a;
-  --art-line: #c3c8f2;
-  --ring: #8d8dff;
+  --background: #121518;
+  --surface: #191d21;
+  --surface-2: #20252a;
+  --surface-3: #2a3036;
+  --card: #191d21;
+  --foreground: #eeeae2;
+  --muted-foreground: #a6adb4;
+  --border: #2c3238;
+  --border-strong: #3c444b;
+  --art-line: #d9d4ca;
+  --ring: #98c1e9;
 
-  --primary: #7d7dff;
-  --primary-strong: #a0a0ff;
-  --primary-shadow: #4b4bc4;
-  --primary-soft: #23275c;
-  --primary-foreground: #ffffff;
+  --on-accent: #13171a;
+  --on-sun: #3a2a06;
 
-  --mint: #2fd68f;
-  --mint-shadow: #179a62;
-  --mint-soft: #11372d;
-  --sun: #ffcc3d;
-  --sun-shadow: #c79300;
-  --sun-soft: #3a3115;
-  --coral: #ff7378;
-  --coral-shadow: #c9454a;
-  --coral-soft: #3f1d27;
-  --sky: #45bdff;
-  --sky-shadow: #1b85c4;
-  --sky-soft: #102f4a;
-  --grape: #b585ff;
-  --grape-shadow: #7f4fd1;
-  --grape-soft: #2c2052;
-  --tangerine: #ff9b57;
-  --tangerine-shadow: #c96a26;
-  --tangerine-soft: #3a2518;
-  --pink: #ff74b5;
-  --pink-shadow: #c94284;
-  --pink-soft: #3d1a36;
-  --teal: #2fd3cf;
-  --teal-shadow: #13908d;
-  --teal-soft: #0f3437;
+  --primary: #98c1e9;
+  --primary-strong: #b6d4f0;
+  --primary-shadow: #7aa6d1;
+  --primary-soft: #1b2a38;
+  --primary-foreground: #13171a;
 
-  --accent: #45bdff;
-  --accent-soft: #102f4a;
-  --success: #3ce09a;
-  --success-soft: #11372d;
-  --warning: #ffcc3d;
-  --warning-soft: #3a3115;
-  --danger: #ff7a7f;
-  --danger-soft: #3f1d27;
-  --info: #6cc8ff;
-  --info-soft: #102f4a;
+  --mint: #5ba881;
+  --mint-shadow: #4a8f6c;
+  --mint-soft: #172a20;
+  --sun: #fed57d;
+  --sun-shadow: #e3b85c;
+  --sun-soft: #2e2817;
+  --coral: #ef8a87;
+  --coral-shadow: #d46f6c;
+  --coral-soft: #331c1e;
+  --sky: #b3dfe8;
+  --sky-shadow: #93c6d1;
+  --sky-soft: #15292e;
+  --grape: #c4bdf0;
+  --grape-shadow: #a79fd9;
+  --grape-soft: #232139;
+  --tangerine: #f0a351;
+  --tangerine-shadow: #d6893a;
+  --tangerine-soft: #33261a;
+  --pink: #f5b3b6;
+  --pink-shadow: #dc979a;
+  --pink-soft: #33202a;
+  --teal: #b5bc7a;
+  --teal-shadow: #9ca362;
+  --teal-soft: #262a1a;
 
-  --code-bg: #0e1230;
-  --code-gutter: #5a6199;
-  --code-active-line: #161b40;
-  --code-selection: #2e3780;
-  --console-bg: #0b0e28;
-  --syn-keyword: #c79bff;
-  --syn-string: #7ef0b4;
-  --syn-number: #ffb86b;
-  --syn-comment: #7880b8;
-  --syn-function: #7ab8ff;
-  --syn-atom: #ff8fb8;
-  --syn-operator: #ff8fb8;
-  --syn-variable: #eef0ff;
-  --syn-punct: #a2a8d6;
+  --accent: #b3dfe8;
+  --accent-soft: #15292e;
+  --success: #5ba881;
+  --success-soft: #172a20;
+  --warning: #fed57d;
+  --warning-soft: #2e2817;
+  --danger: #ef8a87;
+  --danger-soft: #331c1e;
+  --info: #98c1e9;
+  --info-soft: #1b2a38;
 
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.35), 0 10px 30px -14px rgb(0 0 0 / 0.6);
-  --shadow-pop: 0 18px 50px -16px rgb(125 125 255 / 0.35);
-  --hex-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='98' viewBox='0 0 56 98'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66zm0 32L0 82V66l28 16 28-16v16L28 98z' fill='none' stroke='%238d8dff' stroke-opacity='0.06' stroke-width='1.2'/%3E%3C/svg%3E");
+  --code-bg: #15191c;
+  --code-gutter: #5e666e;
+  --code-active-line: #1c2125;
+  --code-selection: #2b3d52;
+  --console-bg: #111417;
+  --syn-keyword: #c4bdf0;
+  --syn-string: #8fcbaa;
+  --syn-number: #f0a351;
+  --syn-comment: #7d858c;
+  --syn-function: #98c1e9;
+  --syn-atom: #f5b3b6;
+  --syn-operator: #ef8a87;
+  --syn-variable: #eeeae2;
+  --syn-punct: #a6adb4;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-pop: 0 10px 30px -10px rgb(0 0 0 / 0.6);
   color-scheme: dark;
 }
 
@@ -217,22 +224,29 @@
   --color-teal: var(--teal);
   --color-teal-shadow: var(--teal-shadow);
   --color-teal-soft: var(--teal-soft);
+  --color-on-accent: var(--on-accent);
+  --color-on-sun: var(--on-sun);
   --color-code: var(--code-bg);
   --color-console: var(--console-bg);
-  --font-display: "Fredoka Variable", "Nunito Variable", ui-rounded, system-ui, sans-serif;
-  --font-sans: "Nunito Variable", ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Plus Jakarta Sans Variable", "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --radius-lg: var(--radius);
+  /* Calmer, more professional corners than Tailwind's defaults. */
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.625rem;
+  --radius-2xl: 0.75rem;
+  --radius-3xl: 0.875rem;
   --shadow-card: var(--shadow-card);
   --shadow-pop: var(--shadow-pop);
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-pop-in: pop-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
-  --animate-fade-up: fade-up 0.45s ease-out both;
-  --animate-shake: shake 0.45s ease-in-out;
-  --animate-wiggle: wiggle 1.2s ease-in-out infinite;
-  --animate-pulse-ring: pulse-ring 1.8s ease-out infinite;
-  --animate-slide-up: slide-up 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
-  --animate-bob: bob 3s ease-in-out infinite;
+  /* Decorative looping motion is switched off; only short, functional transitions remain. */
+  --animate-float: none;
+  --animate-bob: none;
+  --animate-wiggle: none;
+  --animate-pulse-ring: none;
+  --animate-pop-in: pop-in 0.25s ease-out both;
+  --animate-fade-up: fade-up 0.3s ease-out both;
+  --animate-shake: shake 0.4s ease-in-out;
+  --animate-slide-up: slide-up 0.25s ease-out both;
 }
 
 /* =================================================================== */
@@ -257,10 +271,10 @@
 
   body {
     background-color: var(--background);
-    background-image: var(--hex-pattern);
     color: var(--foreground);
     font-family: var(--font-sans);
-    font-weight: 500;
+    font-weight: 400;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -282,7 +296,7 @@
   h4,
   .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.012em;
   }
 
   * {
@@ -334,58 +348,42 @@
 }
 
 /* =================================================================== */
-/* Game-feel components                                                 */
+/* Interactive surfaces                                                 */
 /* =================================================================== */
 
-/* Chunky 3D "pressable" surfaces (buttons, answer tiles, map nodes). */
+/* Buttons, answer tiles and map nodes: flat, with a quiet press feedback. */
 .press {
-  /* The edge colour comes from --press-shadow (set per variant/utility). */
-  box-shadow: 0 4px 0 var(--press-shadow, var(--border-strong));
-  transform: translateY(0);
   transition:
     transform 0.08s ease,
-    box-shadow 0.08s ease,
+    box-shadow 0.15s ease,
     background-color 0.15s ease,
     border-color 0.15s ease,
     filter 0.15s ease;
 }
 .press:hover:not(:disabled) {
-  filter: brightness(1.04);
+  filter: brightness(0.96);
+}
+.dark .press:hover:not(:disabled) {
+  filter: brightness(1.08);
 }
 .press:active:not(:disabled) {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--press-shadow, var(--border-strong));
+  transform: translateY(1px);
 }
 
-/* Cards that lift on hover. */
+/* Cards that respond to hover with a soft shadow. */
 .lift {
   transition:
-    transform 0.2s ease,
     box-shadow 0.2s ease,
     border-color 0.2s ease;
 }
 .lift:hover {
-  transform: translateY(-3px);
   box-shadow: var(--shadow-pop);
+  border-color: var(--border-strong);
 }
 
-/* Decorative blurred colour blobs behind heroes. */
-.blob {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(60px);
-  opacity: 0.45;
-  pointer-events: none;
-}
-.dark .blob {
-  opacity: 0.28;
-}
-
+/* Emphasis in headlines – a solid brand colour, no gradient. */
 .text-gradient {
-  background: linear-gradient(100deg, var(--primary) 0%, var(--grape) 45%, var(--pink) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--primary);
 }
 
 .hex-clip {
@@ -415,24 +413,6 @@ html[data-reduce-motion="true"] .reveal {
   }
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(3deg);
-  }
-}
-@keyframes bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
 @keyframes pop-in {
   0% {
     opacity: 0;
@@ -475,26 +455,6 @@ html[data-reduce-motion="true"] .reveal {
   40%,
   80% {
     transform: translateX(6px);
-  }
-}
-@keyframes wiggle {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-6deg);
-  }
-  75% {
-    transform: rotate(6deg);
-  }
-}
-@keyframes pulse-ring {
-  0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--node-color, var(--primary)) 55%, transparent);
-  }
-  100% {
-    box-shadow: 0 0 0 18px transparent;
   }
 }
 @keyframes xp-rise {

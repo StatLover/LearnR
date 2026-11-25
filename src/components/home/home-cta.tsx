@@ -18,7 +18,7 @@ export function HomeCta({ className, center }: { className?: string; center?: bo
   return (
     <div className={cn("flex flex-col gap-3", center && "items-center", className)}>
       <div className={cn("flex flex-wrap gap-3", center && "justify-center")}>
-        <Button asChild size="xl" variant="success">
+        <Button asChild size="xl" variant="primary">
           <Link href={target ? `/learn/${target.id}` : "/learn"}>
             <Play className="fill-current" /> {started ? "Continue learning" : "Start Learning"}
           </Link>
@@ -29,7 +29,7 @@ export function HomeCta({ className, center }: { className?: string; center?: bo
           </Link>
         </Button>
       </div>
-      <p className="text-sm font-semibold text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         {started ? (
           <>
             Up next: <strong className="text-foreground">{next.title}</strong> · {c.done}/{c.total} lessons done

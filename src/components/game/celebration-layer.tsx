@@ -55,7 +55,7 @@ export function CelebrationLayer() {
     <>
       <div aria-live="polite" className="pointer-events-none fixed right-4 top-20 z-[80] sm:right-8">
         {gain && (
-          <div key={gain.id} className="animate-xp-rise flex items-center gap-1.5 rounded-full bg-sun px-4 py-2 font-display text-lg font-semibold text-[#3b2600] shadow-[0_4px_0_var(--sun-shadow)]">
+          <div key={gain.id} className="animate-xp-rise flex items-center gap-1.5 rounded-full bg-sun px-4 py-2 font-display text-lg font-semibold text-on-sun">
             <Zap className="size-5 fill-current" /> +{gain.amount} XP
           </div>
         )}

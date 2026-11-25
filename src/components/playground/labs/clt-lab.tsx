@@ -129,7 +129,7 @@ export function CltLab() {
             <p>
               Whatever shape the population has, the <strong>means of random samples</strong> of size n are approximately <strong>normally distributed</strong> once n is large enough.
             </p>
-            <ul className="space-y-1.5 rounded-2xl border-2 border-border bg-surface p-3">
+            <ul className="space-y-1.5 rounded-2xl border border-border bg-surface p-3">
               <li>
                 Centre: the population mean <strong>μ</strong>
               </li>

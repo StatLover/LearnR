@@ -253,8 +253,8 @@ export function CodeRunner({
   };
 
   return (
-    <div className={cn("flex min-w-0 flex-col overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]", className)}>
-      <div className="flex flex-wrap items-center gap-1.5 border-b-2 border-border bg-surface-2/70 px-3 py-2">
+    <div className={cn("flex min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]", className)}>
+      <div className="flex flex-wrap items-center gap-1.5 border-b border-border bg-surface-2/70 px-3 py-2">
         <span className="mr-1 hidden items-center gap-1.5 sm:flex" aria-hidden>
           <span className="size-3 rounded-full bg-coral" />
           <span className="size-3 rounded-full bg-sun" />
@@ -296,7 +296,7 @@ export function CodeRunner({
       />
 
       {(lines.length > 0 || running || !compact || images.length > 0) && (
-        <Tabs value={tab} onValueChange={setTab} className="border-t-2 border-border">
+        <Tabs value={tab} onValueChange={setTab} className="border-t border-border">
           {!running && status && status !== "ok" && (status === "error" || status === "parse_error") && (
             <div role="status" className="flex flex-wrap items-center gap-2 bg-coral-soft px-4 py-2 text-sm font-semibold text-danger animate-fade-up">
               <span className="min-w-0 flex-1">

@@ -74,11 +74,11 @@ export function QuestionCard({ question: q, index, total, onAnswered, allowRetry
 
   const tile = (on: boolean, isAns: boolean, chosen: boolean) =>
     cn(
-      "press flex w-full cursor-pointer items-start gap-3 rounded-2xl border-2 px-4 py-3 text-left text-[15px] font-semibold",
-      !submitted && (on ? "border-primary bg-primary-soft [--press-shadow:var(--primary)]" : "border-border bg-surface [--press-shadow:var(--border)] hover:bg-surface-2"),
-      submitted && isAns && "border-mint bg-mint-soft [--press-shadow:var(--mint)]",
-      submitted && chosen && !isAns && "border-coral bg-coral-soft [--press-shadow:var(--coral)] animate-shake",
-      submitted && !chosen && !isAns && "border-border bg-surface opacity-60 [--press-shadow:var(--border)]",
+      "press flex w-full cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 text-left text-[15px] font-semibold",
+      !submitted && (on ? "border-primary bg-primary-soft" : "border-border bg-surface hover:bg-surface-2"),
+      submitted && isAns && "border-mint bg-mint-soft",
+      submitted && chosen && !isAns && "border-coral bg-coral-soft animate-shake",
+      submitted && !chosen && !isAns && "border-border bg-surface opacity-60",
       submitted && "cursor-default",
     );
 
@@ -90,7 +90,7 @@ export function QuestionCard({ question: q, index, total, onAnswered, allowRetry
         return (
           <label key={i} className={tile(chosen, Boolean(isAns), chosen)}>
             <input type="radio" name={name} className="sr-only" checked={chosen} disabled={submitted} onChange={() => setAnswer(i)} />
-            <span className={cn("grid size-7 shrink-0 place-items-center rounded-lg border-2 font-display text-sm", chosen ? "border-primary text-primary" : "border-border text-muted-foreground")} aria-hidden>
+            <span className={cn("grid size-7 shrink-0 place-items-center rounded-lg border font-display text-sm", chosen ? "border-primary text-primary" : "border-border text-muted-foreground")} aria-hidden>
               {LETTERS[i]}
             </span>
             <span className="min-w-0 flex-1">
@@ -110,7 +110,7 @@ export function QuestionCard({ question: q, index, total, onAnswered, allowRetry
   );
 
   return (
-    <fieldset className={cn(!bare && "rounded-3xl border-2 border-border bg-card p-5")} data-question={q.id}>
+    <fieldset className={cn(!bare && "rounded-3xl border border-border bg-card p-5")} data-question={q.id}>
       <legend className="sr-only">{q.prompt}</legend>
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <Badge variant="grape">{TYPE_LABEL[q.type]}</Badge>
@@ -126,8 +126,8 @@ export function QuestionCard({ question: q, index, total, onAnswered, allowRetry
         <Markdown runnableCode={false}>{q.prompt}</Markdown>
       </div>
 
-      {(q.type === "multiple-choice" || q.type === "true-false") && "code" in q && q.code && <StaticCode code={q.code} className="mb-4 rounded-2xl border-2 border-border" />}
-      {q.type === "predict-output" && <StaticCode code={q.code} className="mb-4 rounded-2xl border-2 border-border" />}
+      {(q.type === "multiple-choice" || q.type === "true-false") && "code" in q && q.code && <StaticCode code={q.code} className="mb-4 rounded-2xl border border-border" />}
+      {q.type === "predict-output" && <StaticCode code={q.code} className="mb-4 rounded-2xl border border-border" />}
 
       {q.type === "multiple-choice" && optionList(q.options, false)}
       {q.type === "predict-output" && optionList(q.options, true)}
@@ -139,7 +139,7 @@ export function QuestionCard({ question: q, index, total, onAnswered, allowRetry
             return (
               <label key={String(v)} className={cn(tile(chosen, isAns, chosen), "justify-center py-4 font-display text-lg")}>
                 <input type="radio" name={name} className="sr-only" checked={chosen} disabled={submitted} onChange={() => setAnswer(v)} />
-                {v ? "👍 True" : "👎 False"}
+                {v ? "True" : "False"}
               </label>
             );
           })}
@@ -149,8 +149,8 @@ export function QuestionCard({ question: q, index, total, onAnswered, allowRetry
       {q.type === "fill-blank" && <FillBlank code={q.code} value={(answer as string) ?? ""} onChange={setAnswer} disabled={submitted} onEnter={submit} id={name} />}
 
       {q.type === "find-error" && (
-        <div role="radiogroup" aria-labelledby={`${name}-prompt`} className="overflow-hidden rounded-2xl border-2 border-border bg-code">
-          <p className="border-b-2 border-border bg-surface-2 px-4 py-2 text-xs font-bold text-muted-foreground">🐞 Tap the line that contains the bug</p>
+        <div role="radiogroup" aria-labelledby={`${name}-prompt`} className="overflow-hidden rounded-2xl border border-border bg-code">
+          <p className="border-b border-border bg-surface-2 px-4 py-2 text-xs font-bold text-muted-foreground">Tap the line that contains the bug</p>
           {highlightR(q.code).map((spans, i) => {
             const line = i + 1;
             const chosen = answer === line;
@@ -190,10 +190,10 @@ export function QuestionCard({ question: q, index, total, onAnswered, allowRetry
           )}
         </div>
       )}
-      {showHint && !submitted && q.type === "fill-blank" && q.hint && <p className="mt-3 rounded-2xl bg-sun-soft px-4 py-2 text-sm font-semibold">💡 {q.hint}</p>}
+      {showHint && !submitted && q.type === "fill-blank" && q.hint && <p className="mt-3 rounded-2xl bg-sun-soft px-4 py-2 text-sm font-semibold">Hint: {q.hint}</p>}
 
       {submitted && (
-        <div role="status" className={cn("mt-4 rounded-2xl border-2 p-4 animate-slide-up", correct ? "border-mint bg-mint-soft" : "border-coral bg-coral-soft")}>
+        <div role="status" className={cn("mt-4 rounded-2xl border p-4 animate-slide-up", correct ? "border-mint bg-mint-soft" : "border-coral bg-coral-soft")}>
           <div className="flex items-start gap-3">
             <HexyAvatar mood={correct ? "celebrate" : "oops"} size={44} className={correct ? "bg-mint/20" : "bg-coral/20"} />
             <div className="min-w-0 flex-1">
@@ -210,7 +210,7 @@ export function QuestionCard({ question: q, index, total, onAnswered, allowRetry
               {q.type === "find-error" && (
                 <div className="mt-2">
                   <p className="text-xs font-bold">Fixed code</p>
-                  <StaticCode code={q.fix} className="mt-1 rounded-xl border-2 border-border" />
+                  <StaticCode code={q.fix} className="mt-1 rounded-xl border border-border" />
                 </div>
               )}
               {allowRetry && !correct && (
@@ -230,7 +230,7 @@ function FillBlank({ code, value, onChange, disabled, onEnter, id }: { code: str
   const [before, after] = code.split("___");
   const width = Math.max(4, Math.min(30, value.length + 2));
   return (
-    <div className="code-static overflow-x-auto rounded-2xl border-2 border-border bg-code px-4 py-3 text-[14px]">
+    <div className="code-static overflow-x-auto rounded-2xl border border-border bg-code px-4 py-3 text-[14px]">
       <pre className="whitespace-pre-wrap">
         {before}
         <label htmlFor={`${id}-blank`} className="sr-only">
@@ -245,7 +245,7 @@ function FillBlank({ code, value, onChange, disabled, onEnter, id }: { code: str
           spellCheck={false}
           autoComplete="off"
           style={{ width: `${width}ch` }}
-          className="mx-0.5 rounded-lg border-2 border-dashed border-primary bg-primary-soft px-1.5 font-mono font-bold text-foreground outline-none focus-visible:border-solid"
+          className="mx-0.5 rounded-lg border border-dashed border-primary bg-primary-soft px-1.5 font-mono font-bold text-foreground outline-none focus-visible:border-solid"
           placeholder="?"
         />
         {after}

@@ -19,8 +19,8 @@ export function LessonBlock({ block, lesson }: { block: Block; lesson: Lesson })
       return <Markdown>{block.md}</Markdown>;
     case "definition":
       return (
-        <div className="my-5 flex gap-3 rounded-2xl border-2 border-primary/30 bg-primary-soft/60 px-4 py-4">
-          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary text-white" aria-hidden>
+        <div className="my-5 flex gap-3 rounded-2xl border border-primary/30 bg-primary-soft/60 px-4 py-4">
+          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary text-on-accent" aria-hidden>
             <BookMarked className="size-5" />
           </span>
           <div className="min-w-0">
@@ -35,8 +35,8 @@ export function LessonBlock({ block, lesson }: { block: Block; lesson: Lesson })
     case "callout": {
       const c = CALLOUT[block.tone];
       return (
-        <aside className={cn("my-5 flex gap-3 rounded-2xl border-2 px-4 py-4", c.cls)}>
-          <span className={cn("grid size-9 shrink-0 place-items-center rounded-xl text-white", c.chip)} aria-hidden>
+        <aside className={cn("my-5 flex gap-3 rounded-2xl border px-4 py-4", c.cls)}>
+          <span className={cn("grid size-9 shrink-0 place-items-center rounded-xl text-on-accent", c.chip)} aria-hidden>
             <c.icon className="size-5" />
           </span>
           <div className="min-w-0">
@@ -52,9 +52,9 @@ export function LessonBlock({ block, lesson }: { block: Block; lesson: Lesson })
       return <Diagram name={block.name} caption={block.caption} />;
     case "table":
       return (
-        <div className="my-5 overflow-x-auto rounded-2xl border-2 border-border">
+        <div className="my-5 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full border-collapse text-sm">
-            {block.caption && <caption className="border-b-2 border-border bg-surface-2 px-4 py-2 text-left font-display text-sm font-semibold">{block.caption}</caption>}
+            {block.caption && <caption className="border-b border-border bg-surface-2 px-4 py-2 text-left font-display text-sm font-semibold">{block.caption}</caption>}
             <thead className="bg-surface-2/60">
               <tr>
                 {block.headers.map((h, i) => (

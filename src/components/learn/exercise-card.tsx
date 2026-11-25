@@ -142,9 +142,9 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
   if (info?.status === "parse_error" && info.parse_error?.line) marks.push({ line: info.parse_error.line, kind: "error" });
 
   return (
-    <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]" id={`exercise-${task.id}`}>
-      <div className="flex flex-wrap items-center gap-3 border-b-2 border-border bg-gradient-to-r from-grape-soft to-transparent px-5 py-4">
-        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-grape text-white shadow-[0_3px_0_var(--grape-shadow)]">
+    <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]" id={`exercise-${task.id}`}>
+      <div className="flex flex-wrap items-center gap-3 border-b border-border bg-grape-soft px-5 py-4">
+        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-grape text-on-accent">
           <Target className="size-6" />
         </span>
         <div className="min-w-0 flex-1 basis-[11rem]">
@@ -167,15 +167,15 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
       <div className="space-y-3 p-5">
         <Markdown>{task.prompt}</Markdown>
         {task.expected && (
-          <div className="rounded-2xl border-2 border-dashed border-border bg-surface-2/50 px-4 py-3 text-sm">
-            <p className="font-display text-xs font-semibold uppercase tracking-wider text-primary">🎯 Goal</p>
+          <div className="rounded-2xl border border-dashed border-border bg-surface-2/50 px-4 py-3 text-sm">
+            <p className="font-display text-xs font-semibold uppercase tracking-wider text-primary">Goal</p>
             <Markdown runnableCode={false}>{task.expected}</Markdown>
           </div>
         )}
       </div>
 
-      <div className="mx-5 overflow-hidden rounded-2xl border-2 border-border">
-        <div className="flex flex-wrap items-center gap-1.5 border-b-2 border-border bg-surface-2/70 px-3 py-2">
+      <div className="mx-5 overflow-hidden rounded-2xl border border-border">
+        <div className="flex flex-wrap items-center gap-1.5 border-b border-border bg-surface-2/70 px-3 py-2">
           <Button size="sm" variant="success" onClick={runTests} disabled={!!running}>
             {running === "test" ? <Loader2 className="animate-spin" /> : <FlaskConical />} Check my code
           </Button>
@@ -193,7 +193,7 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
         </div>
         <CodeEditor ref={editor} value={code} onChange={change} onRun={runTests} minHeight={150} maxHeight={420} lineMarks={marks} ariaLabel={`Your solution for: ${task.title}`} />
         {(result || running) && (
-          <div className="border-t-2 border-border">
+          <div className="border-t border-border">
             <ConsoleView lines={result?.lines ?? []} running={!!running} empty="(Your code printed nothing.)" maxHeight={240} />
             {result && result.images.length > 0 && <PlotGallery images={result.images} />}
           </div>
@@ -201,7 +201,7 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
       </div>
 
       {tests && (
-        <div role="status" className={cn("mx-5 mt-4 rounded-2xl border-2 p-4 animate-slide-up", allPass ? "border-mint bg-mint-soft" : "border-coral/50 bg-coral-soft")}>
+        <div role="status" className={cn("mx-5 mt-4 rounded-2xl border p-4 animate-slide-up", allPass ? "border-mint bg-mint-soft" : "border-coral/50 bg-coral-soft")}>
           <div className="flex items-start gap-3">
             <Hexy mood={allPass ? "celebrate" : "oops"} size={58} className="shrink-0" />
             <div className="min-w-0 flex-1">
@@ -253,8 +253,8 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
         {hintsShown > 0 && (
           <ol className="space-y-2">
             {task.hints.slice(0, hintsShown).map((h, i) => (
-              <li key={i} className="flex gap-3 rounded-2xl border-2 border-sun/40 bg-sun-soft px-4 py-3 text-sm animate-pop-in">
-                <span className="grid size-6 shrink-0 place-items-center rounded-full bg-sun font-display text-xs font-bold text-[#3b2600]">{i + 1}</span>
+              <li key={i} className="flex gap-3 rounded-2xl border border-sun/40 bg-sun-soft px-4 py-3 text-sm animate-pop-in">
+                <span className="grid size-6 shrink-0 place-items-center rounded-full bg-sun font-display text-xs font-bold text-on-sun">{i + 1}</span>
                 <Markdown runnableCode={false}>{h}</Markdown>
               </li>
             ))}
@@ -262,11 +262,11 @@ export function ExerciseCard({ task, kind = "exercise", setupCode, workspace, sa
         )}
         {compare && <DiffView before={code} after={task.solution} beforeLabel="Your code" afterLabel="Example solution" />}
         {(showSolution || allPass) && (
-          <div className="space-y-2 rounded-2xl border-2 border-border p-4">
+          <div className="space-y-2 rounded-2xl border border-border p-4">
             {showSolution && (
               <>
                 <p className="font-display font-semibold">Example solution</p>
-                <StaticCode code={task.solution} lineNumbers className="rounded-xl border-2 border-border" />
+                <StaticCode code={task.solution} lineNumbers className="rounded-xl border border-border" />
               </>
             )}
             <p className="font-display font-semibold">How it works</p>

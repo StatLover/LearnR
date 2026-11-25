@@ -67,7 +67,7 @@ function PhaseChip({ phase }: { phase: Phase }) {
   const Icon = PHASE_ICON[phase];
   const label = PHASES.find((p) => p.id === phase)!.label;
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-display text-xs font-semibold uppercase tracking-wider text-white" style={{ background: "var(--world)" }}>
+    <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-display text-xs font-semibold uppercase tracking-wider text-on-accent" style={{ background: "var(--world)" }}>
       <Icon className="size-3.5" /> {label}
     </span>
   );
@@ -181,7 +181,7 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
           <Hexy mood="sleep" size={130} className="mx-auto" />
           <p className="mt-4 font-display text-sm font-semibold uppercase tracking-wider" style={{ color: "var(--world)" }}>Lesson {lessonNumber} · {world.name}</p>
           <h1 className="mt-1 font-display text-3xl font-bold">{lesson.title}</h1>
-          <p className="mt-3 font-semibold text-muted-foreground">
+          <p className="mt-3 text-muted-foreground">
             This lesson builds on {prev ? <strong className="text-foreground">{prev.title}</strong> : "the previous lesson"}. Finish that first – or peek ahead if you like.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -205,7 +205,7 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
   return (
     <div className="flex min-h-screen flex-col" style={styleVars}>
       {/* Top bar */}
-      <div className="sticky top-0 z-40 border-b-2 border-border bg-background/90 backdrop-blur-md">
+      <div className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-2 px-3 sm:gap-3 sm:px-5">
           <Button asChild variant="ghost" size="icon" aria-label="Close lesson and go back to the map">
             <Link href={`/learn#world-${world.id}`}>
@@ -219,7 +219,7 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
             {index + 1}/{cards.length}
           </span>
           <span className="flex items-center gap-1 font-display text-sm font-semibold text-warning" aria-label={`${game.xp} XP`}>
-            <Zap className="size-5 fill-sun text-sun" /> {game.xp.toLocaleString()}
+            <Zap className="size-5 fill-sun text-warning" /> {game.xp.toLocaleString()}
           </span>
           <Button variant="ghost" size="icon" onClick={() => setOutlineOpen(true)} aria-label="Lesson outline">
             <ListTree />
@@ -251,12 +251,12 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
                 disabled={first < 0}
                 aria-current={current ? "step" : undefined}
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 rounded-full border-2 px-3 py-1 font-display text-xs font-semibold transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-40",
-                  current ? "border-transparent text-white" : done ? "border-transparent bg-surface-2 text-foreground" : "border-border text-muted-foreground hover:bg-surface-2",
+                  "flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 font-display text-xs font-semibold transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-40",
+                  current ? "border-transparent text-on-accent" : done ? "border-transparent bg-surface-2 text-foreground" : "border-border text-muted-foreground hover:bg-surface-2",
                 )}
                 style={current ? { background: "var(--world)" } : undefined}
               >
-                <span className={cn("grid size-5 place-items-center rounded-full text-[10px]", current ? "bg-white/25" : done ? "text-white" : "bg-surface-2")} style={done && !current ? { background: "var(--world)" } : undefined}>
+                <span className={cn("grid size-5 place-items-center rounded-full text-[10px]", current ? "bg-white/25" : done ? "text-on-accent" : "bg-surface-2")} style={done && !current ? { background: "var(--world)" } : undefined}>
                   {done ? <Check className="size-3" /> : <Icon className="size-3" />}
                 </span>
                 <span className={cn(i > 0 && !current && "hidden sm:inline")}>{p.label}</span>
@@ -297,7 +297,7 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
       </div>
 
       {/* Bottom action bar */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center gap-2 px-4 py-3 sm:px-6">
           <Button variant="outline" size="lg" onClick={() => go(index - 1)} disabled={index === 0} aria-label="Previous step">
             <ArrowLeft /> <span className="hidden sm:inline">Previous</span>
@@ -312,9 +312,9 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
       {/* Outline drawer */}
       {outlineOpen && (
         <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label="Lesson outline">
-          <button className="absolute inset-0 bg-[#0c0f24]/50 cursor-default" onClick={() => setOutlineOpen(false)} aria-label="Close outline" />
+          <button className="absolute inset-0 bg-[#121518]/50 cursor-default" onClick={() => setOutlineOpen(false)} aria-label="Close outline" />
           <div className="absolute inset-y-0 left-0 flex w-[min(92vw,380px)] flex-col bg-surface shadow-2xl animate-fade-up">
-            <div className="flex items-center gap-2 border-b-2 border-border p-4">
+            <div className="flex items-center gap-2 border-b border-border p-4">
               <div className="min-w-0 flex-1">
                 <p className="font-display text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--world)" }}>Lesson {lessonNumber}</p>
                 <p className="truncate font-display text-lg font-semibold">{lesson.title}</p>
@@ -338,7 +338,7 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
                       aria-current={i === index ? "step" : undefined}
                       className={cn("flex w-full items-center gap-2 rounded-xl px-2 py-1.5 text-left text-sm font-semibold cursor-pointer", i === index ? "bg-primary-soft text-primary" : "hover:bg-surface-2")}
                     >
-                      <span className={cn("grid size-6 shrink-0 place-items-center rounded-lg", i < index ? "text-white" : "bg-surface-2 text-muted-foreground")} style={i < index ? { background: "var(--world)" } : undefined}>
+                      <span className={cn("grid size-6 shrink-0 place-items-center rounded-lg", i < index ? "text-on-accent" : "bg-surface-2 text-muted-foreground")} style={i < index ? { background: "var(--world)" } : undefined}>
                         {i < index ? <Check className="size-3.5" /> : <Icon className="size-3.5" />}
                       </span>
                       <span className="truncate">{c.kind === "quiz" ? `Question ${c.index + 1}` : c.kind === "challenge" ? `Challenge: ${c.title}` : c.title}</span>
@@ -347,7 +347,7 @@ export function LessonPlayer({ lesson, exercises, module, world, lessonNumber, p
                 );
               })}
             </ol>
-            <div className="border-t-2 border-border p-3 text-xs font-semibold text-muted-foreground">Tip: Alt + → and Alt + ← move between steps.</div>
+            <div className="border-t border-border p-3 text-xs font-semibold text-muted-foreground">Tip: Alt + → and Alt + ← move between steps.</div>
           </div>
         </div>
       )}
@@ -389,7 +389,7 @@ function CardView(p: CardViewProps) {
     case "intro":
       return (
         <div>
-          <div className="relative overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
+          <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
             <div className="relative" style={{ background: "var(--world-soft)" }}>
               <TopicArt kind={LESSON_ART[lesson.id] ?? world.art} bg="transparent" className="mx-auto max-h-52" />
               <div className="absolute bottom-2 right-3 hidden sm:block">
@@ -398,19 +398,19 @@ function CardView(p: CardViewProps) {
             </div>
             <div className="p-6">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge className="text-white" style={{ background: "var(--world)" }}>World {world.number} · {world.name}</Badge>
+                <Badge className="text-on-accent" style={{ background: "var(--world)" }}>World {world.number} · {world.name}</Badge>
                 <Badge variant="outline">Lesson {p.lessonNumber}</Badge>
                 <span className="flex items-center gap-1 text-xs font-bold text-muted-foreground"><Clock className="size-3.5" /> {lesson.minutes} min</span>
                 <span className="flex items-center gap-1 text-xs font-bold text-warning"><Zap className="size-3.5 fill-current" /> up to {p.lessonXp} XP</span>
               </div>
               <h1 className="mt-3 font-display text-3xl font-bold leading-tight sm:text-4xl">{lesson.title}</h1>
-              <p className="mt-2 text-lg font-semibold text-muted-foreground">{lesson.summary}</p>
-              <div className="mt-5 rounded-2xl border-2 border-border bg-surface-2/50 p-4">
+              <p className="mt-2 text-lg text-muted-foreground">{lesson.summary}</p>
+              <div className="mt-5 rounded-2xl border border-border bg-surface-2/50 p-4">
                 <p className="font-display font-semibold">In this lesson you will…</p>
                 <ul className="mt-2 space-y-2">
                   {lesson.objectives.map((o, i) => (
                     <li key={o} className="flex gap-2 text-[15px] font-semibold">
-                      <span className="grid size-6 shrink-0 place-items-center rounded-lg text-xs font-bold text-white" style={{ background: "var(--world)" }}>{i + 1}</span>
+                      <span className="grid size-6 shrink-0 place-items-center rounded-lg text-xs font-bold text-on-accent" style={{ background: "var(--world)" }}>{i + 1}</span>
                       {o}
                     </li>
                   ))}
@@ -421,7 +421,7 @@ function CardView(p: CardViewProps) {
               </p>
             </div>
           </div>
-          <section className="mt-6 rounded-3xl border-2 border-border bg-card p-6" aria-labelledby="big-picture">
+          <section className="mt-6 rounded-3xl border border-border bg-card p-6" aria-labelledby="big-picture">
             <h2 id="big-picture" className="flex items-center gap-2 font-display text-xl font-semibold">
               <Eye className="size-5" style={{ color: "var(--world)" }} /> The big picture
             </h2>
@@ -434,7 +434,7 @@ function CardView(p: CardViewProps) {
         <article>
           <PhaseChip phase="learn" />
           <h2 className="mt-3 font-display text-3xl font-bold">{card.title}</h2>
-          <div className="mt-4 rounded-3xl border-2 border-border bg-card p-6 text-[1.02rem]">
+          <div className="mt-4 rounded-3xl border border-border bg-card p-6 text-[1.02rem]">
             {card.blocks.map((b, i) => (
               <LessonBlock key={i} block={b} lesson={lesson} />
             ))}
@@ -469,9 +469,9 @@ function CardView(p: CardViewProps) {
       return (
         <article>
           <PhaseChip phase="learn" />
-          <h2 className="mt-3 font-display text-3xl font-bold">Quick check ✋</h2>
-          <p className="mt-1 font-semibold text-muted-foreground">A tiny question to lock in what you just learned.</p>
-          <div className="mt-4 rounded-3xl border-2 border-border bg-card p-6">
+          <h2 className="mt-3 font-display text-3xl font-bold">Quick check</h2>
+          <p className="mt-1 text-muted-foreground">A tiny question to lock in what you just learned.</p>
+          <div className="mt-4 rounded-3xl border border-border bg-card p-6">
             <QuestionCard question={card.question} bare />
           </div>
         </article>
@@ -483,7 +483,7 @@ function CardView(p: CardViewProps) {
           <div className="mt-3 flex items-center gap-4">
             <div className="min-w-0 flex-1">
               <h2 className="font-display text-3xl font-bold">{card.title}</h2>
-              <p className="mt-1 font-semibold text-muted-foreground">This playground is yours. Change the code, break it, fix it – press Run (or Ctrl + Enter) to see what real R does.</p>
+              <p className="mt-1 text-muted-foreground">This playground is yours. Change the code, break it, fix it – press Run (or Ctrl + Enter) to see what real R does.</p>
             </div>
             <Hexy mood="point" size={84} className="hidden shrink-0 sm:block" />
           </div>
@@ -499,12 +499,12 @@ function CardView(p: CardViewProps) {
             />
           </div>
           {p.tryIdeas.length > 0 && (
-            <div className="mt-5 rounded-3xl border-2 border-border bg-card p-5">
+            <div className="mt-5 rounded-3xl border border-border bg-card p-5">
               <p className="font-display text-lg font-semibold">Ideas to try</p>
               <ul className="mt-3 space-y-2">
                 {p.tryIdeas.map((t, i) => (
                   <li key={i}>
-                    <label className={cn("flex cursor-pointer items-start gap-3 rounded-2xl border-2 px-4 py-3 text-[15px] transition-colors", p.tried[i] ? "border-mint bg-mint-soft" : "border-border hover:bg-surface-2")}>
+                    <label className={cn("flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 text-[15px] transition-colors", p.tried[i] ? "border-mint bg-mint-soft" : "border-border hover:bg-surface-2")}>
                       <input type="checkbox" className="mt-1 size-4 accent-[var(--mint)]" checked={Boolean(p.tried[i])} onChange={(e) => p.setTried((s) => ({ ...s, [i]: e.target.checked }))} />
                       <Markdown runnableCode={false} className={cn(p.tried[i] && "opacity-70")}>{t}</Markdown>
                     </label>
@@ -520,12 +520,12 @@ function CardView(p: CardViewProps) {
         <article>
           <PhaseChip phase="try" />
           <h2 className="mt-3 font-display text-3xl font-bold">{card.title}</h2>
-          <p className="mt-1 font-semibold text-muted-foreground">Every programmer makes these. Run the broken code to see R&apos;s real message, guess the problem, then reveal the fix.</p>
+          <p className="mt-1 text-muted-foreground">Every programmer makes these. Run the broken code to see R&apos;s real message, guess the problem, then reveal the fix.</p>
           <div className="mt-5 space-y-5">
             {lesson.mistakes.map((m, i) => (
-              <div key={i} className="overflow-hidden rounded-3xl border-2 border-border bg-card">
-                <div className="flex items-center gap-3 border-b-2 border-border bg-coral-soft px-5 py-3">
-                  <span className="grid size-9 place-items-center rounded-xl bg-coral text-white"><Bug className="size-5" /></span>
+              <div key={i} className="overflow-hidden rounded-3xl border border-border bg-card">
+                <div className="flex items-center gap-3 border-b border-border bg-coral-soft px-5 py-3">
+                  <span className="grid size-9 place-items-center rounded-xl bg-coral text-on-accent"><Bug className="size-5" /></span>
                   <p className="font-display text-lg font-semibold">{m.title}</p>
                 </div>
                 <div className="p-4">
@@ -578,7 +578,7 @@ function CardView(p: CardViewProps) {
               <span key={q.id} className={cn("h-2 flex-1 rounded-full", q.id in p.quiz ? (p.quiz[q.id] ? "bg-mint" : "bg-coral") : i === card.index ? "bg-primary" : "bg-surface-3")} />
             ))}
           </div>
-          <div className="mt-5 rounded-3xl border-2 border-border bg-card p-6">
+          <div className="mt-5 rounded-3xl border border-border bg-card p-6">
             <QuestionCard key={card.question.id} question={card.question} index={card.index} total={card.total} onAnswered={(ok) => p.onQuizAnswer(card.question.id, ok)} bare />
           </div>
         </article>
@@ -590,36 +590,36 @@ function CardView(p: CardViewProps) {
         <article className="text-center">
           <Hexy mood="celebrate" size={150} className="mx-auto" animate />
           <h2 className="mt-2 font-display text-4xl font-bold">Lesson complete!</h2>
-          <p className="mt-2 text-lg font-semibold text-muted-foreground">You finished “{lesson.title}”. Brilliant work!</p>
+          <p className="mt-2 text-lg text-muted-foreground">You finished “{lesson.title}”. Brilliant work!</p>
           <div className="mx-auto mt-6 grid max-w-xl grid-cols-3 gap-3">
-            <div className="rounded-3xl border-2 border-sun/50 bg-sun-soft p-4">
-              <Zap className="mx-auto size-7 fill-sun text-sun" />
+            <div className="rounded-3xl border border-sun/50 bg-sun-soft p-4">
+              <Zap className="mx-auto size-7 fill-sun text-warning" />
               <p className="mt-1 font-display text-2xl font-bold">{p.earnedXp}</p>
               <p className="text-xs font-bold text-muted-foreground">XP earned here</p>
             </div>
-            <div className="rounded-3xl border-2 border-grape/40 bg-grape-soft p-4">
+            <div className="rounded-3xl border border-grape/40 bg-grape-soft p-4">
               <Target className="mx-auto size-7 text-grape" />
               <p className="mt-1 font-display text-2xl font-bold">
                 {p.exercisesPassed}/{p.exercisesTotal}
               </p>
               <p className="text-xs font-bold text-muted-foreground">challenges solved</p>
             </div>
-            <div className="rounded-3xl border-2 border-mint/40 bg-mint-soft p-4">
+            <div className="rounded-3xl border border-mint/40 bg-mint-soft p-4">
               <CheckCircle2 className="mx-auto size-7 text-success" />
               <p className="mt-1 font-display text-2xl font-bold">{answered ? `${right}/${answered}` : "–"}</p>
               <p className="text-xs font-bold text-muted-foreground">quiz answers right</p>
             </div>
           </div>
-          {p.exercisesPassed < p.exercisesTotal && <p className="mt-3 text-sm font-semibold text-muted-foreground">Come back anytime to finish the remaining challenges for extra XP.</p>}
+          {p.exercisesPassed < p.exercisesTotal && <p className="mt-3 text-sm text-muted-foreground">Come back anytime to finish the remaining challenges for extra XP.</p>}
           {p.next?.world?.changed && (
-            <div className="mx-auto mt-6 flex max-w-xl items-center gap-3 rounded-3xl border-2 border-primary/40 bg-primary-soft p-4 text-left">
+            <div className="mx-auto mt-6 flex max-w-xl items-center gap-3 rounded-3xl border border-primary/40 bg-primary-soft p-4 text-left">
               <Trophy className="size-8 shrink-0 text-primary" />
               <p className="font-semibold">
                 New world unlocked: <strong>World {p.next.world.number} · {p.next.world.name}</strong>
               </p>
             </div>
           )}
-          <div className="mx-auto mt-8 max-w-xl rounded-3xl border-2 border-border bg-card p-6 text-left">
+          <div className="mx-auto mt-8 max-w-xl rounded-3xl border border-border bg-card p-6 text-left">
             <p className="font-display text-lg font-semibold">What you learned</p>
             <ul className="mt-3 space-y-2">
               {lesson.keyPoints.map((k) => (
@@ -632,7 +632,7 @@ function CardView(p: CardViewProps) {
             {p.terms.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {p.terms.map((t) => (
-                  <Link key={t.slug} href={`/glossary#${t.slug}`} className="rounded-full border-2 border-border px-3 py-1 text-xs font-bold hover:border-primary hover:bg-primary-soft">
+                  <Link key={t.slug} href={`/glossary#${t.slug}`} className="rounded-full border border-border px-3 py-1 text-xs font-bold hover:border-primary hover:bg-primary-soft">
                     {t.term}
                   </Link>
                 ))}

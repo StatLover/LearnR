@@ -44,7 +44,7 @@ function DatasetCard({ d }: { d: DatasetInfo }) {
   const builtIn = d.source === "built-in";
   const code = builtIn ? `head(${d.path})` : `${d.id} <- read.csv("${d.path}")\nhead(${d.id})`;
   return (
-    <article id={d.id} aria-labelledby={`ds-${d.id}`} style={candy(l.color)} className="flex min-w-0 scroll-mt-36 flex-col overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] target:border-[var(--c)] target:ring-4 target:ring-[var(--c)]/25">
+    <article id={d.id} aria-labelledby={`ds-${d.id}`} style={candy(l.color)} className="flex min-w-0 scroll-mt-36 flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] target:border-[var(--c)] target:ring-4 target:ring-[var(--c)]/25">
       <div className="relative h-36 overflow-hidden bg-[var(--c-soft)] sm:h-44">
         <TopicArt kind={l.art} bg="var(--c-soft)" className="mx-auto h-full w-auto" />
         <span className={cn("absolute left-3 top-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-extrabold shadow-sm", builtIn ? "bg-card text-foreground" : "bg-[var(--c)] text-[var(--c-fg)]")}>
@@ -67,7 +67,7 @@ function DatasetCard({ d }: { d: DatasetInfo }) {
             </span>
             <code className="inline-flex items-center rounded-full bg-surface-2 px-2.5 py-1 font-mono font-bold text-muted-foreground">{d.path}</code>
           </div>
-          <p className="mt-3 font-semibold text-muted-foreground">{d.description}</p>
+          <p className="mt-3 text-muted-foreground">{d.description}</p>
         </div>
 
         <div>
@@ -75,7 +75,7 @@ function DatasetCard({ d }: { d: DatasetInfo }) {
           <CodeBlock code={code} workspace="datasets" className="my-0" />
         </div>
 
-        <details className="group rounded-2xl border-2 border-border bg-surface-2/50 [&_summary::-webkit-details-marker]:hidden">
+        <details className="group rounded-2xl border border-border bg-surface-2/50 [&_summary::-webkit-details-marker]:hidden">
           <summary className="flex cursor-pointer list-none items-center gap-2 rounded-2xl px-4 py-3 font-display font-semibold hover:bg-surface-2">
             <Columns3 className={cn("size-4", INK)} aria-hidden />
             Columns ({d.columns.length})
@@ -92,7 +92,7 @@ function DatasetCard({ d }: { d: DatasetInfo }) {
               </thead>
               <tbody>
                 {d.columns.map((c) => (
-                  <tr key={c.name} className="border-t-2 border-border/70 align-top">
+                  <tr key={c.name} className="border-t border-border/70 align-top">
                     <th scope="row" className="px-2 py-2 font-mono text-[13px] font-bold">{c.name}</th>
                     <td className="px-2 py-2">
                       <span style={candy(typeColor(c.type))} className={cn("whitespace-nowrap rounded-full bg-[var(--c-soft)] px-2 py-0.5 text-xs font-extrabold", INK)}>
@@ -144,7 +144,7 @@ export default function DatasetsPage() {
             <h2 id={g.id} className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
               {g.title}
             </h2>
-            <p className="mt-1 font-semibold text-muted-foreground">{g.desc}</p>
+            <p className="mt-1 text-muted-foreground">{g.desc}</p>
             <div className="mt-5 grid grid-cols-1 gap-6 lg:grid-cols-2">
               {g.items.map((d) => (
                 <DatasetCard key={d.id} d={d} />

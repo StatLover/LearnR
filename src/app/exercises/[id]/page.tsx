@@ -34,9 +34,9 @@ function NeighbourCard({ ex, dir }: { ex: Exercise; dir: "prev" | "next" }) {
     <Link
       href={`/exercises/${ex.id}`}
       rel={dir}
-      className={cn("group lift flex items-center gap-4 rounded-3xl border-2 border-border bg-card p-3 pr-5 shadow-[var(--shadow-card)]", dir === "next" && "flex-row-reverse pl-5 pr-3 text-right")}
+      className={cn("group lift flex items-center gap-4 rounded-3xl border border-border bg-card p-3 pr-5 shadow-[var(--shadow-card)]", dir === "next" && "flex-row-reverse pl-5 pr-3 text-right")}
     >
-      <div className="w-24 shrink-0 overflow-hidden rounded-2xl border-2 border-border sm:w-28 [&_svg]:block">
+      <div className="w-24 shrink-0 overflow-hidden rounded-2xl border border-border sm:w-28 [&_svg]:block">
         <TopicArt kind={artFor(ex)} bg={w.color.soft} />
       </div>
       <div className={cn("min-w-0 flex-1", dir === "next" && "flex flex-col items-end")}>
@@ -110,10 +110,9 @@ export default async function ExercisePage({ params }: { params: Promise<{ id: s
       </nav>
 
       <header
-        className="relative mb-6 overflow-hidden rounded-3xl border-2 border-border shadow-[var(--shadow-card)]"
-        style={{ background: `linear-gradient(115deg, ${world.color.soft} 0%, var(--card) 78%)` }}
+        className="relative mb-6 overflow-hidden rounded-3xl border border-border shadow-[var(--shadow-card)]"
+        style={{ background: `${world.color.soft}` }}
       >
-        <div className="blob -left-12 -top-20 size-56" style={{ background: world.color.main }} />
         <div className="relative flex items-center gap-6 p-5 sm:p-6">
           <div className="min-w-0 flex-1">
             <WorldChip world={world} />
@@ -127,7 +126,7 @@ export default async function ExercisePage({ params }: { params: Promise<{ id: s
               </span>
             </div>
           </div>
-          <div className="hidden w-48 shrink-0 rotate-2 overflow-hidden rounded-2xl border-2 border-border shadow-[var(--shadow-card)] sm:block md:w-56 [&_svg]:block">{thumb}</div>
+          <div className="hidden w-48 shrink-0 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)] sm:block md:w-56 [&_svg]:block">{thumb}</div>
         </div>
       </header>
 

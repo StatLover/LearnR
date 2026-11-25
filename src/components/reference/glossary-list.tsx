@@ -28,15 +28,15 @@ function Pill({ label, count, color, icon: Icon, active, onClick }: { label: str
       aria-pressed={active}
       style={candy(color)}
       className={cn(
-        "press inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border-2 px-3.5 py-1.5 font-display text-sm font-semibold [&_svg]:size-4",
+        "press inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-display text-sm font-semibold [&_svg]:size-4",
         active
-          ? "border-[var(--c)] bg-[var(--c)] text-[var(--c-fg)] [--press-shadow:var(--c-shadow)]"
-          : "border-transparent bg-[var(--c-soft)] text-foreground [--press-shadow:color-mix(in_srgb,var(--c)_35%,transparent)] hover:border-[var(--c)]",
+          ? "border-[var(--c)] bg-[var(--c)] text-[var(--c-fg)]"
+          : "border-transparent bg-[var(--c-soft)] text-foreground hover:border-[var(--c)]",
       )}
     >
       <Icon className={cn(!active && INK)} aria-hidden />
       {label}
-      <span className={cn("rounded-full px-1.5 text-xs font-bold", active ? "bg-white/25" : "bg-card/70 text-muted-foreground")}>{count}</span>
+      <span className={cn("rounded-full px-1.5 text-xs font-bold", active ? "bg-black/15 dark:bg-white/35" : "bg-card/70 text-muted-foreground")}>{count}</span>
     </button>
   );
 }
@@ -93,7 +93,7 @@ export function GlossaryList({ terms }: { terms: GlossaryTerm[] }) {
         <label htmlFor="gl-search" className="sr-only">
           Search the glossary
         </label>
-        <span aria-hidden className="pointer-events-none absolute left-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-xl bg-pink text-white">
+        <span aria-hidden className="pointer-events-none absolute left-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-xl bg-pink text-on-accent">
           <Search className="size-5" />
         </span>
         <input
@@ -104,7 +104,7 @@ export function GlossaryList({ terms }: { terms: GlossaryTerm[] }) {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Look up a word, e.g. “vector” or “p-value”"
-          className="h-16 w-full rounded-3xl border-2 border-border bg-card pl-15 pr-14 font-display text-lg font-medium shadow-[var(--shadow-card)] placeholder:font-sans placeholder:text-base placeholder:font-semibold placeholder:text-muted-foreground focus-visible:border-pink focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-pink/20 [&::-webkit-search-cancel-button]:hidden"
+          className="h-16 w-full rounded-3xl border border-border bg-card pl-15 pr-14 font-display text-lg font-medium shadow-[var(--shadow-card)] placeholder:font-sans placeholder:text-base placeholder:font-semibold placeholder:text-muted-foreground focus-visible:border-pink focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-pink/20 [&::-webkit-search-cancel-button]:hidden"
         />
         {q && (
           <button type="button" onClick={() => { setQ(""); input.current?.focus(); }} aria-label="Clear search" className="absolute right-3 top-1/2 grid size-9 -translate-y-1/2 cursor-pointer place-items-center rounded-xl text-muted-foreground hover:bg-surface-2 hover:text-foreground">
@@ -120,12 +120,12 @@ export function GlossaryList({ terms }: { terms: GlossaryTerm[] }) {
         ))}
       </div>
 
-      <nav aria-label="Jump to letter" className="sticky top-[var(--header-h)] z-20 -mx-5 border-y-2 border-border bg-background/85 px-5 py-2 backdrop-blur-md supports-[backdrop-filter]:bg-background/70 sm:mx-0 sm:rounded-2xl sm:border-2 sm:px-2">
+      <nav aria-label="Jump to letter" className="sticky top-[var(--header-h)] z-20 -mx-5 border-y border-border bg-background/85 px-5 py-2 backdrop-blur-md supports-[backdrop-filter]:bg-background/70 sm:mx-0 sm:rounded-2xl sm:border sm:px-2">
         <ul className="relative flex gap-1 overflow-x-auto no-scrollbar lg:justify-between">
           {ALPHABET.map((l) => (
             <li key={l} className="shrink-0">
               {letters.has(l) ? (
-                <a href={`#letter-${l}`} className="grid size-8 place-items-center rounded-lg font-display text-sm font-bold text-foreground transition-colors hover:bg-pink hover:text-white">
+                <a href={`#letter-${l}`} className="grid size-8 place-items-center rounded-lg font-display text-sm font-bold text-foreground transition-colors hover:bg-pink hover:text-on-accent">
                   {l}
                 </a>
               ) : (
@@ -166,7 +166,7 @@ export function GlossaryList({ terms }: { terms: GlossaryTerm[] }) {
                     aria-labelledby={`${g.slug}-term`}
                     style={candy(c.color)}
                     className={cn(
-                      "relative min-w-0 scroll-mt-40 overflow-hidden rounded-3xl border-2 border-border bg-card p-5 pt-6 shadow-[var(--shadow-card)] transition-shadow target:border-[var(--c)] target:ring-4 target:ring-[var(--c)]/25",
+                      "relative min-w-0 scroll-mt-40 overflow-hidden rounded-3xl border border-border bg-card p-5 pt-6 shadow-[var(--shadow-card)] transition-shadow target:border-[var(--c)] target:ring-4 target:ring-[var(--c)]/25",
                       on && "border-[var(--c)] ring-4 ring-[var(--c)]/25",
                     )}
                   >
@@ -186,7 +186,7 @@ export function GlossaryList({ terms }: { terms: GlossaryTerm[] }) {
                     {g.example && (
                       <div className="mt-3">
                         <p className="mb-1 text-xs font-extrabold uppercase tracking-wider text-muted-foreground">Example</p>
-                        <StaticCode code={g.example} className="rounded-2xl border-2 border-border py-2.5" />
+                        <StaticCode code={g.example} className="rounded-2xl border border-border py-2.5" />
                       </div>
                     )}
                     {g.related?.length ? (
@@ -202,7 +202,7 @@ export function GlossaryList({ terms }: { terms: GlossaryTerm[] }) {
                               href={`#${r}`}
                               onClick={(e) => jump(e, r)}
                               style={candy(CATS[target?.category ?? "programming"].color)}
-                              className="rounded-full border-2 border-transparent bg-[var(--c-soft)] px-2.5 py-0.5 text-sm font-bold hover:border-[var(--c)]"
+                              className="rounded-full border border-transparent bg-[var(--c-soft)] px-2.5 py-0.5 text-sm font-bold hover:border-[var(--c)]"
                             >
                               {target?.term ?? r}
                             </a>
@@ -218,10 +218,10 @@ export function GlossaryList({ terms }: { terms: GlossaryTerm[] }) {
       ))}
 
       {!list.length && (
-        <div className="flex flex-col items-center rounded-3xl border-2 border-dashed border-border bg-card px-6 py-12 text-center">
+        <div className="flex flex-col items-center rounded-3xl border border-dashed border-border bg-card px-6 py-12 text-center">
           <Hexy mood="think" size={96} />
           <h2 className="mt-3 font-display text-xl font-bold">No terms match “{q.trim()}”</h2>
-          <p className="mt-1 max-w-md text-sm font-semibold text-muted-foreground">Try a shorter word or another spelling – or ask the AI tutor to explain it.</p>
+          <p className="mt-1 max-w-md text-sm text-muted-foreground">Try a shorter word or another spelling.</p>
           <Button variant="outline" className="mt-4" onClick={() => { setQ(""); setCat(null); }}>
             Show all terms
           </Button>

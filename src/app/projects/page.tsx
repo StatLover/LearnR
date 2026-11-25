@@ -39,8 +39,8 @@ export default function ProjectsPage() {
           <ProjectsOverview projects={projects.map((p) => ({ id: p.id, stepIds: p.steps.map((s) => s.id) }))} />
           <ol className="grid grid-cols-3 gap-2 sm:gap-3" aria-label="How a project works">
             {HOW.map((h) => (
-              <li key={h.n} className="flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-border bg-card/60 px-2 py-3 text-center sm:flex-row sm:items-start sm:gap-3 sm:px-4 sm:text-left">
-                <span className="grid size-8 shrink-0 place-items-center rounded-full font-display text-sm font-bold text-white" style={{ background: h.color }} aria-hidden>
+              <li key={h.n} className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-border bg-card/60 px-2 py-3 text-center sm:flex-row sm:items-start sm:gap-3 sm:px-4 sm:text-left">
+                <span className="grid size-8 shrink-0 place-items-center rounded-full font-display text-sm font-bold text-on-accent" style={{ background: h.color }} aria-hidden>
                   {h.n}
                 </span>
                 <span>
@@ -62,7 +62,7 @@ export default function ProjectsPage() {
                 <h2 id={`level-${level}`} className="font-display text-2xl font-bold tracking-tight">
                   {LEVELS[level].title}
                 </h2>
-                <p className="text-sm font-semibold text-muted-foreground">{LEVELS[level].blurb}</p>
+                <p className="text-sm text-muted-foreground">{LEVELS[level].blurb}</p>
               </div>
             </div>
             {level === "capstone" ? (

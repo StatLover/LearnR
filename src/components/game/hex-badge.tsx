@@ -1,4 +1,4 @@
-import { BookOpen, Bug, Calendar, CalendarCheck, CheckCircle2, Crown, Dumbbell, Flag, Flame, Map, MessageCircle, Mountain, Play, Search, Star, Trophy, Zap, Lock, type LucideIcon } from "lucide-react";
+import { BookOpen, Bug, Calendar, CalendarCheck, CheckCircle2, Crown, Dumbbell, Flag, Flame, Map, Mountain, NotebookPen, Play, Search, Star, Trophy, Zap, Lock, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ICONS: Record<string, LucideIcon> = {
@@ -6,7 +6,7 @@ const ICONS: Record<string, LucideIcon> = {
   "book-open": BookOpen,
   "check-circle": CheckCircle2,
   bug: Bug,
-  "message-circle": MessageCircle,
+  "notebook-pen": NotebookPen,
   map: Map,
   flame: Flame,
   dumbbell: Dumbbell,
@@ -33,7 +33,7 @@ export function HexBadge({ icon, color = "primary", size = 64, locked = false, c
         <path d="M50 8 L90 31 L90 79 L50 102 L10 79 L10 31 Z" fill={main} strokeLinejoin="round" stroke={main} strokeWidth="8" />
         <path d="M50 16 L83 35 L83 50 Q50 40 17 50 L17 35 Z" fill="#ffffff" opacity={locked ? 0.15 : 0.25} />
       </svg>
-      <Icon className={cn("relative", locked ? "text-muted-foreground" : "text-white")} style={{ width: size * 0.38, height: size * 0.38 }} strokeWidth={2.4} aria-hidden />
+      <Icon className={cn("relative", locked ? "text-muted-foreground" : "text-on-accent")} style={{ width: size * 0.38, height: size * 0.38 }} strokeWidth={2.4} aria-hidden />
     </span>
   );
 }

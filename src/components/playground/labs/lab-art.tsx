@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import type { LabInfo } from "./lab-list";
 
 /** Same palette as TopicArt, so the custom scene matches the other thumbnails. */
-const P = { ink: "#1b1e3d", w: "#ffffff", grape: "#9a5cf0", tang: "#ff8433", coral: "#ff5a5f", sun: "#ffbd14" };
+const P = { ink: "#1f2933", w: "#ffffff", grape: "#8f86cf", tang: "#f0a351", coral: "#c62a29", sun: "#fed57d" };
 
 /** Custom thumbnail for the Central Limit Theorem lab: a skewed histogram turning into a bell. */
 function CltArt({ bg, className }: { bg: string; className?: string }) {

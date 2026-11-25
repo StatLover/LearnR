@@ -84,7 +84,7 @@ function announceHash(href: string) {
 }
 
 function Kbd({ children }: { children: ReactNode }) {
-  return <kbd className="inline-grid min-w-6 place-items-center rounded-md border-2 border-border bg-surface px-1 font-mono text-[11px] font-bold text-foreground">{children}</kbd>;
+  return <kbd className="inline-grid min-w-6 place-items-center rounded-md border border-border bg-surface px-1 font-mono text-[11px] font-bold text-foreground">{children}</kbd>;
 }
 
 export function SearchDialog() {
@@ -141,8 +141,8 @@ export function SearchDialog() {
   return (
     <Dialog open={open} onOpenChange={(o) => (o ? openSearch() : closeSearch())}>
       <DialogContent title="Search R Academy" hideTitle className="max-w-2xl overflow-hidden p-0">
-        <div className="flex items-center gap-3 border-b-2 border-border bg-primary-soft/50 py-3 pl-4 pr-14">
-          <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-white shadow-[0_3px_0_var(--primary-shadow)]">
+        <div className="flex items-center gap-3 border-b border-border bg-primary-soft/50 py-3 pl-4 pr-14">
+          <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-on-accent">
             <Search className="size-5" />
           </span>
           <input
@@ -190,7 +190,7 @@ export function SearchDialog() {
             <div className="flex flex-col items-center px-4 py-8 text-center">
               <Hexy mood="think" size={72} />
               <p className="mt-3 font-display text-lg font-semibold">What would you like to find?</p>
-              <p className="mt-1 text-sm font-semibold text-muted-foreground">Lessons, exercises, projects, functions, glossary terms, cheat sheets and datasets.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Lessons, exercises, projects, functions, glossary terms, cheat sheets and datasets.</p>
               <div className="mt-4 flex flex-wrap justify-center gap-2">
                 {SUGGESTIONS.map((s, i) => (
                   <button
@@ -198,7 +198,7 @@ export function SearchDialog() {
                     type="button"
                     onClick={() => pick(s)}
                     style={candy((["grape", "pink", "mint", "sky", "tangerine", "teal"] as Candy[])[i % 6])}
-                    className="cursor-pointer rounded-full border-2 border-transparent bg-[var(--c-soft)] px-3 py-1 font-display text-sm font-semibold hover:border-[var(--c)]"
+                    className="cursor-pointer rounded-full border border-transparent bg-[var(--c-soft)] px-3 py-1 font-display text-sm font-semibold hover:border-[var(--c)]"
                   >
                     {s}
                   </button>
@@ -211,7 +211,7 @@ export function SearchDialog() {
             <div className="flex flex-col items-center px-4 py-8 text-center">
               <Hexy mood="oops" size={64} />
               <p className="mt-3 font-semibold">No results for “{q}”.</p>
-              <p className="text-sm font-semibold text-muted-foreground">Try a different word, or ask the AI tutor.</p>
+              <p className="text-sm text-muted-foreground">Try a different or shorter word.</p>
             </div>
           )}
 
@@ -229,7 +229,7 @@ export function SearchDialog() {
                   onClick={() => go(r.href)}
                   onMouseMove={() => sel !== i && setSel(i)}
                   style={candy(t.color)}
-                  className={cn("flex cursor-pointer items-start gap-3 rounded-2xl border-2 px-3 py-2.5", on ? "border-[var(--c)] bg-[var(--c-soft)]" : "border-transparent")}
+                  className={cn("flex cursor-pointer items-start gap-3 rounded-2xl border px-3 py-2.5", on ? "border-[var(--c)] bg-[var(--c-soft)]" : "border-transparent")}
                 >
                   <span aria-hidden className={cn("mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl [&_svg]:size-[18px]", on ? "bg-[var(--c)] text-[var(--c-fg)]" : cn("bg-[var(--c-soft)]", INK))}>
                     <t.icon />
@@ -251,7 +251,7 @@ export function SearchDialog() {
           </ul>
         </div>
 
-        <div className="hidden items-center gap-4 border-t-2 border-border bg-surface-2/60 px-4 py-2.5 text-xs font-bold text-muted-foreground sm:flex" aria-hidden>
+        <div className="hidden items-center gap-4 border-t border-border bg-surface-2/60 px-4 py-2.5 text-xs font-bold text-muted-foreground sm:flex" aria-hidden>
           <span className="flex items-center gap-1">
             <Kbd>↑</Kbd>
             <Kbd>↓</Kbd> to move

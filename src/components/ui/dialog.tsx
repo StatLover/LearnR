@@ -18,10 +18,10 @@ export function DialogContent({
 }: ComponentProps<typeof D.Content> & { title: string; description?: ReactNode; hideTitle?: boolean }) {
   return (
     <D.Portal>
-      <D.Overlay className="fixed inset-0 z-50 bg-[#0c0f24]/50 backdrop-blur-[3px] animate-fade-up" />
+      <D.Overlay className="fixed inset-0 z-50 bg-[#121518]/50 backdrop-blur-[3px] animate-fade-up" />
       <D.Content
         className={cn(
-          "fixed left-1/2 top-[7vh] z-50 w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 rounded-3xl border-2 border-border bg-surface p-6 shadow-2xl outline-none max-h-[86vh] overflow-y-auto scrollbar-thin animate-pop-in",
+          "fixed left-1/2 top-[7vh] z-50 w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 rounded-3xl border border-border bg-surface p-6 shadow-2xl outline-none max-h-[86vh] overflow-y-auto scrollbar-thin animate-pop-in",
           className,
         )}
         {...props}

@@ -52,7 +52,7 @@ export function DiffView({ before, after, beforeLabel = "Your code", afterLabel 
         c?.kind === "removed" && "bg-danger-soft",
         c?.kind === "added" && "bg-success-soft",
         !c && "bg-surface",
-        side === "left" && "border-r-2 border-border",
+        side === "left" && "border-r border-border",
       )}
     >
       {c && (
@@ -70,11 +70,11 @@ export function DiffView({ before, after, beforeLabel = "Your code", afterLabel 
     </td>
   );
   return (
-    <div className="overflow-x-auto rounded-2xl border-2 border-border bg-code scrollbar-thin">
+    <div className="overflow-x-auto rounded-2xl border border-border bg-code scrollbar-thin">
       <table className="code-static w-full min-w-[34rem] border-collapse text-[13px]">
         <thead>
-          <tr className="border-b-2 border-border bg-surface-2/70 text-left text-xs text-muted-foreground">
-            <th scope="col" className="border-r-2 border-border px-3 py-2 font-display font-semibold">
+          <tr className="border-b border-border bg-surface-2/70 text-left text-xs text-muted-foreground">
+            <th scope="col" className="border-r border-border px-3 py-2 font-display font-semibold">
               <span className="mr-1.5 inline-block size-2 rounded-full bg-coral align-middle" aria-hidden />
               Before – {beforeLabel}
             </th>

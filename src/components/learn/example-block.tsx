@@ -76,8 +76,8 @@ export function ExampleBlock({ example, lessonId, lessonTitle, onEditChange }: {
   };
 
   return (
-    <figure className="not-prose overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]" aria-label={example.title ?? "Code example"}>
-      <div className="flex flex-wrap items-center gap-1.5 border-b-2 border-border bg-surface-2/70 px-3 py-2">
+    <figure className="not-prose overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]" aria-label={example.title ?? "Code example"}>
+      <div className="flex flex-wrap items-center gap-1.5 border-b border-border bg-surface-2/70 px-3 py-2">
         <span className="mr-auto flex items-center gap-2 font-display font-semibold">
           <span className="hidden gap-1.5 sm:flex" aria-hidden>
             <span className="size-3 rounded-full bg-coral" />
@@ -139,7 +139,7 @@ export function ExampleBlock({ example, lessonId, lessonTitle, onEditChange }: {
         <>
           <StaticCode code={example.code} lineNumbers highlight={hover} className="py-4 text-[14px]" />
           {result && (
-            <div className="border-t-2 border-border">
+            <div className="border-t border-border">
               <p className="flex items-center gap-1.5 bg-mint-soft px-4 py-1.5 text-xs font-bold text-success">
                 <Terminal className="size-3.5" /> Your output (from real R) · {(result.elapsedMs / 1000).toFixed(2)} s
               </p>
@@ -148,14 +148,14 @@ export function ExampleBlock({ example, lessonId, lessonTitle, onEditChange }: {
             </div>
           )}
           {(example.output !== undefined || example.plot) && (
-            <div className="border-t-2 border-border">
+            <div className="border-t border-border">
               <p className="flex items-center gap-1.5 bg-surface-2/70 px-4 py-1.5 text-xs font-bold text-muted-foreground">
                 {example.output ? <Terminal className="size-3.5" /> : <ImageIcon className="size-3.5" />} Expected output
               </p>
               {example.output ? (
                 <pre className="code-static overflow-x-auto bg-console px-4 py-3 text-[13px] whitespace-pre">{example.output}</pre>
               ) : (
-                <p className="bg-console px-4 py-3 text-sm font-semibold text-muted-foreground">This code draws a plot – press Run to see it.</p>
+                <p className="bg-console px-4 py-3 text-sm text-muted-foreground">This code draws a plot – press Run to see it.</p>
               )}
             </div>
           )}
@@ -163,7 +163,7 @@ export function ExampleBlock({ example, lessonId, lessonTitle, onEditChange }: {
       )}
 
       {!editing && (example.explanation?.length || example.outputNote || example.tryIt) ? (
-        <figcaption className="space-y-4 border-t-2 border-border p-4 text-[15px]">
+        <figcaption className="space-y-4 border-t border-border p-4 text-[15px]">
           {example.explanation && example.explanation.length > 0 && (
             <div>
               <p className="mb-2 font-display text-base font-semibold">Line by line</p>
@@ -176,9 +176,9 @@ export function ExampleBlock({ example, lessonId, lessonTitle, onEditChange }: {
                     onMouseLeave={() => setHover([])}
                     onFocus={() => setHover(noteLines[i])}
                     onBlur={() => setHover([])}
-                    className="flex gap-3 rounded-2xl border-2 border-transparent p-2 outline-none transition-colors hover:border-primary/30 hover:bg-primary-soft/50 focus-visible:border-primary/50 focus-visible:bg-primary-soft/50"
+                    className="flex gap-3 rounded-2xl border border-transparent p-2 outline-none transition-colors hover:border-primary/30 hover:bg-primary-soft/50 focus-visible:border-primary/50 focus-visible:bg-primary-soft/50"
                   >
-                    <span className="grid size-6 shrink-0 place-items-center rounded-lg bg-primary font-display text-xs font-bold text-white">{i + 1}</span>
+                    <span className="grid size-6 shrink-0 place-items-center rounded-lg bg-primary font-display text-xs font-bold text-on-accent">{i + 1}</span>
                     <span className="grid min-w-0 flex-1 gap-1 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:gap-4">
                       <code className="code-static self-start overflow-x-auto rounded-lg bg-code px-2 py-1 text-[12.5px] whitespace-pre">{n.code}</code>
                       <Markdown runnableCode={false}>{n.text}</Markdown>
@@ -189,13 +189,13 @@ export function ExampleBlock({ example, lessonId, lessonTitle, onEditChange }: {
             </div>
           )}
           {example.outputNote && (
-            <div className="rounded-2xl border-2 border-sky/30 bg-sky-soft px-4 py-3">
+            <div className="rounded-2xl border border-sky/30 bg-sky-soft px-4 py-3">
               <p className="mb-1 font-display text-xs font-semibold uppercase tracking-wider text-sky">Reading the output</p>
               <Markdown runnableCode={false}>{example.outputNote}</Markdown>
             </div>
           )}
           {example.tryIt && (
-            <div className={cn("flex flex-wrap items-center gap-3 rounded-2xl border-2 border-dashed border-grape/50 bg-grape-soft/50 px-4 py-3")}>
+            <div className={cn("flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-grape/50 bg-grape-soft/50 px-4 py-3")}>
               <PencilLine className="size-5 shrink-0 text-grape" />
               <div className="min-w-0 flex-1 basis-[12rem]">
                 <span className="font-display font-semibold text-grape">Try it yourself: </span>

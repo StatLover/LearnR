@@ -16,7 +16,6 @@ import {
   Table2,
   Boxes,
   Loader2,
-  Sparkles,
   Check,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -53,8 +52,6 @@ export interface CodeRunnerProps {
   freshEachRun?: boolean;
   onResult?: (r: RunResult) => void;
   onCodeChange?: (code: string) => void;
-  /** Ask the AI tutor about this code + output. */
-  onAskTutor?: (code: string, result: RunResult | null) => void;
   extraToolbar?: ReactNode;
   showSave?: boolean;
   autoRun?: boolean;
@@ -92,7 +89,6 @@ export function CodeRunner({
   freshEachRun = false,
   onResult,
   onCodeChange,
-  onAskTutor,
   extraToolbar,
   showSave = true,
   autoRun = false,
@@ -233,7 +229,6 @@ export function CodeRunner({
     toast("Saved to your dashboard", { description: "Find it under Saved code on your Dashboard." });
   };
   const stop = () => rSession.interrupt();
-  const askTutor = () => onAskTutor?.(editor.current?.getValue() ?? code, last);
   const runNow = () => void run();
   const clear = () => {
     setLines([]);
@@ -258,8 +253,8 @@ export function CodeRunner({
   };
 
   return (
-    <div className={cn("flex min-w-0 flex-col overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]", className)}>
-      <div className="flex flex-wrap items-center gap-1.5 border-b-2 border-border bg-surface-2/70 px-3 py-2">
+    <div className={cn("flex min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]", className)}>
+      <div className="flex flex-wrap items-center gap-1.5 border-b border-border bg-surface-2/70 px-3 py-2">
         <span className="mr-1 hidden items-center gap-1.5 sm:flex" aria-hidden>
           <span className="size-3 rounded-full bg-coral" />
           <span className="size-3 rounded-full bg-sun" />
@@ -284,7 +279,6 @@ export function CodeRunner({
           {showSave && !compact && <IconBtn label="Save to dashboard" onClick={save} icon={<Save />} shortcut="Ctrl+S" />}
           {!compact && <IconBtn label="Clear console" onClick={clear} icon={<Eraser />} />}
           {!compact && <IconBtn label="Keyboard shortcuts" onClick={() => setShowKeys(true)} icon={<Keyboard />} />}
-          {onAskTutor && <IconBtn label="Ask the AI tutor about this code" onClick={askTutor} icon={<Sparkles />} />}
         </div>
       </div>
 
@@ -302,12 +296,11 @@ export function CodeRunner({
       />
 
       {(lines.length > 0 || running || !compact || images.length > 0) && (
-        <Tabs value={tab} onValueChange={setTab} className="border-t-2 border-border">
+        <Tabs value={tab} onValueChange={setTab} className="border-t border-border">
           {!running && status && status !== "ok" && (status === "error" || status === "parse_error") && (
             <div role="status" className="flex flex-wrap items-center gap-2 bg-coral-soft px-4 py-2 text-sm font-semibold text-danger animate-fade-up">
-              <span aria-hidden>🔍</span>
               <span className="min-w-0 flex-1">
-                R stopped {errLine ? `on line ${errLine}` : "with an error"} – that&apos;s normal while learning! Read the message below{onAskTutor ? ", ask the tutor," : ""} or let the Error Detective explain it.
+                R stopped {errLine ? `on line ${errLine}` : "with an error"} – that&apos;s normal while learning! Read the message below, or let the Error Detective explain it.
               </span>
               <Button size="sm" variant="outline" onClick={findMistake}>Find my mistake</Button>
             </div>

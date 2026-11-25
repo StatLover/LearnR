@@ -249,7 +249,7 @@ paste("I like", toupper(fruit))`,
 - \`?round\` – open the help page for \`round()\`. (\`help(round)\` does the same.)
 - \`??"square root"\` – search all help pages for a phrase when you don't know the function's name.
 
-In RStudio the help page appears in the **Help** pane. On this website you can also look functions up in the **Functions** reference, or ask the **AI tutor** next to each lesson.`,
+In RStudio the help page appears in the **Help** pane. On this website you can also look functions up in the **Functions** reference.`,
         },
         {
           kind: "table",
@@ -301,7 +301,7 @@ Error in sqrt("49") : non-numeric argument to mathematical function
             "Read the message after the colon. What is R complaining about?",
             "Look at the code mentioned in the message (or the line number) and check spelling, capitals, quotes, commas and parentheses.",
             "Change **one** thing and run the code again.",
-            "Still stuck? Paste your code into the **Error Detective** page of this site, which explains R errors in plain English, or ask the AI tutor.",
+            "Still stuck? Paste your code into the **Error Detective** page of this site, which explains R errors in plain English.",
           ],
         },
         {

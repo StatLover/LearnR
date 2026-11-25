@@ -53,7 +53,7 @@ export default function PlaygroundPage() {
       <div className="mx-auto max-w-7xl px-5 py-6 sm:py-8">
         <Playground datasets={datasets} />
 
-        <section aria-labelledby="about-webr" className="mt-10 rounded-3xl border-2 border-border bg-surface/70 p-5 sm:p-6">
+        <section aria-labelledby="about-webr" className="mt-10 rounded-3xl border border-border bg-surface/70 p-5 sm:p-6">
           <div className="flex items-center gap-3">
             <Hexy mood="think" size={52} />
             <h2 id="about-webr" className="font-display text-xl font-semibold">
@@ -63,12 +63,12 @@ export default function PlaygroundPage() {
           <ul className="mt-4 grid gap-4 md:grid-cols-3">
             {FACTS.map(({ icon: Icon, color, title, text }) => (
               <li key={title} className="flex gap-3">
-                <span className="grid size-10 shrink-0 place-items-center rounded-xl text-white" style={{ background: `var(--${color})`, color: color === "sun" ? "#3b2600" : undefined }} aria-hidden>
+                <span className="grid size-10 shrink-0 place-items-center rounded-xl text-on-accent" style={{ background: `var(--${color})`, color: color === "sun" ? "var(--on-sun)" : undefined }} aria-hidden>
                   <Icon className="size-5" />
                 </span>
                 <div className="min-w-0">
                   <p className="font-display font-semibold">{title}</p>
-                  <p className="mt-0.5 text-sm font-semibold text-muted-foreground">{text}</p>
+                  <p className="mt-0.5 text-sm text-muted-foreground">{text}</p>
                 </div>
               </li>
             ))}

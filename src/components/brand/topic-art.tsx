@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 /** Lines drawn straight on the background (axes, arrows) adapt to the theme; ink on white panels stays dark. */
 const LINE = { stroke: "var(--art-line)" } as const;
-const P = { ink: "#1b1e3d", w: "#ffffff", indigo: "#5b5bf6", mint: "#18b874", sun: "#ffbd14", coral: "#ff5a5f", sky: "#1e9bf0", grape: "#9a5cf0", tang: "#ff8433", pink: "#f2559d", teal: "#10b3b0", soft: "#eef0fd" };
+const P = { ink: "#1f2933", w: "#ffffff", indigo: "#5b8fc4", mint: "#5ba881", sun: "#fed57d", coral: "#c62a29", sky: "#6fb3c6", grape: "#8f86cf", tang: "#f0a351", pink: "#f3a3a6", teal: "#9ca362", soft: "#f5efe6" };
 const MONO = "var(--font-mono)";
 
 function Win({ children, x = 22, y = 16, w = 116, h = 68, bar = P.indigo }: { children?: ReactNode; x?: number; y?: number; w?: number; h?: number; bar?: string }) {
@@ -67,7 +67,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
         <rect x="30" y="50" width="60" height="4" rx="2" fill={P.mint} />
         <rect x="30" y="62" width="28" height="4" rx="2" fill={P.tang} />
         <rect x="62" y="62" width="34" height="4" rx="2" fill={P.pink} />
-        <rect x="30" y="74" width="46" height="4" rx="2" fill="#a0a6c8" />
+        <rect x="30" y="74" width="46" height="4" rx="2" fill="#c9bfb0" />
       </Win>
       <circle cx="132" cy="70" r="16" fill={P.sun} />
       <path d="M126 70 l5 5 9 -10" stroke={P.ink} strokeWidth="3.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -214,7 +214,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
   clean: () => (
     <g>
       <rect x="24" y="30" width="58" height="50" rx="8" fill={P.w} />
-      {[0, 1, 2, 3].map((r) => <rect key={r} x="30" y={37 + r * 10} width={[40, 28, 44, 20][r]} height="5" rx="2.5" fill={r % 2 ? P.coral : "#a0a6c8"} transform={`rotate(${[4, -6, 3, -4][r]} 50 50)`} />)}
+      {[0, 1, 2, 3].map((r) => <rect key={r} x="30" y={37 + r * 10} width={[40, 28, 44, 20][r]} height="5" rx="2.5" fill={r % 2 ? P.coral : "#c9bfb0"} transform={`rotate(${[4, -6, 3, -4][r]} 50 50)`} />)}
       <path d="M90 55 h14" style={LINE} strokeWidth="4" strokeLinecap="round" />
       <rect x="110" y="30" width="34" height="50" rx="8" fill={P.w} />
       {[0, 1, 2, 3].map((r) => <rect key={r} x="115" y={37 + r * 10} width="24" height="5" rx="2.5" fill={P.mint} />)}
@@ -297,7 +297,7 @@ const scenes: Record<TopicKind, () => ReactNode> = {
       <rect x="22" y="22" width="56" height="62" rx="9" fill={P.w} />
       <text x="50" y="44" textAnchor="middle" fontFamily={MONO} fontSize="10" fontWeight="800" fill={P.ink}>p &lt; 0.05</text>
       <rect x="30" y="54" width="40" height="5" rx="2.5" fill={P.teal} />
-      <rect x="30" y="64" width="30" height="5" rx="2.5" fill="#a0a6c8" />
+      <rect x="30" y="64" width="30" height="5" rx="2.5" fill="#c9bfb0" />
       <circle cx="108" cy="50" r="22" fill={P.w} stroke={P.ink} strokeWidth="4" />
       <line x1="124" y1="66" x2="140" y2="82" style={LINE} strokeWidth="7" strokeLinecap="round" />
       <path d="M98 50 l7 7 12 -14" stroke={P.mint} strokeWidth="4.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -368,8 +368,8 @@ const scenes: Record<TopicKind, () => ReactNode> = {
       <rect x="38" y="12" width="70" height="82" rx="8" fill={P.w} />
       <rect x="46" y="22" width="40" height="6" rx="3" fill={P.ink} />
       <Bars x={48} y={62} heights={[14, 24, 18, 30]} colors={[P.sky, P.mint, P.sun, P.pink]} w={9} gap={4} />
-      <rect x="46" y="70" width="52" height="4" rx="2" fill="#a0a6c8" />
-      <rect x="46" y="78" width="40" height="4" rx="2" fill="#a0a6c8" />
+      <rect x="46" y="70" width="52" height="4" rx="2" fill="#c9bfb0" />
+      <rect x="46" y="78" width="40" height="4" rx="2" fill="#c9bfb0" />
       <circle cx="122" cy="64" r="16" fill={P.sun} />
       <path d="M115 64 l5 5 9 -10" stroke={P.ink} strokeWidth="3.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
     </g>
@@ -390,8 +390,6 @@ export function TopicArt({ kind, className, bg, label }: { kind: TopicKind; clas
   return (
     <svg viewBox="0 0 160 100" className={cn("h-auto w-full", className)} role={label ? "img" : undefined} aria-label={label} aria-hidden={label ? undefined : true}>
       <rect width="160" height="100" fill={bg ?? "var(--surface-2)"} />
-      <circle cx="146" cy="8" r="26" fill="#ffffff" opacity="0.18" />
-      <circle cx="10" cy="96" r="20" fill="#ffffff" opacity="0.14" />
       {S()}
     </svg>
   );

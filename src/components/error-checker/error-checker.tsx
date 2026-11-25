@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
 import {
   AlertTriangle,
   Ban,
@@ -24,18 +23,15 @@ import {
   Search,
   SearchX,
   ShieldCheck,
-  Sparkles,
   SpellCheck,
   Tag,
   Undo2,
   Wand2,
   Wrench,
   XCircle,
-  type LucideIcon,
-} from "lucide-react";
+  type LucideIcon } from "lucide-react";
 import { CodeEditor, type CodeEditorHandle, type LineMark, type TokenMark } from "@/components/code/code-editor";
 import { ConsoleView, PlotGallery } from "@/components/code/output-panels";
-import { StaticCode } from "@/components/code/static-code";
 import { Markdown } from "@/components/content/markdown";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,19 +41,17 @@ import { DiffView } from "./diff-view";
 import { DetectiveHexy } from "./detective-hexy";
 import { LineExcerpt } from "./line-excerpt";
 import { rSession } from "@/lib/r/session";
-import { transcript, type CheckInfo, type RunResult } from "@/lib/r/console";
+import {  type CheckInfo, type RunResult } from "@/lib/r/console";
 import { analyzeParseError, analyzeRun, outputChecks, staticChecks, type AnalysisContext, type Diagnosis } from "@/lib/errors/analyze";
 import { verifyFix, type VerifiedFix } from "@/lib/errors/fix-loop";
 import { definedFunctions } from "@/lib/errors/helpers";
 import { significant, tokenize } from "@/lib/r/tokens";
-import { AI_NEEDS_SERVER, aiStatus, codeMessage, tutor } from "@/lib/ai/tutor-store";
 import { progress } from "@/lib/store/progress";
 import { useSettings } from "@/lib/store/settings";
 import { useResolvedTheme } from "@/hooks/use-theme";
 import { useRSession } from "@/hooks/use-r-session";
 import type { HexyMood } from "@/components/brand/mascot";
 import { cn } from "@/lib/utils";
-import { withBase } from "@/lib/base-path";
 
 const EXAMPLES: { label: string; code: string; icon: LucideIcon; color: string }[] = [
   { label: "Object not found", code: "numbers <- c(10, 20, 30)\nmean(number)", icon: SearchX, color: "coral" },
@@ -79,20 +73,8 @@ const KIND_STYLE = {
 } as const;
 
 const accent = (color: string) => ({ "--a": `var(--${color})`, "--a-soft": `var(--${color}-soft)`, "--a-shadow": `var(--${color}-shadow)` }) as CSSProperties;
-const onAccent = (color: string) => (color === "sun" ? "text-[#3b2600]" : "text-white");
+const onAccent = (color: string) => (color === "sun" ? "text-on-sun" : "text-on-accent");
 const isError = (d: Diagnosis) => d.kind === "syntax" || d.kind === "runtime";
-
-interface AiAnalysis {
-  kind: string;
-  category: string;
-  summary: string;
-  explanation: string;
-  how_to_fix: string;
-  location: { line: number | null; basis: string; note: string };
-  fixed_code: string | null;
-  changes: { line: number | null; before: string; after: string; reason: string }[];
-  prevention_tips: string[];
-}
 
 function identifierNames(code: string) {
   return [...new Set(significant(tokenize(code)).filter((t) => t.kind === "name").map((t) => t.text))].slice(0, 200);
@@ -103,7 +85,7 @@ function Clue({ n, icon: Icon, color, title, children, extra }: { n: number; ico
   return (
     <li className="relative flex gap-3 animate-fade-up" style={{ ...accent(color), animationDelay: `${n * 60}ms` }}>
       <span className="flex flex-col items-center">
-        <span className={cn("grid size-9 shrink-0 place-items-center rounded-xl bg-[var(--a)] shadow-[0_3px_0_var(--a-shadow)]", onAccent(color))} aria-hidden>
+        <span className={cn("grid size-9 shrink-0 place-items-center rounded-xl bg-[var(--a)]", onAccent(color))} aria-hidden>
           <Icon className="size-[18px]" />
         </span>
         <span className="mt-1.5 w-0.5 flex-1 rounded-full bg-border" aria-hidden />
@@ -126,7 +108,7 @@ export function ErrorChecker() {
   const [code, setCode] = useState(EXAMPLES[0].code);
   /** The learner's own code from before a fix was applied (for “Restore my original code”). */
   const [backup, setBackup] = useState<string | null>(null);
-  const [busy, setBusy] = useState<null | "check" | "run" | "ai">(null);
+  const [busy, setBusy] = useState<null | "check" | "run">(null);
   const [fixing, setFixing] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [result, setResult] = useState<RunResult | null>(null);
@@ -136,21 +118,15 @@ export function ErrorChecker() {
   const [fixFor, setFixFor] = useState<string | null>(null);
   const [fixTried, setFixTried] = useState(false);
   const [simple, setSimple] = useState<Record<string, boolean>>({});
-  const [ai, setAi] = useState<AiAnalysis | null>(null);
-  const [aiFixRun, setAiFixRun] = useState<RunResult | null>(null);
-  const [aiError, setAiError] = useState<string | null>(null);
-  const [aiConfigured, setAiConfigured] = useState<boolean | null>(null);
   const [analyzedCode, setAnalyzedCode] = useState<string | null>(null);
   /** The code a fix put into the editor – to celebrate when it passes. */
   const [appliedFix, setAppliedFix] = useState<string | null>(null);
   const editor = useRef<CodeEditorHandle>(null);
   const reportRef = useRef<HTMLDivElement>(null);
   const fixRef = useRef<HTMLDivElement>(null);
-  const aiRef = useRef<HTMLDivElement>(null);
   const settings = useSettings();
   const theme = useResolvedTheme();
   const session = useRSession();
-  const router = useRouter();
 
   const stale = analyzedCode !== null && analyzedCode !== code;
   const working = Boolean(busy) || fixing;
@@ -169,9 +145,6 @@ export function ErrorChecker() {
     setFix(null);
     setFixFor(null);
     setFixTried(false);
-    setAi(null);
-    setAiFixRun(null);
-    setAiError(null);
     setSimple({});
   };
 
@@ -281,62 +254,6 @@ export function ErrorChecker() {
     if (out) reveal(reportRef.current);
   };
 
-  /** Explain with AI: ask the AI, then verify its fix in R. */
-  const explainAi = async (simpler = false, pre?: { r: RunResult; ds: Diagnosis[] }): Promise<AiAnalysis | null> => {
-    const src = code;
-    let r = pre?.r ?? result;
-    let ds = pre?.ds ?? diagnoses;
-    if (!r || (!pre && stale)) {
-      const out = await runAnalyze(src);
-      if (!out) return null;
-      r = out.r;
-      ds = out.ds;
-    }
-    if (!aiConfigured) {
-      setAiError(
-        AI_NEEDS_SERVER
-          ? "AI explanations need a server, and this copy of R Academy is a static site. The rule-based analysis above is based on what R reported."
-          : "AI explanations are not configured on this server (the site owner needs to set ANTHROPIC_API_KEY). The rule-based analysis above is based on what R reported.",
-      );
-      return null;
-    }
-    setBusy("ai");
-    setAiError(null);
-    try {
-      const res = await fetch(withBase("/api/ai/analyze"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          code: src,
-          console: transcript(r.lines),
-          status: r.status,
-          errorLine: r.info?.error?.line_start ?? r.info?.parse_error?.line ?? null,
-          ruleDiagnosis: ds?.length ? ds.map((d) => `${d.category}: ${d.title}${d.lineStart ? ` (line ${d.lineStart})` : ""}`).join("\n") : undefined,
-          simpler,
-        }),
-      });
-      const j = await res.json();
-      if (!res.ok) throw new Error(j.error ?? "The AI could not analyse the code.");
-      const a = j.analysis as AiAnalysis;
-      setAi(a);
-      setAiFixRun(null);
-      if (a.fixed_code && a.fixed_code.trim() !== src.trim()) {
-        setAiFixRun(await rSession.run(a.fixed_code, { ...runOpts(), workspace: "checker-fix" }));
-      }
-      return a;
-    } catch (e) {
-      setAiError(e instanceof Error ? e.message : String(e));
-      return null;
-    } finally {
-      setBusy(null);
-    }
-  };
-
-  const explainWithAi = async () => {
-    await explainAi();
-    reveal(aiRef.current, true);
-  };
-
   /** Fix it for me: find a corrected version that R has really run. */
   const fixCode = async () => {
     setFixing(true);
@@ -353,12 +270,8 @@ export function ErrorChecker() {
         reveal(reportRef.current);
         return;
       }
-      const a = ai ?? (aiConfigured ? await explainAi(false, out) : null);
-      if (a?.fixed_code) reveal(aiRef.current, true);
-      else {
-        toast("No automatic fix found", { description: "Read the explanation for how to fix it, or ask the AI tutor.", tone: "info" });
-        reveal(reportRef.current);
-      }
+      toast("No automatic fix found", { description: "R couldn't confirm a corrected version automatically – follow “How to fix it” in the report.", tone: "info" });
+      reveal(reportRef.current);
     } finally {
       setFixing(false);
     }
@@ -400,7 +313,6 @@ export function ErrorChecker() {
   // With "ra-check-auto" set, start the investigation straight away (R starts on demand).
   const handedOver = useRef(false);
   useEffect(() => {
-    aiStatus().then((s) => setAiConfigured(s.configured));
     if (handedOver.current) return;
     try {
       const incoming = sessionStorage.getItem("ra-check-code");
@@ -441,11 +353,6 @@ export function ErrorChecker() {
   const others = (diagnoses ?? []).filter((d) => d.kind === "logic" || d.kind === "style");
   const solvedByFix = Boolean(result && appliedFix !== null && analyzedCode === appliedFix && !stale && !errors.length && result.status === "ok");
 
-  const askTutor = () => {
-    tutor.queue(codeMessage(code, result ? transcript(result.lines) : null, "Please help me understand and fix the problem in this R code."));
-    router.push("/tutor");
-  };
-
   // ---------- The case report headline ----------
   const first = errors[0];
   const verdict = (() => {
@@ -458,7 +365,7 @@ export function ErrorChecker() {
         stamp: "Case open",
         tone: "coral",
         title: result || first.kind === "syntax" ? `${label} found${where}` : `Possible ${label.toLowerCase()} spotted${where}`,
-        text: "Hexy collected the clues below: what kind of problem it is, where it is, why it happened and how to fix it.",
+        text: "The clues below show what kind of problem it is, where it is, why it happened and how to fix it.",
       };
     }
     const extras = [warnings.length && `${warnings.length} warning${warnings.length > 1 ? "s" : ""}`, others.length && `${others.length} suggestion${others.length > 1 ? "s" : ""}`].filter(Boolean).join(" and ");
@@ -492,9 +399,9 @@ export function ErrorChecker() {
     const before = analyzedCode ?? code;
     let n = 0;
     return (
-      <article key={d.id} className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] animate-fade-up" aria-labelledby={`case-${d.id}`} style={accent(k.tone)}>
-        <header className="flex flex-wrap items-start gap-3 border-b-2 border-border bg-gradient-to-r from-[var(--a-soft)] to-transparent px-5 py-4">
-          <span className={cn("grid size-11 shrink-0 place-items-center rounded-2xl bg-[var(--a)] shadow-[0_3px_0_var(--a-shadow)]", onAccent(k.tone))} aria-hidden>
+      <article key={d.id} className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] animate-fade-up" aria-labelledby={`case-${d.id}`} style={accent(k.tone)}>
+        <header className="flex flex-wrap items-start gap-3 border-b border-border bg-[var(--a-soft)] px-5 py-4">
+          <span className={cn("grid size-11 shrink-0 place-items-center rounded-2xl bg-[var(--a)]", onAccent(k.tone))} aria-hidden>
             <k.icon className="size-6" />
           </span>
           <div className="min-w-0 flex-1">
@@ -516,7 +423,7 @@ export function ErrorChecker() {
           {(d.message || isError(d)) && (
             <Clue n={++n} icon={MessageSquareQuote} color="coral" title="The exact R message">
               {d.message ? (
-                <pre className="code-static whitespace-pre-wrap rounded-2xl border-2 border-coral/30 bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger">{d.message}</pre>
+                <pre className="code-static whitespace-pre-wrap rounded-2xl border border-coral/30 bg-danger-soft px-3.5 py-2.5 text-[13px] text-danger">{d.message}</pre>
               ) : (
                 <p className="text-muted-foreground">R hasn&apos;t printed a message yet – this was spotted by checking the code without running it. Press Find My Error to see R&apos;s real message.</p>
               )}
@@ -554,7 +461,7 @@ export function ErrorChecker() {
               <p className="text-muted-foreground">R didn&apos;t point to one specific line for this.</p>
             )}
             <div className="rounded-2xl bg-surface-2/70 px-3.5 py-2.5 text-xs text-muted-foreground">
-              <span className="font-display font-semibold text-foreground">🔎 How we know: </span>
+              <span className="font-display font-semibold text-foreground">How we know: </span>
               <Markdown runnableCode={false} className="inline [&>p]:inline">
                 {d.evidence}
               </Markdown>
@@ -585,7 +492,7 @@ export function ErrorChecker() {
           <Clue n={++n} icon={Wrench} color="tangerine" title="How to fix it">
             <Markdown runnableCode={false}>{d.howToFix}</Markdown>
             {d.tips.length > 0 && (
-              <div className="rounded-2xl border-2 border-dashed border-border px-3.5 py-2.5">
+              <div className="rounded-2xl border border-dashed border-border px-3.5 py-2.5">
                 <p className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">Avoid it next time</p>
                 <ul className="mt-1 list-disc space-y-1 pl-5">
                   {d.tips.map((t) => (
@@ -616,26 +523,26 @@ export function ErrorChecker() {
                 <div ref={fixRef} className="scroll-mt-24 space-y-2">
                   <DiffView before={before} after={dFix.code} />
                   <p className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">What R printed when it ran the corrected code</p>
-                  <div className="overflow-hidden rounded-2xl border-2 border-border">
+                  <div className="overflow-hidden rounded-2xl border border-border">
                     <ConsoleView lines={dFix.result.lines} empty="(The corrected code printed nothing.)" maxHeight={220} />
                     {dFix.result.images.length > 0 && <PlotGallery images={dFix.result.images} />}
                   </div>
                 </div>
               ) : verifying && fixFor === d.id ? (
-                <p className="flex items-center gap-2 font-semibold text-muted-foreground">
+                <p className="flex items-center gap-2 text-muted-foreground">
                   <Loader2 className="size-4 animate-spin text-primary" /> Testing a possible fix in R…
                 </p>
               ) : d.fix && !result ? (
                 <div className="space-y-2">
-                  <p className="text-muted-foreground">Hexy has an idea for a fix, but only shows corrected code after R has run it successfully.</p>
+                  <p className="text-muted-foreground">A fix is possible, but corrected code is only shown after R has run it successfully.</p>
                   <Button size="sm" variant="success" onClick={() => void findError()} disabled={working}>
                     <Wand2 /> Run to verify a fix
                   </Button>
                 </div>
               ) : result && fixTried ? (
-                <p className="text-muted-foreground">No automatic fix could be confirmed by running R. Follow “How to fix it” above{aiConfigured ? ", or press Explain with AI for a suggestion that R will test" : ""}.</p>
+                <p className="text-muted-foreground">No automatic fix could be confirmed by running R. Follow “How to fix it” above.</p>
               ) : (
-                <p className="text-muted-foreground">Hexy has no automatic fix for this one – follow “How to fix it” above{aiConfigured ? ", or press Explain with AI for a suggestion that R will test" : ""}.</p>
+                <p className="text-muted-foreground">There is no automatic fix for this one – follow “How to fix it” above.</p>
               )}
             </Clue>
           )}
@@ -668,9 +575,6 @@ export function ErrorChecker() {
                 <Button variant="success" onClick={() => void applyAndTest(dFix.code)} disabled={working}>
                   <Wand2 /> Apply fix &amp; test
                 </Button>
-                <Button variant="outline" onClick={askTutor}>
-                  <Sparkles /> Discuss with Hexy
-                </Button>
               </div>
             </Clue>
           )}
@@ -679,7 +583,7 @@ export function ErrorChecker() {
     );
   };
 
-  const busyText = busy === "check" ? "Asking R to read your code (without running it)…" : busy === "ai" ? "Asking Hexy's AI brain for a second opinion…" : session.status === "loading" || session.status === "idle" ? "Starting R in your browser – the first time takes a few seconds…" : "Running your code in real R…";
+  const busyText = busy === "check" ? "Asking R to read your code (without running it)…" : session.status === "loading" || session.status === "idle" ? "Starting R in your browser – the first time takes a few seconds…" : "Running your code in real R…";
 
   return (
     <div className="space-y-12">
@@ -688,7 +592,7 @@ export function ErrorChecker() {
         <div className="min-w-0 space-y-4 lg:self-start lg:[@media(min-height:860px)]:sticky lg:[@media(min-height:860px)]:top-[calc(var(--header-h)+1rem)]">
           <div>
             <p id="cases-label" className="mb-2 font-display text-sm font-semibold text-muted-foreground">
-              🗂️ Pick a case to crack – each one has a classic beginner mistake:
+              Pick a case to crack – each one has a classic beginner mistake:
             </p>
             <div role="group" aria-labelledby="cases-label" className="flex flex-wrap gap-2">
               {EXAMPLES.map((e, i) => {
@@ -701,8 +605,8 @@ export function ErrorChecker() {
                     onClick={() => loadCode(e.code)}
                     style={accent(e.color)}
                     className={cn(
-                      "press flex cursor-pointer items-center gap-1.5 rounded-full border-2 py-1 pl-1 pr-3 font-display text-[13px] font-semibold",
-                      on ? "border-[var(--a)] bg-[var(--a-soft)] [--press-shadow:var(--a)]" : "border-border bg-surface [--press-shadow:var(--border)] hover:border-[var(--a)]",
+                      "press flex cursor-pointer items-center gap-1.5 rounded-full border py-1 pl-1 pr-3 font-display text-[13px] font-semibold",
+                      on ? "border-[var(--a)] bg-[var(--a-soft)]" : "border-border bg-surface hover:border-[var(--a)]",
                     )}
                   >
                     <span className={cn("grid size-6 place-items-center rounded-full bg-[var(--a)]", onAccent(e.color))} aria-hidden>
@@ -716,8 +620,8 @@ export function ErrorChecker() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
-            <div className="flex flex-wrap items-center gap-2 border-b-2 border-border bg-surface-2/70 px-3 py-2">
+          <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+            <div className="flex flex-wrap items-center gap-2 border-b border-border bg-surface-2/70 px-3 py-2">
               <span className="mr-1 hidden items-center gap-1.5 sm:flex" aria-hidden>
                 <span className="size-3 rounded-full bg-coral" />
                 <span className="size-3 rounded-full bg-sun" />
@@ -747,16 +651,13 @@ export function ErrorChecker() {
               ariaLabel="Paste or write the R code to check"
               placeholder="Paste your R code here…"
             />
-            <div className="space-y-2.5 border-t-2 border-border bg-surface-2/50 p-3">
+            <div className="space-y-2.5 border-t border-border bg-surface-2/50 p-3">
               <Button size="lg" className="w-full text-[17px]" onClick={() => void findError()} disabled={working || !code.trim()}>
                 {busy === "run" && !fixing ? <Loader2 className="animate-spin" /> : <Search />} Find My Error
               </Button>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <Button variant="outline" size="sm" onClick={() => void checkCode()} disabled={working || !code.trim()}>
                   {busy === "check" ? <Loader2 className="animate-spin" /> : <ClipboardCheck />} Check without running
-                </Button>
-                <Button variant="grape" size="sm" onClick={() => void explainWithAi()} disabled={working || !code.trim()}>
-                  {busy === "ai" && !fixing ? <Loader2 className="animate-spin" /> : <Sparkles />} Explain with AI
                 </Button>
                 <Button variant="success" size="sm" onClick={() => void fixCode()} disabled={working || !code.trim()}>
                   {fixing ? <Loader2 className="animate-spin" /> : <Wand2 />} Fix it for me
@@ -779,17 +680,17 @@ export function ErrorChecker() {
           </p>
 
           {stale && diagnoses && (
-            <p className="flex items-center gap-2 rounded-2xl border-2 border-sun/50 bg-sun-soft px-4 py-2.5 text-sm font-semibold">
+            <p className="flex items-center gap-2 rounded-2xl border border-sun/50 bg-sun-soft px-4 py-2.5 text-sm font-semibold">
               <AlertTriangle className="size-4 shrink-0 text-warning" aria-hidden /> The code has changed since it was investigated – press Find My Error again to update the clues.
             </p>
           )}
 
           {!diagnoses && !busy && (
-            <div className="rounded-3xl border-2 border-dashed border-border-strong bg-card/70 p-6 text-center sm:p-8">
+            <div className="rounded-3xl border border-dashed border-border-strong bg-card/70 p-6 text-center sm:p-8">
               <DetectiveHexy mood="point" size={112} className="mx-auto" />
               <p className="mt-4 font-display text-2xl font-bold">Ready to investigate!</p>
-              <p className="mx-auto mt-1 max-w-md text-sm font-semibold text-muted-foreground">
-                Paste your code (or pick a case) and press <strong className="text-foreground">Find My Error</strong>. Hexy runs it in real R and collects the clues:
+              <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
+                Paste your code (or pick a case) and press <strong className="text-foreground">Find My Error</strong>. Your code runs in real R and the report collects the clues:
               </p>
               <ol className="mx-auto mt-5 grid max-w-md grid-cols-2 gap-2 text-left text-[13px] font-semibold">
                 {[
@@ -802,7 +703,7 @@ export function ErrorChecker() {
                 ].map(([label, Icon, color], i) => {
                   const I = Icon as LucideIcon;
                   return (
-                    <li key={label as string} className="flex items-center gap-2 rounded-2xl border-2 border-border bg-surface px-2.5 py-2" style={accent(color as string)}>
+                    <li key={label as string} className="flex items-center gap-2 rounded-2xl border border-border bg-surface px-2.5 py-2" style={accent(color as string)}>
                       <span className={cn("grid size-7 shrink-0 place-items-center rounded-lg bg-[var(--a)]", onAccent(color as string))} aria-hidden>
                         <I className="size-4" />
                       </span>
@@ -818,11 +719,11 @@ export function ErrorChecker() {
           )}
 
           {busy && !diagnoses && (
-            <div className="flex items-center gap-4 rounded-3xl border-2 border-border bg-card p-6 shadow-[var(--shadow-card)]">
+            <div className="flex items-center gap-4 rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
               <DetectiveHexy mood="think" size={84} animate />
               <div>
                 <p className="font-display text-xl font-semibold">Investigating…</p>
-                <p className="mt-0.5 text-sm font-semibold text-muted-foreground">{busyText}</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">{busyText}</p>
                 <span className="mt-2 flex gap-1" aria-hidden>
                   <span className="typing-dot size-2 rounded-full bg-primary" />
                   <span className="typing-dot size-2 rounded-full bg-primary" />
@@ -835,11 +736,11 @@ export function ErrorChecker() {
           {verdict && (
             <div
               ref={reportRef}
-              className="relative scroll-mt-24 overflow-hidden rounded-3xl border-2 border-[var(--a)] bg-[var(--a-soft)] p-5 shadow-[var(--shadow-card)] animate-pop-in"
+              className="relative scroll-mt-24 overflow-hidden rounded-3xl border border-[var(--a)] bg-[var(--a-soft)] p-5 shadow-[var(--shadow-card)] animate-pop-in"
               style={accent(verdict.tone)}
             >
               <span
-                className="absolute right-4 top-4 hidden rotate-[-8deg] rounded-lg border-[3px] border-[var(--a)] px-2 py-0.5 font-display text-sm font-bold uppercase tracking-widest text-[var(--a)] opacity-80 sm:block"
+                className="absolute right-4 top-4 hidden rounded-md border border-[var(--a)] px-2 py-0.5 text-xs font-semibold uppercase tracking-wider text-[var(--a)] sm:block"
                 aria-hidden
               >
                 {verdict.stamp}
@@ -849,7 +750,7 @@ export function ErrorChecker() {
                 <div className="min-w-0 flex-1 sm:pr-28">
                   <p className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">Case report</p>
                   <p className="font-display text-xl font-bold leading-tight sm:text-2xl">{verdict.title}</p>
-                  <p className="mt-1 text-sm font-semibold text-muted-foreground">{verdict.text}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{verdict.text}</p>
                 </div>
               </div>
               {(diagnoses?.length ?? 0) > 0 && (
@@ -859,18 +760,11 @@ export function ErrorChecker() {
                   {others.length > 0 && <Badge variant="info">{others.length} suggestion{others.length > 1 ? "s" : ""}</Badge>}
                 </div>
               )}
-              {(solvedByFix || (first && !working)) && (
+              {solvedByFix && backup !== null && backup !== code && (
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {solvedByFix && backup !== null && backup !== code && (
-                    <Button size="sm" variant="outline" onClick={restore}>
-                      <Undo2 /> Restore my original code
-                    </Button>
-                  )}
-                  {first && (
-                    <Button size="sm" variant="outline" onClick={askTutor}>
-                      <Sparkles /> Ask Hexy about it
-                    </Button>
-                  )}
+                  <Button size="sm" variant="outline" onClick={restore}>
+                    <Undo2 /> Restore my original code
+                  </Button>
                 </div>
               )}
               {working && diagnoses && (
@@ -882,8 +776,8 @@ export function ErrorChecker() {
           )}
 
           {result && (
-            <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
-              <p className="flex items-center gap-2 border-b-2 border-border bg-surface-2/70 px-4 py-2 font-display text-sm font-semibold">
+            <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+              <p className="flex items-center gap-2 border-b border-border bg-surface-2/70 px-4 py-2 font-display text-sm font-semibold">
                 <Bug className="size-4 text-primary" aria-hidden /> Evidence: what R printed
               </p>
               <ConsoleView lines={result.lines} empty="(Your code printed nothing.)" maxHeight={240} />
@@ -892,95 +786,6 @@ export function ErrorChecker() {
           )}
 
           {(diagnoses ?? []).map((d, i) => caseFile(d, i))}
-
-          <div ref={aiRef} className="scroll-mt-24 space-y-5 empty:hidden">
-            {aiError && (
-              <div role="alert" className="rounded-3xl border-2 border-sun/60 bg-sun-soft p-4 text-sm">
-                <p className="flex items-center gap-2 font-display font-semibold text-warning">
-                  <AlertTriangle className="size-4" aria-hidden /> AI explanation unavailable
-                </p>
-                <p className="mt-1 font-semibold text-muted-foreground">{aiError}</p>
-              </div>
-            )}
-
-            {busy === "ai" && diagnoses && (
-              <div className="flex items-center gap-3 rounded-3xl border-2 border-grape/40 bg-grape-soft p-4 text-sm font-semibold">
-                <Loader2 className="size-5 animate-spin text-grape" aria-hidden /> Asking Hexy&apos;s AI brain for a second opinion…
-              </div>
-            )}
-
-            {ai && (
-              <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] animate-fade-up">
-                <div className="flex flex-wrap items-center gap-2 border-b-2 border-border bg-gradient-to-r from-grape-soft to-transparent px-5 py-3">
-                  <span className="grid size-9 place-items-center rounded-xl bg-grape text-white shadow-[0_3px_0_var(--grape-shadow)]" aria-hidden>
-                    <Sparkles className="size-5" />
-                  </span>
-                  <h3 className="font-display text-lg font-semibold">Second opinion from Hexy AI</h3>
-                  <Badge variant="grape">{ai.category}</Badge>
-                </div>
-                <div className="space-y-3 p-5 text-sm">
-                  <p className="font-display text-base font-semibold">{ai.summary}</p>
-                  {ai.location.line && (
-                    <p className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-                      <MapPin className="size-3.5" aria-hidden /> Location: line {ai.location.line} ({ai.location.basis === "reported_by_r" ? "reported by R" : ai.location.basis === "inferred_from_code" ? "inferred from the code" : "uncertain"}) – {ai.location.note}
-                    </p>
-                  )}
-                  <Markdown runnableCode={false}>{ai.explanation}</Markdown>
-                  <div>
-                    <p className="font-display font-semibold">How to fix it</p>
-                    <Markdown runnableCode={false}>{ai.how_to_fix}</Markdown>
-                  </div>
-                  {ai.fixed_code && (
-                    <div className="space-y-2">
-                      <DiffView before={analyzedCode ?? code} after={ai.fixed_code} afterLabel="AI suggestion" />
-                      {ai.changes.length > 0 && (
-                        <ul className="list-disc space-y-1 pl-5">
-                          {ai.changes.map((c, i) => (
-                            <li key={i}>
-                              {c.line ? `Line ${c.line}: ` : ""}
-                              <code className="font-mono text-xs">{c.before}</code> → <code className="font-mono text-xs">{c.after}</code> – {c.reason}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                      {aiFixRun ? (
-                        <div>
-                          <p className={cn("flex items-center gap-1.5 text-xs font-bold", aiFixRun.status === "ok" ? "text-success" : "text-danger")}>
-                            {aiFixRun.status === "ok" ? <CheckCircle2 className="size-4" aria-hidden /> : <XCircle className="size-4" aria-hidden />}
-                            {aiFixRun.status === "ok" ? "Verified: the suggested code ran successfully in R. Real output:" : "Not verified: the suggested code still fails when run in R:"}
-                          </p>
-                          <div className="mt-1 overflow-hidden rounded-2xl border-2 border-border">
-                            <ConsoleView lines={aiFixRun.lines} empty="(No output.)" maxHeight={200} />
-                            {aiFixRun.images.length > 0 && <PlotGallery images={aiFixRun.images} />}
-                          </div>
-                        </div>
-                      ) : (
-                        <StaticCode code={ai.fixed_code} className="rounded-2xl border-2 border-border" />
-                      )}
-                      {aiFixRun?.status === "ok" && (
-                        <Button variant="success" onClick={() => void applyAndTest(ai.fixed_code!)} disabled={working}>
-                          <Wand2 /> Apply fix &amp; test
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                  {ai.prevention_tips.length > 0 && (
-                    <div className="rounded-2xl border-2 border-dashed border-border px-3.5 py-2.5">
-                      <p className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">Avoid it next time</p>
-                      <ul className="mt-1 list-disc space-y-1 pl-5">
-                        {ai.prevention_tips.map((t) => (
-                          <li key={t}>{t}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  <Button size="sm" variant="outline" onClick={() => void explainAi(true)} disabled={working}>
-                    <MessageCircleQuestion /> Explain more simply
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
         </section>
       </div>
 
@@ -990,19 +795,18 @@ export function ErrorChecker() {
         <h2 id="toolkit-title" className="mt-1 font-display text-2xl font-bold tracking-tight sm:text-3xl">
           Your detective toolkit
         </h2>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
           {[
             { icon: Search, color: "primary", title: "Find My Error", text: "Runs the code in real R in your browser, records exactly which line failed, and explains R's message." },
             { icon: ClipboardCheck, color: "sky", title: "Check without running", text: "Asks R to read (parse) your code without running it, and looks for common mistakes." },
-            { icon: Sparkles, color: "grape", title: "Explain with AI", text: "Asks Hexy's AI for a deeper explanation based on R's real output. Its fix is tested in R too." },
             { icon: Wand2, color: "mint", title: "Fix it for me", text: "Suggests corrected code – only shown as working after R has run it successfully." },
           ].map((tool) => (
-            <div key={tool.title} className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)]" style={accent(tool.color)}>
-              <span className={cn("grid size-11 place-items-center rounded-2xl bg-[var(--a)] shadow-[0_3px_0_var(--a-shadow)]", onAccent(tool.color))} aria-hidden>
+            <div key={tool.title} className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)]" style={accent(tool.color)}>
+              <span className={cn("grid size-11 place-items-center rounded-2xl bg-[var(--a)]", onAccent(tool.color))} aria-hidden>
                 <tool.icon className="size-6" />
               </span>
               <h3 className="mt-3 font-display text-lg font-semibold">{tool.title}</h3>
-              <p className="mt-1 text-sm font-semibold text-muted-foreground">{tool.text}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{tool.text}</p>
             </div>
           ))}
         </div>

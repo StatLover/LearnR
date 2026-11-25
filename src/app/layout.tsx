@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/nunito";
-import "@fontsource-variable/fredoka";
+import "@fontsource-variable/inter";
+import "@fontsource-variable/plus-jakarta-sans";
 import "@fontsource-variable/jetbrains-mono";
 import "./globals.css";
 import { Header, MobileNav } from "@/components/layout/header";
@@ -13,15 +13,15 @@ import { withBase } from "@/lib/base-path";
 export const metadata: Metadata = {
   title: { default: "R Academy – Learn R. Write Code. Unlock Your Potential.", template: "%s · R Academy" },
   description:
-    "Learn R programming as an adventure: bite-sized interactive lessons, real R running in your browser, XP and levels, daily challenges, an Error Detective and a friendly AI tutor.",
+    "Learn R programming as an adventure: bite-sized interactive lessons, real R running in your browser, XP and levels, daily challenges and an Error Detective that explains R errors.",
   applicationName: "R Academy",
   icons: { icon: withBase("/icon.svg") },
 };
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f6ff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0c0f24" },
+    { media: "(prefers-color-scheme: light)", color: "#faf7f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#121518" },
   ],
 };
 

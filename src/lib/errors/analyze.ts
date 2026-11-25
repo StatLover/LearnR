@@ -893,7 +893,7 @@ export function analyzeRuntimeError(ctx: AnalysisContext): Diagnosis | null {
   return {
     ...base,
     why: `R reported: “${msg}”. ${base.why}`,
-    tips: ["Copy the error message into the AI tutor or a search engine – most R errors have well-known causes.", "Run your code line by line to find the first line that fails."],
+    tips: ["Copy the error message into a search engine – most R errors have well-known causes.", "Run your code line by line to find the first line that fails."],
   };
 }
 

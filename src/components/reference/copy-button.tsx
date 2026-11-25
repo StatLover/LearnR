@@ -16,7 +16,7 @@ export function CopyButton({ text, label = "Copy", className }: { text: string; 
         }
       }}
       className={cn(
-        "inline-flex h-7 cursor-pointer items-center gap-1 rounded-lg border-2 px-1.5 text-xs font-bold transition-colors print:hidden",
+        "inline-flex h-7 cursor-pointer items-center gap-1 rounded-lg border px-1.5 text-xs font-bold transition-colors print:hidden",
         done ? "border-mint bg-mint-soft text-success" : "border-border bg-card text-muted-foreground hover:border-border-strong hover:text-foreground",
         className,
       )}

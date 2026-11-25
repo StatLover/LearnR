@@ -39,7 +39,7 @@ export function Toaster() {
       {list.map((t) => {
         const Icon = t.tone === "success" ? CheckCircle2 : t.tone === "warning" ? AlertTriangle : Info;
         return (
-          <div key={t.id} className="pointer-events-auto flex items-start gap-3 rounded-2xl border-2 border-border bg-surface p-3.5 shadow-[var(--shadow-pop)] animate-pop-in">
+          <div key={t.id} className="pointer-events-auto flex items-start gap-3 rounded-2xl border border-border bg-surface p-3.5 shadow-[var(--shadow-pop)] animate-pop-in">
             <Icon className={cn("mt-0.5 size-5 shrink-0", t.tone === "success" ? "text-success" : t.tone === "warning" ? "text-warning" : "text-info")} />
             <div className="min-w-0 flex-1">
               <p className="font-display text-[15px] font-semibold">{t.title}</p>

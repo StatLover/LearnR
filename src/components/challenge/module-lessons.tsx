@@ -42,13 +42,13 @@ export function ModuleLessons({ moduleNumber, color, thumbs }: { moduleNumber: n
               <Link
                 href={`/learn/${l.id}`}
                 className={cn(
-                  "group flex items-center gap-3 rounded-2xl border-2 bg-card p-2 pr-3 transition-colors hover:border-[var(--mc)]",
+                  "group flex items-center gap-3 rounded-2xl border bg-card p-2 pr-3 transition-colors hover:border-[var(--mc)]",
                   isNext ? "border-[var(--mc)]" : "border-border",
                   !unlocked && "opacity-70",
                 )}
                 style={{ ["--mc" as string]: color }}
               >
-                <span className="relative w-16 shrink-0 overflow-hidden rounded-xl border-2 border-border [&_svg]:block">{thumbs[l.id]}</span>
+                <span className="relative w-16 shrink-0 overflow-hidden rounded-xl border border-border [&_svg]:block">{thumbs[l.id]}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-xs font-bold text-muted-foreground">
                     Lesson {m.number}.{i + 1} · {l.minutes} min

@@ -46,13 +46,13 @@ export function LabHub({ arts }: { arts: Record<string, ReactNode> }) {
                 }}
                 tabIndex={on ? 0 : -1}
                 className={cn(
-                  "press flex h-10 cursor-pointer items-center gap-2 rounded-full border-2 px-4 font-display text-sm font-semibold",
-                  on ? "border-transparent text-white" : "border-border bg-surface text-foreground hover:bg-surface-2 [--press-shadow:var(--border)]",
+                  "press flex h-10 cursor-pointer items-center gap-2 rounded-full border px-4 font-display text-sm font-semibold",
+                  on ? "border-transparent text-on-accent" : "border-border bg-surface text-foreground hover:bg-surface-2",
                 )}
                 style={on ? { background: `var(--${color})`, ["--press-shadow" as string]: `var(--${color}-shadow)` } : undefined}
               >
                 {t === "all" ? "All labs" : t}
-                <span className={cn("rounded-full px-1.5 text-xs", on ? "bg-white/25" : "bg-surface-2 text-muted-foreground")}>{count}</span>
+                <span className={cn("rounded-full px-1.5 text-xs", on ? "bg-black/15 dark:bg-white/35" : "bg-surface-2 text-muted-foreground")}>{count}</span>
               </button>
             );
           })}
@@ -68,10 +68,10 @@ export function LabHub({ arts }: { arts: Record<string, ReactNode> }) {
           <li key={lab.id} className="animate-fade-up" style={{ animationDelay: `${i * 60}ms` }}>
             <Link
               href={`/visualize/${lab.id}`}
-              className="lift group flex h-full flex-col overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] hover:border-[var(--c)]"
+              className="lift group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] hover:border-[var(--c)]"
               style={{ ["--c" as string]: `var(--${lab.color})` }}
             >
-              <div className="relative border-b-2 border-border">
+              <div className="relative border-b border-border">
                 <div className="transition-transform duration-300 group-hover:scale-[1.03]">{arts[lab.id]}</div>
                 <span className="absolute left-3 top-3 rounded-full bg-card/90 px-2.5 py-0.5 font-display text-xs font-semibold text-foreground shadow-sm backdrop-blur">
                   {lab.level}
@@ -86,7 +86,7 @@ export function LabHub({ arts }: { arts: Record<string, ReactNode> }) {
                   ))}
                 </div>
                 <h2 className="font-display text-xl font-semibold leading-tight">{lab.title}</h2>
-                <p className="flex-1 text-sm font-semibold text-muted-foreground">{lab.short}</p>
+                <p className="flex-1 text-sm text-muted-foreground">{lab.short}</p>
                 <div className="mt-2 flex items-center justify-between gap-2">
                   {lab.lesson ? (
                     <span className="flex min-w-0 items-center gap-1 truncate text-xs font-semibold text-muted-foreground">
@@ -103,19 +103,19 @@ export function LabHub({ arts }: { arts: Record<string, ReactNode> }) {
             </Link>
           </li>
         ))}
-        <li className="flex flex-col gap-4 rounded-3xl border-2 border-dashed border-border-strong bg-surface/60 p-6">
+        <li className="flex flex-col gap-4 rounded-3xl border border-dashed border-border-strong bg-surface/60 p-6">
           <div className="flex items-center gap-3">
             <Hexy mood="point" size={64} />
             <h2 className="font-display text-xl font-semibold leading-tight">Everything here is real R</h2>
           </div>
-          <ol className="space-y-3 text-sm font-semibold text-muted-foreground">
+          <ol className="space-y-3 text-sm text-muted-foreground">
             {[
               ["Move a slider or flip a switch.", "sky"],
               ["The lab writes the R code – you can read every line.", "grape"],
               ["webR runs it in your browser and shows the true output and plot.", "mint"],
             ].map(([text, c], i) => (
               <li key={i} className="flex items-start gap-3">
-                <span className="grid size-7 shrink-0 place-items-center rounded-xl font-display text-sm font-bold text-white" style={{ background: `var(--${c})` }} aria-hidden>
+                <span className="grid size-7 shrink-0 place-items-center rounded-xl font-display text-sm font-bold text-on-accent" style={{ background: `var(--${c})` }} aria-hidden>
                   {i + 1}
                 </span>
                 <span className="pt-0.5">{text}</span>

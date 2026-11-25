@@ -138,7 +138,7 @@ local(envir = new.env(parent = baseenv()), {
   }
 
   ra$.ra_gg_dark <- function() {
-    fg <- "#e5e7eb"; mid <- "#9ca3af"; bg <- "#0f172a"; panel <- "#111c33"; grid <- "#26344f"
+    fg <- "#eeeae2"; mid <- "#a6adb4"; bg <- "#191d21"; panel <- "#20252a"; grid <- "#2c3238"
     ggplot2::theme(
       text = ggplot2::element_text(colour = fg),
       axis.text = ggplot2::element_text(colour = mid),
@@ -149,7 +149,7 @@ local(envir = new.env(parent = baseenv()), {
       panel.grid.minor = ggplot2::element_line(colour = grid, linewidth = 0.25),
       legend.background = ggplot2::element_rect(fill = bg, colour = NA),
       legend.key = ggplot2::element_rect(fill = panel, colour = NA),
-      strip.background = ggplot2::element_rect(fill = "#1e293b", colour = NA),
+      strip.background = ggplot2::element_rect(fill = "#2a3036", colour = NA),
       strip.text = ggplot2::element_text(colour = fg)
     )
   }
@@ -167,8 +167,8 @@ local(envir = new.env(parent = baseenv()), {
 
   ra$.ra_hooks <- function() {
     setHook("before.plot.new", function() {
-      if (isTRUE(state$dark)) graphics::par(fg = "#e5e7eb", col = "#e5e7eb", col.axis = "#cbd5e1",
-        col.lab = "#e5e7eb", col.main = "#f8fafc", col.sub = "#cbd5e1")
+      if (isTRUE(state$dark)) graphics::par(fg = "#eeeae2", col = "#eeeae2", col.axis = "#c9c3b8",
+        col.lab = "#eeeae2", col.main = "#f7f1e8", col.sub = "#c9c3b8")
     })
     setHook("plot.new", function() state$plots <- state$plots + 1L)
     setHook("grid.newpage", function() state$plots <- state$plots + 1L)

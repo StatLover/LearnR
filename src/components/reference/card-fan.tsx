@@ -7,7 +7,7 @@ const CARDS: { name: string; color: Candy; rotate: number; x: number }[] = [
   { name: "ggplot()", color: "coral", rotate: 11, x: 108 },
 ];
 
-/** Decorative hero art for the function library: a fanned hand of function cards with Hexy. */
+/** Decorative hero art for the function library: a fanned hand of function cards with the mascot. */
 export function CardFan() {
   return (
     <div aria-hidden className="relative h-40 w-64">
@@ -15,7 +15,7 @@ export function CardFan() {
         <div
           key={c.name}
           style={{ ...candy(c.color), left: c.x, transform: `rotate(${c.rotate}deg)` }}
-          className="absolute top-3 w-28 origin-bottom overflow-hidden rounded-2xl border-2 border-border bg-card shadow-[var(--shadow-pop)]"
+          className="absolute top-3 w-28 origin-bottom overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-pop)]"
         >
           <div className="bg-[var(--c)] px-2.5 py-2">
             <div className="h-1.5 w-8 rounded-full bg-white/60" />

@@ -21,10 +21,10 @@ export const metadata: Metadata = { title: "R Cheat Sheets", description: "Quick
 const PRINT_CSS = `
 @media print {
   .cs-print {
-    --background: #fff; --card: #fff; --surface: #fff; --surface-2: #f4f5fa; --code-bg: #f7f7fb;
-    --foreground: #15172e; --muted-foreground: #464a6b; --border: #c9cde0; --border-strong: #b0b5cf;
-    --syn-keyword: #6f2fd1; --syn-string: #0b7a48; --syn-number: #b33c0c; --syn-comment: #6b708f;
-    --syn-function: #2f40b8; --syn-atom: #b8285a; --syn-operator: #a81f50; --syn-variable: #15172e; --syn-punct: #464a6b;
+    --background: #fff; --card: #fff; --surface: #fff; --surface-2: #f5efe6; --code-bg: #fcfaf6;
+    --foreground: #1f2933; --muted-foreground: #5b6570; --border: #e6ded2; --border-strong: #d3c8b8;
+    --syn-keyword: #5a4fa2; --syn-string: #2d7a55; --syn-number: #a3561a; --syn-comment: #857d70;
+    --syn-function: #2d6597; --syn-atom: #a63e54; --syn-operator: #c62a29; --syn-variable: #1f2933; --syn-punct: #5b6570;
     --shadow-card: none; --c-soft: #fff;
     color: var(--foreground);
   }
@@ -63,16 +63,15 @@ export default function CheatSheetsPage() {
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {sheets.map((s) => (
               <li key={s.id} className="min-w-0">
-                <a href={`#${s.id}`} style={candy(s.meta.color)} className="group lift flex h-full flex-col overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] hover:border-[var(--c)]">
+                <a href={`#${s.id}`} style={candy(s.meta.color)} className="group lift flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] hover:border-[var(--c)]">
                   <span className="relative flex items-center gap-3 overflow-hidden bg-[var(--c)] px-4 py-3.5 text-[var(--c-fg)]">
-                    <span aria-hidden className="absolute -right-4 -top-6 size-16 rounded-full bg-white/20" />
-                    <span aria-hidden className="grid size-10 place-items-center rounded-xl bg-white/25 [&_svg]:size-5">
+                                        <span aria-hidden className="grid size-10 place-items-center rounded-xl bg-black/15 dark:bg-white/35 [&_svg]:size-5">
                       <s.meta.icon />
                     </span>
                     <span className="relative font-display text-lg font-bold leading-tight">{s.title}</span>
                   </span>
                   <span className="flex flex-1 flex-col gap-3 p-4">
-                    <span className="line-clamp-3 text-sm font-semibold text-muted-foreground">{s.description}</span>
+                    <span className="line-clamp-3 text-sm text-muted-foreground">{s.description}</span>
                     <span className="mt-auto flex items-center gap-2 text-xs font-extrabold">
                       <span className={cn("rounded-full bg-[var(--c-soft)] px-2 py-0.5", INK)}>{s.snippets} snippets</span>
                       <ArrowRight className={cn("ml-auto size-4 transition-transform group-hover:translate-x-0.5", INK)} aria-hidden />
@@ -87,10 +86,9 @@ export default function CheatSheetsPage() {
         <div className="mt-12 space-y-14 print:mt-0">
           {sheets.map((c) => (
             <section key={c.id} id={c.id} aria-labelledby={`${c.id}-t`} className="cs-sheet scroll-mt-36" style={candy(c.meta.color)}>
-              <div className="cs-banner relative overflow-hidden rounded-3xl border-2 border-[var(--c)] bg-[var(--c-soft)] p-5 sm:p-6 print:p-0 print:pb-2">
-                <div aria-hidden className="blob -right-10 -top-16 size-48 bg-[var(--c)]" />
+              <div className="cs-banner relative overflow-hidden rounded-3xl border border-[var(--c)] bg-[var(--c-soft)] p-5 sm:p-6 print:p-0 print:pb-2">
                 <div className="relative grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-2 sm:grid-cols-[auto_minmax(0,1fr)_auto]">
-                  <span aria-hidden className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[var(--c)] text-[var(--c-fg)] shadow-[0_4px_0_var(--c-shadow)] sm:row-span-2 sm:size-14 print:hidden [&_svg]:size-6 sm:[&_svg]:size-7">
+                  <span aria-hidden className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[var(--c)] text-[var(--c-fg)] sm:row-span-2 sm:size-14 print:hidden [&_svg]:size-6 sm:[&_svg]:size-7">
                     <c.meta.icon />
                   </span>
                   <h2 id={`${c.id}-t`} className="font-display text-2xl font-bold tracking-tight sm:text-3xl print:col-span-full">
@@ -99,14 +97,14 @@ export default function CheatSheetsPage() {
                   <a href="#main" className="hidden items-center gap-1 rounded-full bg-card px-3 py-1.5 font-display text-sm font-semibold text-muted-foreground hover:text-foreground sm:row-span-2 sm:inline-flex print:hidden">
                     <ArrowUp className="size-4" aria-hidden /> Top
                   </a>
-                  <p className="col-span-full max-w-3xl font-semibold text-muted-foreground sm:col-span-1 sm:col-start-2 sm:row-start-2 print:col-span-full">{c.description}</p>
+                  <p className="col-span-full max-w-3xl text-muted-foreground sm:col-span-1 sm:col-start-2 sm:row-start-2 print:col-span-full">{c.description}</p>
                 </div>
               </div>
 
               <div className="mt-5 gap-4 md:columns-2 xl:columns-3 print:gap-3">
                 {c.sections.map((s) => (
-                  <div key={s.title} className="cs-card mb-4 break-inside-avoid overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)] print:mb-2 print:rounded-xl">
-                    <h3 className="flex items-center gap-2.5 border-b-2 border-border px-4 py-3 font-display text-lg font-semibold print:break-after-avoid print:px-3 print:py-1.5 print:text-sm">
+                  <div key={s.title} className="cs-card mb-4 break-inside-avoid overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] print:mb-2 print:rounded-xl">
+                    <h3 className="flex items-center gap-2.5 border-b border-border px-4 py-3 font-display text-lg font-semibold print:break-after-avoid print:px-3 print:py-1.5 print:text-sm">
                       <svg aria-hidden viewBox="0 0 24 26" className="size-5 shrink-0 print:hidden">
                         <path d="M12 1 L23 7 L23 19 L12 25 L1 19 L1 7 Z" fill="var(--c)" />
                       </svg>
@@ -116,10 +114,10 @@ export default function CheatSheetsPage() {
                       {s.items.map((it, i) => (
                         <li key={i} className="break-inside-avoid px-3 py-3 print:px-2 print:py-1.5">
                           <div className="relative">
-                            <StaticCode code={it.code} wrap className="rounded-xl border-2 border-border py-2 pr-11 text-[12.5px] print:rounded-md print:border print:py-1 print:pr-2 print:text-[10.5px] [&>code>span]:px-3 print:[&>code>span]:px-2" />
+                            <StaticCode code={it.code} wrap className="rounded-xl border border-border py-2 pr-11 text-[12.5px] print:rounded-md print:border print:py-1 print:pr-2 print:text-[10.5px] [&>code>span]:px-3 print:[&>code>span]:px-2" />
                             <CopyButton text={it.code} label="Copy snippet" className="absolute right-1.5 top-1.5" />
                           </div>
-                          <p className="mt-1.5 px-1 text-sm font-semibold text-muted-foreground print:mt-1 print:text-[11px] print:leading-snug">
+                          <p className="mt-1.5 px-1 text-sm text-muted-foreground print:mt-1 print:text-[11px] print:leading-snug">
                             <InlineMd>{it.description}</InlineMd>
                           </p>
                         </li>

@@ -9,8 +9,6 @@ import { TopicArt } from "@/components/brand/topic-art";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/toast";
-import { codeMessage, tutor } from "@/lib/ai/tutor-store";
-import { transcript } from "@/lib/r/console";
 import { progress, useProgress } from "@/lib/store/progress";
 import type { DatasetInfo } from "@/content/types";
 import { timeAgo } from "@/lib/utils";
@@ -76,10 +74,6 @@ export function Playground({ datasets }: { datasets: DatasetInfo[] }) {
           downloadName="playground.R"
           editorMinHeight={340}
           outputMaxHeight={460}
-          onAskTutor={(code, r) => {
-            tutor.queue(codeMessage(code, r && r.code === code ? transcript(r.lines) : null));
-            router.push("/tutor");
-          }}
           extraToolbar={
             <Button
               size="sm"
@@ -101,9 +95,9 @@ export function Playground({ datasets }: { datasets: DatasetInfo[] }) {
       </div>
 
       <aside aria-label="Playground tools" className="lg:sticky lg:top-20">
-        <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
+        <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
           <Tabs value={tab} onValueChange={setTab}>
-            <div className="border-b-2 border-border bg-surface-2/60 p-2">
+            <div className="border-b border-border bg-surface-2/60 p-2">
               <TabsList className="grid w-full grid-cols-4 bg-transparent p-0">
                 <TabsTrigger value="starters" className={TAB_CLASS}>
                   <Sparkles /> Starters
@@ -145,7 +139,7 @@ export function Playground({ datasets }: { datasets: DatasetInfo[] }) {
                       <button
                         type="button"
                         onClick={() => load(st.title, st.code, true)}
-                        className="press group flex w-full cursor-pointer items-center gap-3 rounded-2xl border-2 border-border bg-surface p-2 text-left hover:bg-surface-2 [--press-shadow:var(--border)]"
+                        className="press group flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-border bg-surface p-2 text-left hover:bg-surface-2"
                         aria-label={`Load and run the example: ${st.title}`}
                       >
                         <span className="w-20 shrink-0 overflow-hidden rounded-xl">
@@ -155,7 +149,7 @@ export function Playground({ datasets }: { datasets: DatasetInfo[] }) {
                           <span className="block font-display text-[15px] font-semibold leading-tight">{st.title}</span>
                           <span className="mt-0.5 block text-xs font-semibold text-muted-foreground">{st.description}</span>
                         </span>
-                        <span className="grid size-8 shrink-0 place-items-center rounded-full text-white transition-transform group-hover:scale-110" style={{ background: `var(--${st.color})` }} aria-hidden>
+                        <span className="grid size-8 shrink-0 place-items-center rounded-full text-on-accent transition-transform group-hover:scale-110" style={{ background: `var(--${st.color})` }} aria-hidden>
                           <Play className="size-4 fill-current" />
                         </span>
                       </button>
@@ -180,14 +174,14 @@ export function Playground({ datasets }: { datasets: DatasetInfo[] }) {
 
               <TabsContent value="saved" className="space-y-2.5">
                 {s.snippets.length === 0 ? (
-                  <div className="rounded-2xl border-2 border-dashed border-border px-4 py-6 text-center text-sm font-semibold text-muted-foreground">
+                  <div className="rounded-2xl border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">
                     <Save className="mx-auto mb-2 size-7 text-primary" />
                     Press the save icon (or <kbd className="font-mono text-xs">Ctrl + S</kbd>) in any editor to keep code here and on your dashboard.
                   </div>
                 ) : (
                   <ul className="space-y-2">
                     {s.snippets.map((sn) => (
-                      <li key={sn.id} className="rounded-2xl border-2 border-border bg-surface p-3 text-sm">
+                      <li key={sn.id} className="rounded-2xl border border-border bg-surface p-3 text-sm">
                         <p className="truncate font-bold">{sn.title}</p>
                         <p className="text-xs font-semibold text-muted-foreground">Saved {timeAgo(sn.updatedAt)}</p>
                         <div className="mt-2 flex gap-1.5">

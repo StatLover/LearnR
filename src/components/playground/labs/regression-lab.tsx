@@ -84,7 +84,7 @@ export function RegressionLab() {
             <p>
               <strong>R² = 1 − (residual variation / total variation)</strong>: the share of the variation in y that the line explains.
             </p>
-            <ul className="space-y-1.5 rounded-2xl border-2 border-border bg-surface p-3">
+            <ul className="space-y-1.5 rounded-2xl border border-border bg-surface p-3">
               <li>More <strong>noise</strong> → bigger residuals → <strong>lower R²</strong>, but the slope is still right on average.</li>
               <li>More <strong>data</strong> → more precise estimates; R² does not simply grow with n.</li>
               <li>A steeper slope (relative to the noise) → <strong>higher R²</strong>.</li>

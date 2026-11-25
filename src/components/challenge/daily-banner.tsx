@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Sun, Timer } from "lucide-react";
 import { Hexy } from "@/components/brand/mascot";
 import { TopicArt } from "@/components/brand/topic-art";
-import { FloatingHexes } from "@/components/brand/decor";
 import { Button } from "@/components/ui/button";
 import { DifficultyBadge, XpBadge } from "@/components/ui/badge";
 import { useGame, useOutline } from "@/components/game/outline-context";
@@ -25,11 +24,9 @@ export function DailyBanner() {
   return (
     <section
       aria-labelledby="daily-banner-title"
-      className="relative overflow-hidden rounded-3xl border-2 border-sun/60 shadow-[var(--shadow-card)]"
-      style={{ background: "linear-gradient(115deg, var(--sun-soft) 0%, var(--tangerine-soft) 55%, var(--pink-soft) 100%)" }}
+      className="relative overflow-hidden rounded-3xl border border-sun/60 shadow-[var(--shadow-card)]"
+      style={{ background: "var(--sun-soft)" }}
     >
-      <div className="blob -left-10 -top-16 size-56" style={{ background: "var(--sun)" }} />
-      <FloatingHexes count={5} className="opacity-60" />
       <div className="relative grid grid-cols-1 items-center gap-5 p-5 sm:p-6 md:grid-cols-[auto_minmax(0,1fr)_auto]">
         <div className="hidden md:block">
           <Hexy mood={done ? "celebrate" : "point"} size={104} animate />
@@ -42,7 +39,7 @@ export function DailyBanner() {
           <h2 id="daily-banner-title" className="mt-1 font-display text-2xl font-bold leading-tight sm:text-3xl">
             {!mounted ? "Today's challenge" : done ? "Done for today – brilliant!" : (meta?.title ?? "Today's challenge")}
           </h2>
-          <p className="mt-1.5 max-w-2xl text-sm font-semibold text-muted-foreground">
+          <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">
             {done
               ? `You solved “${meta?.title ?? "today's exercise"}” and earned the +${XP.daily} XP bonus. A fresh challenge unlocks at midnight.`
               : `One hand-picked exercise from the worlds you have reached. Solve it today for a +${XP.daily} XP bonus on top of the usual XP.`}
@@ -65,7 +62,7 @@ export function DailyBanner() {
         </div>
         <div className="flex items-center gap-4">
           {meta && (
-            <div className="hidden w-36 overflow-hidden rounded-2xl border-2 border-border bg-card shadow-[var(--shadow-card)] lg:block">
+            <div className="hidden w-36 overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] lg:block">
               <TopicArt kind={meta.art} bg={meta.world.color.soft} />
             </div>
           )}

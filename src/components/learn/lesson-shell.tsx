@@ -33,7 +33,7 @@ export function LessonNotes({ lessonId, title }: { lessonId: string; title: stri
     }, 600);
   };
   return (
-    <section aria-labelledby="notes-title" className="rounded-3xl border-2 border-border bg-card p-5">
+    <section aria-labelledby="notes-title" className="rounded-3xl border border-border bg-card p-5">
       <div className="mb-2 flex items-center gap-2">
         <span className="grid size-8 place-items-center rounded-xl bg-sun-soft text-warning">
           <NotebookPen className="size-4" />

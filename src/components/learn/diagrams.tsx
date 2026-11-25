@@ -146,7 +146,7 @@ const diagrams: Record<DiagramName, () => ReactNode> = {
         <T x={380} y={88} mono size={30} weight={650}>5</T>
       </Box>
       <rect x={340} y={22} width={80} height={26} rx={6} fill={C.blue} />
-      <T x={380} y={35} mono fill="#fff" weight={650}>x</T>
+      <T x={380} y={35} mono fill="var(--on-accent)" weight={650}>x</T>
       <T x={530} y={70} size={13} anchor="middle">the name (label)</T>
       <T x={530} y={95} size={13} anchor="middle" fill={C.muted}>points to the value</T>
       <T x={110} y={130} size={12} fill={C.muted}>&lt;- means “gets”: x gets 5</T>
@@ -490,9 +490,9 @@ export function Diagram({ name, caption }: { name: DiagramName; caption?: string
   const D = diagrams[name];
   if (!D) return null;
   return (
-    <figure className="not-prose my-5 rounded-3xl border-2 border-border bg-card p-5">
+    <figure className="not-prose my-5 rounded-3xl border border-border bg-card p-5">
       <div className="mx-auto max-w-2xl">{D()}</div>
-      {caption && <figcaption className="mt-3 text-center text-sm font-semibold text-muted-foreground">{caption}</figcaption>}
+      {caption && <figcaption className="mt-3 text-center text-sm text-muted-foreground">{caption}</figcaption>}
     </figure>
   );
 }

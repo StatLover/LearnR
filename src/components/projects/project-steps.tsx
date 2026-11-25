@@ -1,14 +1,11 @@
 "use client";
 
 import { Check, PartyPopper, Trophy, Zap } from "lucide-react";
-import { useRouter } from "next/navigation";
 import type { Project } from "@/content/types";
 import { ExerciseCard } from "@/components/learn/exercise-card";
 import { Markdown } from "@/components/content/markdown";
 import { Hexy } from "@/components/brand/mascot";
-import { FloatingHexes } from "@/components/brand/decor";
 import { progress, useProgress } from "@/lib/store/progress";
-import { tutor } from "@/lib/ai/tutor-store";
 import { XP } from "@/lib/game/xp";
 import { cn } from "@/lib/utils";
 import { projectStatus } from "./project-progress";
@@ -22,7 +19,7 @@ function StepNode({ n, state, small }: { n: number; state: "done" | "current" | 
       className={cn(
         "relative z-10 grid shrink-0 place-items-center rounded-full font-display font-bold",
         small ? "size-8 text-base" : "size-12 text-xl",
-        state === "done" && "bg-mint text-white shadow-[0_4px_0_var(--mint-shadow)]",
+        state === "done" && "bg-mint text-on-accent",
         state === "current" && "animate-pulse-ring border-[3px] border-primary bg-card text-primary [--node-color:var(--primary)]",
         state === "todo" && "border-[3px] border-border-strong bg-surface-2 text-muted-foreground",
       )}
@@ -39,7 +36,6 @@ function StepNode({ n, state, small }: { n: number; state: "done" | "current" | 
  */
 export function ProjectSteps({ project }: { project: Project }) {
   const s = useProgress();
-  const router = useRouter();
   const st = projectStatus(
     s,
     project.id,
@@ -82,10 +78,6 @@ export function ProjectSteps({ project }: { project: Project }) {
                 passed={passed}
                 onCodeChange={(c) => progress.saveProjectCode(project.id, step.id, c)}
                 onResult={(ok, code) => progress.recordProjectStep(project.id, project.title, step.id, ok, code)}
-                onAskTutor={(code) => {
-                  tutor.queue(`I'm doing step ${i + 1} ("${step.title}") of the project "${project.title}". Instructions: ${step.instructions}\n\nMy code:\n\`\`\`r\n${code}\n\`\`\`\nPlease give me a hint, not the full solution.`);
-                  router.push("/tutor");
-                }}
                 headerExtra={i > 0 ? <span className="text-xs font-semibold text-muted-foreground">Earlier steps&apos; solutions run first automatically</span> : null}
               />
             </section>
@@ -100,7 +92,7 @@ export function ProjectSteps({ project }: { project: Project }) {
             aria-hidden
             className={cn(
               "relative z-10 grid size-12 place-items-center rounded-full",
-              allDone ? "bg-sun text-[#3b2600] shadow-[0_4px_0_var(--sun-shadow)]" : "border-[3px] border-dashed border-border-strong bg-surface-2 text-muted-foreground",
+              allDone ? "bg-sun text-on-sun" : "border-[3px] border-dashed border-border-strong bg-surface-2 text-muted-foreground",
             )}
           >
             <Trophy className="size-6" />
@@ -108,10 +100,9 @@ export function ProjectSteps({ project }: { project: Project }) {
         </div>
         <section
           aria-labelledby="wrap-up-title"
-          className={cn("relative overflow-hidden rounded-3xl border-2 p-5 shadow-[var(--shadow-card)] sm:p-6", allDone ? "border-sun" : "border-border bg-card")}
-          style={allDone ? { background: "linear-gradient(135deg, var(--sun-soft) 0%, var(--mint-soft) 60%, var(--card) 100%)" } : undefined}
+          className={cn("relative overflow-hidden rounded-3xl border p-5 shadow-[var(--shadow-card)] sm:p-6", allDone ? "border-sun" : "border-border bg-card")}
+          style={allDone ? { background: "var(--sun-soft)" } : undefined}
         >
-          {allDone && <FloatingHexes count={7} className="opacity-70" />}
           <div className="relative">
             <div role="status" className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Hexy mood={allDone ? "celebrate" : "think"} size={allDone ? 104 : 80} className="shrink-0" animate={allDone} />
@@ -124,7 +115,7 @@ export function ProjectSteps({ project }: { project: Project }) {
                 <h2 id="wrap-up-title" className="font-display text-2xl font-bold">
                   {allDone ? "Project complete – congratulations!" : "Wrapping up"}
                 </h2>
-                <p className="mt-1 text-sm font-semibold text-muted-foreground">
+                <p className="mt-1 text-sm text-muted-foreground">
                   {allDone ? (
                     <>
                       You passed all {project.steps.length} steps and earned{" "}
@@ -140,7 +131,7 @@ export function ProjectSteps({ project }: { project: Project }) {
                 </p>
               </div>
             </div>
-            <div className="mt-4 rounded-2xl border-2 border-border bg-card/80 p-4">
+            <div className="mt-4 rounded-2xl border border-border bg-card/80 p-4">
               <Markdown>{project.wrapUp}</Markdown>
             </div>
           </div>

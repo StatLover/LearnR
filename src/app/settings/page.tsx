@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Hexy } from "@/components/brand/mascot";
 import { SettingsForm } from "@/components/settings/settings-form";
 
-export const metadata: Metadata = { title: "Settings", description: "Theme, font size, editor, learning preferences, AI tutor, account and data settings." };
+export const metadata: Metadata = { title: "Settings", description: "Theme, font size, editor, learning preferences, account and data settings." };
 
 export default function SettingsPage() {
   return (

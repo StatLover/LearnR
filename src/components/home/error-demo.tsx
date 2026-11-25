@@ -53,8 +53,8 @@ export function ErrorDemo() {
   const failed = result && result.status !== "ok";
 
   return (
-    <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
-      <div className="flex flex-wrap gap-2 border-b-2 border-border bg-surface-2/60 p-3" role="radiogroup" aria-label="Choose a buggy snippet">
+    <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+      <div className="flex flex-wrap gap-2 border-b border-border bg-surface-2/60 p-3" role="radiogroup" aria-label="Choose a buggy snippet">
         {BUGS.map((b, i) => (
           <button
             key={b.id}
@@ -65,8 +65,8 @@ export function ErrorDemo() {
               setResult(null);
             }}
             className={cn(
-              "cursor-pointer rounded-full border-2 px-3 py-1 font-display text-sm font-semibold transition-colors",
-              i === pick ? "border-coral bg-coral text-white" : "border-border bg-card hover:bg-surface-2",
+              "cursor-pointer rounded-full border px-3 py-1 font-display text-sm font-semibold transition-colors",
+              i === pick ? "border-coral bg-coral text-on-accent" : "border-border bg-card hover:bg-surface-2",
             )}
           >
             {b.label}
@@ -74,7 +74,7 @@ export function ErrorDemo() {
         ))}
       </div>
       <StaticCode code={bug.code} lineNumbers className="py-3 text-[14px]" />
-      <div className="border-t-2 border-border">
+      <div className="border-t border-border">
         {result ? (
           <div aria-live="polite">
             <p className="flex items-center gap-1.5 bg-surface-2/70 px-4 py-1.5 text-xs font-bold text-muted-foreground">
@@ -83,10 +83,10 @@ export function ErrorDemo() {
             <ConsoleView lines={result.lines} maxHeight={160} empty="(No output.)" />
           </div>
         ) : (
-          <p className="bg-console px-4 py-3 text-sm font-semibold text-muted-foreground">Press “Run it” to see the real error from R.</p>
+          <p className="bg-console px-4 py-3 text-sm text-muted-foreground">Press “Run it” to see the real error from R.</p>
         )}
       </div>
-      <div className="flex flex-wrap items-center gap-2 border-t-2 border-border p-3">
+      <div className="flex flex-wrap items-center gap-2 border-t border-border p-3">
         <Button variant="outline" onClick={run} disabled={running}>
           {running ? <Loader2 className="animate-spin" /> : <Play className="fill-current" />} Run it
         </Button>

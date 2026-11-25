@@ -107,7 +107,7 @@ export function MapSummary() {
   const total = data.reduce((a, w) => a + w.lessons.length, 0);
   const nextWorld = next ? data.find((w) => w.lessons.some((l) => l.id === next.id)) : undefined;
   return (
-    <div className="flex w-full flex-col gap-4 rounded-3xl border-2 border-border bg-card/90 p-4 shadow-[var(--shadow-card)] backdrop-blur sm:flex-row sm:items-center lg:w-auto lg:max-w-xl">
+    <div className="flex w-full flex-col gap-4 rounded-3xl border border-border bg-card/90 p-4 shadow-[var(--shadow-card)] backdrop-blur sm:flex-row sm:items-center lg:w-auto lg:max-w-xl">
       <div className="flex items-center gap-4">
         <ProgressRing value={total ? (done / total) * 100 : 0} size={84} stroke={10} color="var(--mint)" label={`Course progress: ${done} of ${total} lessons`}>
           <span className="text-base">{total ? Math.round((done / total) * 100) : 0}%</span>
@@ -126,7 +126,7 @@ export function MapSummary() {
           <div>
             <dt className="text-xs font-bold text-muted-foreground">XP</dt>
             <dd className="flex items-center gap-1 font-display text-lg font-semibold">
-              <Zap className="size-4 fill-sun text-sun" />
+              <Zap className="size-4 fill-sun text-warning" />
               {game.xp.toLocaleString()}
             </dd>
           </div>
@@ -138,7 +138,7 @@ export function MapSummary() {
           </div>
         </dl>
       </div>
-      <div className="min-w-0 flex-1 sm:border-l-2 sm:border-border sm:pl-4">
+      <div className="min-w-0 flex-1 sm:border-l sm:border-border sm:pl-4">
         {next ? (
           <>
             <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{done ? "Up next" : "Start here"}</p>
@@ -152,8 +152,8 @@ export function MapSummary() {
           </>
         ) : (
           <>
-            <p className="font-display text-lg font-semibold">Every lesson complete! 🎉</p>
-            <p className="text-sm font-semibold text-muted-foreground">Revisit any world, or take on a project.</p>
+            <p className="font-display text-lg font-semibold">Every lesson complete</p>
+            <p className="text-sm text-muted-foreground">Revisit any world, or take on a project.</p>
             <Button asChild size="md" variant="sun" className="mt-2 w-full">
               <Link href="/projects">
                 <Trophy /> Projects
@@ -175,16 +175,16 @@ export function WorldChips() {
         <a
           key={world.id}
           href={`#world-${world.id}`}
-          className="lift group w-40 shrink-0 snap-start overflow-hidden rounded-2xl border-2 border-border bg-card shadow-[var(--shadow-card)] sm:w-44 xl:w-auto xl:min-w-0 xl:flex-1"
+          className="lift group w-40 shrink-0 snap-start overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] sm:w-44 xl:w-auto xl:min-w-0 xl:flex-1"
         >
           <div className="relative" style={{ background: world.color.soft }}>
             <TopicArt kind={world.art} bg="transparent" className={cn("h-20 w-full", locked && "opacity-60 grayscale-[40%]")} />
-            <span className="absolute left-2 top-2 grid size-7 place-items-center rounded-lg font-display text-sm font-bold text-white" style={{ background: world.color.main }}>
+            <span className="absolute left-2 top-2 grid size-7 place-items-center rounded-lg font-display text-sm font-bold text-on-accent" style={{ background: world.color.main }}>
               {world.number}
             </span>
             {pct === 100 && (
               <span className="absolute right-2 top-2 grid size-7 place-items-center rounded-full bg-card text-success" aria-label="Completed">
-                <Crown className="size-4 fill-sun text-sun" />
+                <Crown className="size-4 fill-sun text-warning" />
               </span>
             )}
           </div>
@@ -235,15 +235,15 @@ function WorldSection({ data, state, prev }: { data: WorldData; state: ProgressS
       <div className="grid gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-10">
         {/* World card */}
         <div className="lg:sticky lg:top-24 lg:self-start">
-          <div className="overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-card)]">
-            <div className="relative" style={{ background: `linear-gradient(160deg, var(--world-soft), var(--card))` }}>
+          <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+            <div className="relative" style={{ background: `var(--world-soft)` }}>
               <TopicArt kind={world.art} bg="transparent" className={cn("mx-auto h-40 w-full max-w-sm", locked && "opacity-70")} label={`${world.name} emblem`} />
-              <span className="absolute left-4 top-4 rounded-full px-3 py-1 font-display text-xs font-semibold uppercase tracking-wider text-white" style={{ background: "var(--world)" }}>
+              <span className="absolute left-4 top-4 rounded-full px-3 py-1 font-display text-xs font-semibold uppercase tracking-wider text-on-accent" style={{ background: "var(--world)" }}>
                 World {world.number}
               </span>
               {pct === 100 ? (
                 <span className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-card px-3 py-1 text-xs font-bold text-success">
-                  <Crown className="size-3.5 fill-sun text-sun" /> Complete
+                  <Crown className="size-3.5 fill-sun text-warning" /> Complete
                 </span>
               ) : locked ? (
                 <span className="absolute right-4 top-4 flex items-center gap-1 rounded-full bg-card px-3 py-1 text-xs font-bold text-muted-foreground">
@@ -258,7 +258,7 @@ function WorldSection({ data, state, prev }: { data: WorldData; state: ProgressS
               <p className="font-display text-sm font-semibold" style={{ color: "var(--world)" }}>
                 {world.tagline}
               </p>
-              <p className="mt-2 text-[15px] font-semibold text-muted-foreground">{world.description}</p>
+              <p className="mt-2 text-[15px] text-muted-foreground">{world.description}</p>
               <div className="mt-4 flex items-center gap-3">
                 <ProgressBar value={pct} color="var(--world)" label={`${world.name} progress`} />
                 <span className="shrink-0 font-display text-sm font-semibold">
@@ -286,9 +286,9 @@ function WorldSection({ data, state, prev }: { data: WorldData; state: ProgressS
                   ))}
                 </ul>
               </div>
-              {locked && prev && <p className="mt-3 text-sm font-semibold text-muted-foreground">Finish World {prev.number} · {prev.name} to unlock the path – or peek inside any lesson.</p>}
+              {locked && prev && <p className="mt-3 text-sm text-muted-foreground">Finish World {prev.number} · {prev.name} to unlock the path – or peek inside any lesson.</p>}
               {target && (
-                <Button asChild size="lg" className={cn("mt-4 w-full", !(pct === 100 || locked) && "text-white")} variant={pct === 100 || locked ? "outline" : "primary"} style={pct === 100 || locked ? undefined : { background: "var(--world)", ["--press-shadow" as string]: "var(--world-shadow)" }}>
+                <Button asChild size="lg" className={cn("mt-4 w-full", !(pct === 100 || locked) && "text-on-accent")} variant={pct === 100 || locked ? "outline" : "primary"} style={pct === 100 || locked ? undefined : { background: "var(--world)", ["--press-shadow" as string]: "var(--world-shadow)" }}>
                   <Link href={`/learn/${target.id}`}>
                     {pct === 100 ? <RotateCcw /> : <Play className="fill-current" />} {action}
                   </Link>
@@ -374,7 +374,7 @@ function WorldPath({ data }: { data: WorldData }) {
               <ModuleHeader module={row.module} />
             ) : row.type === "projects" ? (
               <div className="flex h-full items-center justify-center">
-                <span className="relative z-10 flex items-center gap-2 rounded-full border-2 border-border bg-card px-4 py-1.5 font-display text-sm font-semibold shadow-[var(--shadow-card)]">
+                <span className="relative z-10 flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 font-display text-sm font-semibold shadow-[var(--shadow-card)]">
                   <FolderKanban className="size-4" style={{ color: "var(--world)" }} /> Real projects
                 </span>
               </div>
@@ -393,9 +393,9 @@ function ModuleHeader({ module: m }: { module: OutlineModule }) {
     <div className="flex h-full items-center justify-center px-2">
       <Link
         href={`/learn/module/${m.id}`}
-        className="relative z-10 flex max-w-full items-center gap-2 rounded-full border-2 border-border bg-card px-4 py-1.5 font-display text-sm font-semibold shadow-[var(--shadow-card)] hover:border-[var(--world)]"
+        className="relative z-10 flex max-w-full items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 font-display text-sm font-semibold shadow-[var(--shadow-card)] hover:border-[var(--world)]"
       >
-        <span className="grid size-6 shrink-0 place-items-center rounded-full text-xs text-white" style={{ background: "var(--world)" }}>
+        <span className="grid size-6 shrink-0 place-items-center rounded-full text-xs text-on-accent" style={{ background: "var(--world)" }}>
           {m.number}
         </span>
         <span className="truncate">Module {m.number}: {m.title}</span>
@@ -412,9 +412,9 @@ function NodeRow({ row, x, side, ready }: { row: Extract<Row, { type: "lesson" |
     <div className="h-full">
       <div className="absolute top-1/2 z-10 -translate-x-1/2 -translate-y-1/2" style={pos}>
         {current && (
-          <span className="pointer-events-none absolute -top-10 left-1/2 z-20 -translate-x-1/2 animate-bob whitespace-nowrap rounded-xl border-2 border-border bg-card px-3 py-1 font-display text-xs font-bold uppercase tracking-wider shadow-[var(--shadow-card)]" style={{ color: "var(--world)" }}>
+          <span className="pointer-events-none absolute -top-10 left-1/2 z-20 -translate-x-1/2 animate-bob whitespace-nowrap rounded-xl border border-border bg-card px-3 py-1 font-display text-xs font-bold uppercase tracking-wider shadow-[var(--shadow-card)]" style={{ color: "var(--world)" }}>
             {row.started ? "Continue" : "Start"}
-            <span className="absolute -bottom-[7px] left-1/2 size-3 -translate-x-1/2 rotate-45 border-b-2 border-r-2 border-border bg-card" />
+            <span className="absolute -bottom-[7px] left-1/2 size-3 -translate-x-1/2 rotate-45 border-b border-r border-border bg-card" />
           </span>
         )}
         <NodePopover row={row} />
@@ -432,7 +432,7 @@ function NodeLabel({ row, align }: { row: Extract<Row, { type: "lesson" | "check
     return (
       <div className={cn("flex items-center gap-2.5", align === "right" && "flex-row-reverse")}>
         {art && (
-          <span className={cn("hidden h-12 w-16 shrink-0 overflow-hidden rounded-xl border-2 border-border md:block", row.status === "locked" && "opacity-50")} style={{ background: "var(--world-soft)" }}>
+          <span className={cn("hidden h-12 w-16 shrink-0 overflow-hidden rounded-xl border border-border md:block", row.status === "locked" && "opacity-50")} style={{ background: "var(--world-soft)" }}>
             <TopicArt kind={art} bg="transparent" className="h-full w-full" />
           </span>
         )}
@@ -473,15 +473,15 @@ function NodeButton({ row, ...rest }: { row: Extract<Row, { type: "lesson" | "ch
         className={cn(
           "press relative grid cursor-pointer place-items-center rounded-full transition-transform [&_svg]:size-7",
           status === "current" ? "size-[78px] animate-pulse-ring [--node-color:var(--world)]" : "size-[66px]",
-          status === "locked" ? "bg-surface-3 text-muted-foreground [--press-shadow:var(--border-strong)]" : "text-white",
-          status === "open" && "border-4 border-[var(--world)] bg-card !text-[var(--world)]",
+          status === "locked" ? "bg-surface-3 text-muted-foreground" : "text-on-accent",
+          status === "open" && "border-2 border-[var(--world)] bg-card !text-[var(--world)]",
         )}
         style={status === "done" || status === "current" ? { background: "var(--world)", ["--press-shadow" as string]: "var(--world-shadow)" } : status === "open" ? { ["--press-shadow" as string]: "var(--world-shadow)" } : undefined}
       >
         {status === "done" ? <Check strokeWidth={3.5} /> : status === "locked" ? <Lock /> : status === "current" ? <Play className="fill-current" /> : <BookOpen />}
         {status === "done" && (
           <span className="absolute -bottom-1 -right-1 grid size-6 place-items-center rounded-full bg-card" aria-hidden>
-            <Star className="size-4 fill-sun text-sun" />
+            <Star className="size-4 fill-sun text-warning" />
           </span>
         )}
       </button>
@@ -494,7 +494,7 @@ function NodeButton({ row, ...rest }: { row: Extract<Row, { type: "lesson" | "ch
         aria-label={`Module ${row.module.number} checkpoint quiz – ${row.status === "done" ? "passed" : row.status === "locked" ? "locked" : "ready"}`}
         className={cn(
           "press grid size-[70px] cursor-pointer place-items-center rounded-[22px] [&_svg]:size-8",
-          row.status === "done" ? "bg-sun text-[#3b2600] [--press-shadow:var(--sun-shadow)]" : row.status === "open" ? "border-4 border-sun bg-card text-warning [--press-shadow:var(--sun-shadow)]" : "bg-surface-3 text-muted-foreground [--press-shadow:var(--border-strong)]",
+          row.status === "done" ? "bg-sun text-on-sun" : row.status === "open" ? "border-2 border-sun bg-card text-warning" : "bg-surface-3 text-muted-foreground",
         )}
       >
         {row.status === "done" ? <Trophy /> : <Flag />}
@@ -506,7 +506,7 @@ function NodeButton({ row, ...rest }: { row: Extract<Row, { type: "lesson" | "ch
     <button
       {...rest}
       aria-label={`Project: ${row.project.title} – ${row.done} of ${row.total} steps done`}
-      className={cn("press grid size-[66px] cursor-pointer place-items-center rounded-2xl [&_svg]:size-7", complete ? "text-white" : "border-4 border-[var(--world)] bg-card text-warning")}
+      className={cn("press grid size-[66px] cursor-pointer place-items-center rounded-2xl [&_svg]:size-7", complete ? "text-on-accent" : "border-2 border-[var(--world)] bg-card text-warning")}
       style={complete ? { background: "var(--world)", ["--press-shadow" as string]: "var(--world-shadow)" } : { ["--press-shadow" as string]: "var(--world-shadow)" }}
     >
       {complete ? <Crown /> : <FolderKanban />}
@@ -522,7 +522,7 @@ function NodePopover({ row }: { row: Extract<Row, { type: "lesson" | "checkpoint
         <NodeButton row={row} />
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content side="bottom" sideOffset={10} collisionPadding={16} className="z-50 w-[min(92vw,320px)] animate-pop-in rounded-3xl border-2 border-border bg-card shadow-2xl outline-none" style={vars}>
+        <Popover.Content side="bottom" sideOffset={10} collisionPadding={16} className="z-50 w-[min(92vw,320px)] animate-pop-in rounded-3xl border border-border bg-card shadow-2xl outline-none" style={vars}>
           <PopoverBody row={row} />
           <Popover.Arrow className="fill-[var(--border)]" width={18} height={9} />
         </Popover.Content>
@@ -542,13 +542,13 @@ function PopoverBody({ row }: { row: Extract<Row, { type: "lesson" | "checkpoint
       <div>
         <div className="relative overflow-hidden rounded-t-[22px]" style={{ background: "var(--world-soft)" }}>
           {art && <TopicArt kind={art} bg="transparent" className={cn("mx-auto h-24 w-full", status === "locked" && "opacity-60")} />}
-          <span className="absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-white" style={{ background: status === "locked" ? "var(--muted-foreground)" : "var(--world)" }}>
+          <span className="absolute left-3 top-3 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-on-accent" style={{ background: status === "locked" ? "var(--muted-foreground)" : "var(--world)" }}>
             Lesson {row.number}
           </span>
         </div>
         <div className="p-4">
           <p className="font-display text-lg font-semibold leading-snug">{lesson.title}</p>
-          <p className="mt-1 text-sm font-semibold text-muted-foreground">{lesson.summary}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{lesson.summary}</p>
           <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-bold text-muted-foreground">
             <span className="flex items-center gap-1">
               <Clock className="size-3.5" /> {lesson.minutes} min
@@ -567,7 +567,7 @@ function PopoverBody({ row }: { row: Extract<Row, { type: "lesson" | "checkpoint
           )}
           {status === "locked" ? (
             <div className="mt-3">
-              <p className="flex items-start gap-1.5 text-sm font-semibold text-muted-foreground">
+              <p className="flex items-start gap-1.5 text-sm text-muted-foreground">
                 <Lock className="mt-0.5 size-4 shrink-0" /> {row.prevTitle ? <>Finish “{row.prevTitle}” to unlock this lesson.</> : "Finish the previous lesson to unlock this one."}
               </p>
               <Button asChild variant="outline" className="mt-3 w-full">
@@ -577,7 +577,7 @@ function PopoverBody({ row }: { row: Extract<Row, { type: "lesson" | "checkpoint
               </Button>
             </div>
           ) : (
-            <Button asChild className={cn("mt-3 w-full", status !== "done" && "text-white")} style={status === "done" ? undefined : { background: "var(--world)", ["--press-shadow" as string]: "var(--world-shadow)" }} variant={status === "done" ? "outline" : "primary"}>
+            <Button asChild className={cn("mt-3 w-full", status !== "done" && "text-on-accent")} style={status === "done" ? undefined : { background: "var(--world)", ["--press-shadow" as string]: "var(--world-shadow)" }} variant={status === "done" ? "outline" : "primary"}>
               <Link href={`/learn/${lesson.id}`}>
                 {status === "done" ? (
                   <>
@@ -606,11 +606,11 @@ function PopoverBody({ row }: { row: Extract<Row, { type: "lesson" | "checkpoint
           <Flag className="size-4" /> Module checkpoint
         </p>
         <p className="mt-1 font-display text-lg font-semibold leading-snug">Module {row.module.number}: {row.module.title}</p>
-        <p className="mt-1 text-sm font-semibold text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           A {row.module.checkpointSize}-question quiz that checks everything from this module. Pass it to earn {XP.checkpoint} XP.
         </p>
         {row.best !== undefined && <p className="mt-2 text-sm font-bold">Best score: {Math.round(row.best * 100)}%</p>}
-        {row.status === "locked" && <p className="mt-2 text-sm font-semibold text-muted-foreground">Tip: finish the module&apos;s lessons first – you can still try it now.</p>}
+        {row.status === "locked" && <p className="mt-2 text-sm text-muted-foreground">Tip: finish the module&apos;s lessons first – you can still try it now.</p>}
         <Button asChild variant="sun" className="mt-3 w-full">
           <Link href={`/learn/module/${row.module.id}`}>
             {row.status === "done" ? <Trophy /> : <Flag />} {row.status === "done" ? "Open module & checkpoint" : "Go to the checkpoint"}
@@ -632,10 +632,10 @@ function PopoverBody({ row }: { row: Extract<Row, { type: "lesson" | "checkpoint
           Project · {row.project.level}
         </p>
         <p className="mt-1 font-display text-lg font-semibold leading-snug">{row.project.title}</p>
-        <p className="mt-1 text-sm font-semibold text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           {row.done}/{row.total} steps done · {XP.projectStep} XP per step, +{XP.projectComplete} XP when you finish.
         </p>
-        <Button asChild className="mt-3 w-full text-white" style={{ background: "var(--world)", ["--press-shadow" as string]: "var(--world-shadow)" }}>
+        <Button asChild className="mt-3 w-full text-on-accent" style={{ background: "var(--world)", ["--press-shadow" as string]: "var(--world-shadow)" }}>
           <Link href={`/projects/${row.project.id}`}>
             <FolderKanban /> {row.done ? "Continue project" : "Open project"}
           </Link>

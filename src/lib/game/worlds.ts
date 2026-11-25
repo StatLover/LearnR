@@ -137,7 +137,7 @@ export const worlds: World[] = [
     tagline: "Intermediate R and real projects",
     description: "Level up with advanced functions, the apply family, dates, strings and debugging – then complete real data projects.",
     modules: [8, 10],
-    color: c("sun"),
+    color: c("primary"),
     art: "trophy",
     goals: ["Write cleaner, more powerful code", "Work with dates, text and packages", "Complete a full data analysis project"],
   },

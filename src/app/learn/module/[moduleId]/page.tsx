@@ -6,7 +6,6 @@ import { getModule, modules, stages, lessonsForConcept } from "@/content/curricu
 import { Quiz } from "@/components/learn/quiz";
 import { Hexy } from "@/components/brand/mascot";
 import { TopicArt } from "@/components/brand/topic-art";
-import { FloatingHexes } from "@/components/brand/decor";
 import { ModuleLessons } from "@/components/challenge/module-lessons";
 import { WorldChip, worldInk } from "@/components/exercises/world-chip";
 import { Button } from "@/components/ui/button";
@@ -40,10 +39,7 @@ export default async function ModulePage({ params }: { params: Promise<{ moduleI
   return (
     <>
       {/* world-coloured hero */}
-      <section className="relative overflow-hidden border-b-2 border-border" style={{ background: `linear-gradient(135deg, ${world.color.soft} 0%, var(--background) 72%)` }}>
-        <div className="blob -left-16 -top-24 size-72" style={{ background: world.color.main }} />
-        <div className="blob -right-10 top-10 size-56" style={{ background: "var(--pink)", opacity: 0.16 }} />
-        <FloatingHexes count={7} />
+      <section className="relative overflow-hidden border-b border-border" style={{ background: `${world.color.soft}` }}>
         <div className="relative mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-5 py-9 sm:py-12">
           <span className="relative grid size-20 shrink-0 place-items-center sm:size-24" aria-hidden>
             <svg viewBox="0 0 40 44" className="absolute inset-0 size-full">
@@ -51,7 +47,7 @@ export default async function ModulePage({ params }: { params: Promise<{ moduleI
               <path d="M20 3 L36 12 L36 32 L20 41 L4 32 L4 12 Z" fill={world.color.main} stroke={world.color.main} strokeWidth="3" strokeLinejoin="round" />
               <path d="M20 6 L33 13.5 L33 19 Q20 15 7 19 L7 13.5 Z" fill="#ffffff" opacity="0.25" />
             </svg>
-            <span className={`relative font-display text-3xl font-bold sm:text-4xl ${world.color.main.includes("--sun") ? "text-[#3b2600]" : "text-white"}`}>{m.number}</span>
+            <span className={`relative font-display text-3xl font-bold sm:text-4xl ${world.color.main.includes("--sun") ? "text-on-sun" : "text-on-accent"}`}>{m.number}</span>
           </span>
           <div className="min-w-0 flex-1 basis-72">
             <div className="flex flex-wrap items-center gap-2">
@@ -63,7 +59,7 @@ export default async function ModulePage({ params }: { params: Promise<{ moduleI
             <h1 className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">
               Module {m.number}: {m.title}
             </h1>
-            <p className="mt-2 max-w-3xl text-[15px] font-semibold text-muted-foreground">{m.description}</p>
+            <p className="mt-2 max-w-3xl text-[15px] text-muted-foreground">{m.description}</p>
             <ul className="mt-4 flex flex-wrap gap-2 text-sm font-bold">
               <li className="inline-flex items-center gap-1.5 rounded-full bg-card/80 px-3 py-1">
                 <BookOpen className="size-4" style={{ color: worldInk(world) }} aria-hidden /> {m.lessons.length} lessons
@@ -103,14 +99,14 @@ export default async function ModulePage({ params }: { params: Promise<{ moduleI
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-5 py-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_360px]">
         <section aria-labelledby="checkpoint-title" id="checkpoint" className="min-w-0 scroll-mt-24">
           <div className="mb-4 flex items-center gap-3">
-            <span className="grid size-11 shrink-0 place-items-center rounded-2xl text-white shadow-[0_3px_0_var(--edge)]" style={{ background: world.color.main, ["--edge" as string]: world.color.shadow }} aria-hidden>
-              <Flag className={`size-5 ${world.color.main.includes("--sun") ? "text-[#3b2600]" : ""}`} />
+            <span className="grid size-11 shrink-0 place-items-center rounded-2xl text-on-accent" style={{ background: world.color.main, ["--edge" as string]: world.color.shadow }} aria-hidden>
+              <Flag className={`size-5 ${world.color.main.includes("--sun") ? "text-on-sun" : ""}`} />
             </span>
             <div>
               <h2 id="checkpoint-title" className="font-display text-2xl font-bold tracking-tight">
                 World checkpoint
               </h2>
-              <p className="text-sm font-semibold text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 A short challenge on the whole module. Pass with 70% for a +{XP.checkpoint} XP bonus.
               </p>
             </div>
@@ -118,26 +114,26 @@ export default async function ModulePage({ params }: { params: Promise<{ moduleI
           {m.checkpoint.length ? (
             <Quiz questions={m.checkpoint} kind="checkpoint" moduleNumber={m.number} reviewLinks={reviewLinks} color={world.color.main} />
           ) : (
-            <p className="rounded-3xl border-2 border-dashed border-border bg-card p-6 text-sm font-semibold text-muted-foreground">This module has no checkpoint yet.</p>
+            <p className="rounded-3xl border border-dashed border-border bg-card p-6 text-sm text-muted-foreground">This module has no checkpoint yet.</p>
           )}
 
-          <div className="mt-6 flex items-start gap-3 rounded-2xl border-2 border-dashed border-border bg-card/60 p-4">
+          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-dashed border-border bg-card/60 p-4">
             <Lightbulb className="mt-0.5 size-5 shrink-0 text-warning" aria-hidden />
-            <p className="text-sm font-semibold text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Tip: the checkpoint mixes questions from every lesson below. If one trips you up, the results screen links straight to the lesson that explains it – review it and retake as often as you like. Your best score is kept.
             </p>
           </div>
         </section>
 
         <aside className="space-y-5" aria-label="About this module">
-          <section aria-labelledby="lessons-title" className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)]">
+          <section aria-labelledby="lessons-title" className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
             <h2 id="lessons-title" className="mb-3 flex items-center gap-2 font-display text-lg font-semibold">
               <BookOpen className="size-5 text-primary" aria-hidden /> Lessons in this module
             </h2>
             <ModuleLessons moduleNumber={m.number} color={world.color.main} thumbs={thumbs} />
           </section>
 
-          <section aria-labelledby="topics-title" className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)]">
+          <section aria-labelledby="topics-title" className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
             <h2 id="topics-title" className="mb-3 font-display text-lg font-semibold">
               Topics covered
             </h2>
@@ -150,7 +146,7 @@ export default async function ModulePage({ params }: { params: Promise<{ moduleI
             </ul>
           </section>
 
-          <section aria-labelledby="practice-title" className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)]">
+          <section aria-labelledby="practice-title" className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
             <h2 id="practice-title" className="mb-3 flex items-center gap-2 font-display text-lg font-semibold">
               <Dumbbell className="size-5 text-primary" aria-hidden /> Practice exercises
             </h2>
@@ -169,8 +165,8 @@ export default async function ModulePage({ params }: { params: Promise<{ moduleI
             </Link>
           </section>
 
-          <Link href="/challenge" className="lift group flex items-center gap-3 rounded-3xl border-2 border-sun/60 p-4 shadow-[var(--shadow-card)]" style={{ background: "linear-gradient(120deg, var(--sun-soft), var(--card))" }}>
-            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-sun text-[#3b2600] shadow-[0_3px_0_var(--sun-shadow)]" aria-hidden>
+          <Link href="/challenge" className="lift group flex items-center gap-3 rounded-3xl border border-sun/60 p-4 shadow-[var(--shadow-card)]" style={{ background: "var(--sun-soft)" }}>
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-sun text-on-sun" aria-hidden>
               <Zap className="size-5 fill-current" />
             </span>
             <span className="min-w-0 flex-1">

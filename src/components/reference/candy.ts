@@ -26,7 +26,7 @@ export const CANDY_CYCLE: Candy[] = ["mint", "sky", "grape", "tangerine", "pink"
 
 /**
  * CSS custom properties for one candy colour, so a component can use
- * `bg-[var(--c)]`, `bg-[var(--c-soft)]`, `[--press-shadow:var(--c-shadow)]`,
+ * `bg-[var(--c)]`, `bg-[var(--c-soft)]`, ``,
  * `text-[var(--c-fg)]` (text on the solid colour) and `text-[var(--c-ink)]`
  * (readable coloured text on the soft colour; pair with `dark:text-[var(--c)]`).
  */
@@ -35,7 +35,7 @@ export function candy(c: Candy): CSSProperties {
     "--c": `var(--${c})`,
     "--c-soft": `var(--${c}-soft)`,
     "--c-shadow": `var(--${c}-shadow)`,
-    "--c-fg": c === "sun" ? "#3b2600" : "#ffffff",
+    "--c-fg": c === "sun" ? "var(--on-sun)" : "var(--on-accent)",
     "--c-ink": c === "sun" ? "var(--warning)" : c === "primary" ? "var(--primary-strong)" : `var(--${c}-shadow)`,
   } as CSSProperties;
 }

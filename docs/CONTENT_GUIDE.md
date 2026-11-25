@@ -163,4 +163,4 @@ test") usually points at a real problem too.
 2. Add it to the `lessons` array of the module file (`src/content/modules/mNN-*.ts`)
    and add its exercises to the module's `exercises`.
 3. Run the verifier. The lesson automatically appears in the learning path,
-   search, dashboard progress and the AI tutor's lesson context.
+   search and dashboard progress.

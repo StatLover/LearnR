@@ -41,12 +41,11 @@ function SectionTitle({ id, icon, children, className }: { id: string; icon: Rea
 function HeroCard({ f }: { f: RFunction }) {
   const Icon = fnCategory(f.category).icon;
   return (
-    <div aria-hidden className="relative hidden w-56 shrink-0 rotate-3 md:block">
-      <div className="absolute inset-0 -rotate-6 rounded-3xl border-2 border-border bg-[var(--c-soft)]" />
-      <div className="relative overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[var(--shadow-pop)]">
+    <div aria-hidden className="relative hidden w-56 shrink-0 md:block">
+      <div className="absolute inset-0 rounded-3xl border border-border bg-[var(--c-soft)]" />
+      <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-pop)]">
         <div className="relative overflow-hidden bg-[var(--c)] px-4 pb-4 pt-3 text-[var(--c-fg)]">
-          <div className="absolute -right-6 -top-8 size-24 rounded-full bg-white/15" />
-          <div className="relative flex items-center justify-between font-display text-sm font-semibold">
+                    <div className="relative flex items-center justify-between font-display text-sm font-semibold">
             <span>R Academy</span>
             <span>#{cardNo(f)}</span>
           </div>
@@ -73,25 +72,25 @@ function EntryBody({ f, showIntro }: { f: RFunction; showIntro: boolean }) {
   return (
     <div className="space-y-6">
       {showIntro && (
-        <section aria-labelledby={`${key}-intro`} className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
+        <section aria-labelledby={`${key}-intro`} className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
           <h2 id={`${key}-intro`} className="flex flex-wrap items-center gap-2 font-display text-xl font-bold">
             <code className="font-mono">{fnLabel(f.name)}</code> from <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2.5 py-0.5 text-sm"><Package className="size-4" aria-hidden />{f.package}</span>
           </h2>
-          <div className="mt-2 font-semibold text-muted-foreground"><Markdown>{f.purpose}</Markdown></div>
-          <StaticCode code={f.syntax} className="mt-3 rounded-2xl border-2 border-border" wrap />
+          <div className="mt-2 text-muted-foreground"><Markdown>{f.purpose}</Markdown></div>
+          <StaticCode code={f.syntax} className="mt-3 rounded-2xl border border-border" wrap />
           <div className="mt-3"><BookmarkButton id={`fn:${f.package}:${f.name}`} kind="function" title={`${fnLabel(f.name)}`} href={`/reference/${fnSlug(f.name)}`} /></div>
         </section>
       )}
 
       {/* Try it */}
-      <section aria-labelledby={`${key}-try`} className="overflow-hidden rounded-3xl border-2 border-mint bg-card shadow-[var(--shadow-card)]" style={candy("mint")}>
+      <section aria-labelledby={`${key}-try`} className="overflow-hidden rounded-3xl border border-mint bg-card shadow-[var(--shadow-card)]" style={candy("mint")}>
         <div className="flex flex-wrap items-center gap-3 bg-mint-soft px-5 py-4 sm:px-6">
-          <span aria-hidden className="grid size-11 shrink-0 place-items-center rounded-2xl bg-mint text-white shadow-[0_4px_0_var(--mint-shadow)] [&_svg]:size-5 [&_svg]:fill-current">
+          <span aria-hidden className="grid size-11 shrink-0 place-items-center rounded-2xl bg-mint text-on-accent [&_svg]:size-5 [&_svg]:fill-current">
             <Play />
           </span>
           <div className="min-w-0 flex-1">
             <h2 id={`${key}-try`} className="font-display text-xl font-bold tracking-tight">Try it</h2>
-            <p className="text-sm font-semibold text-muted-foreground">Press <strong className="text-foreground">Run</strong> to run this example with real R in your browser – then change it and run it again.</p>
+            <p className="text-sm text-muted-foreground">Press <strong className="text-foreground">Run</strong> to run this example with real R in your browser – then change it and run it again.</p>
           </div>
         </div>
         <div className="flex flex-col gap-4 p-4 sm:p-6">
@@ -101,7 +100,7 @@ function EntryBody({ f, showIntro }: { f: RFunction; showIntro: boolean }) {
               <p className="mb-1.5 flex items-center gap-1.5 text-sm font-bold">
                 <SquareTerminal className="size-4 text-success" aria-hidden /> Expected output
               </p>
-              <pre className="code-static overflow-x-auto rounded-2xl border-2 border-border bg-console px-4 py-3 text-[13px] scrollbar-thin">{f.output}</pre>
+              <pre className="code-static overflow-x-auto rounded-2xl border border-border bg-console px-4 py-3 text-[13px] scrollbar-thin">{f.output}</pre>
             </div>
           )}
           {f.plot && (
@@ -113,7 +112,7 @@ function EntryBody({ f, showIntro }: { f: RFunction; showIntro: boolean }) {
       </section>
 
       {/* Arguments */}
-      <section aria-labelledby={`${key}-args`} className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
+      <section aria-labelledby={`${key}-args`} className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
         <SectionTitle id={`${key}-args`} icon={<ListTree className={INK} />}>
           Arguments
         </SectionTitle>
@@ -135,15 +134,15 @@ function EntryBody({ f, showIntro }: { f: RFunction; showIntro: boolean }) {
       {f.mistakes.length > 0 && (
         <section aria-labelledby={`${key}-mistakes`}>
           <h2 id={`${key}-mistakes`} className="flex items-center gap-2.5 font-display text-xl font-bold tracking-tight">
-            <span aria-hidden className="grid size-9 place-items-center rounded-xl bg-sun text-[#3b2600] shadow-[0_3px_0_var(--sun-shadow)]">
+            <span aria-hidden className="grid size-9 place-items-center rounded-xl bg-sun text-on-sun">
               <TriangleAlert className="size-5" />
             </span>
             Watch out!
           </h2>
-          <p className="mt-1 text-sm font-semibold text-muted-foreground">Common mistakes with <code className="font-mono">{fnLabel(f.name)}</code> – and how to avoid them.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Common mistakes with <code className="font-mono">{fnLabel(f.name)}</code> – and how to avoid them.</p>
           <ul className="mt-4 grid gap-3 md:grid-cols-2">
             {f.mistakes.map((m, i) => (
-              <li key={i} className={cn("flex gap-3 rounded-3xl border-2 border-sun/40 bg-sun-soft p-4", f.mistakes.length % 2 === 1 && i === f.mistakes.length - 1 && "md:col-span-2")}>
+              <li key={i} className={cn("flex gap-3 rounded-3xl border border-sun/40 bg-sun-soft p-4", f.mistakes.length % 2 === 1 && i === f.mistakes.length - 1 && "md:col-span-2")}>
                 <span aria-hidden className="grid size-8 shrink-0 place-items-center rounded-full bg-card font-display text-sm font-bold text-warning">
                   {i + 1}
                 </span>
@@ -174,8 +173,7 @@ export default async function FunctionPage({ params }: { params: Promise<{ name:
   return (
     <div style={candy(cat.color)}>
       {/* Hero */}
-      <div className="relative overflow-hidden border-b-2 border-border" style={{ background: "linear-gradient(135deg, var(--c-soft) 0%, var(--background) 75%)" }}>
-        <div className="blob -left-20 -top-24 size-72 bg-[var(--c)]" />
+      <div className="relative overflow-hidden border-b border-border" style={{ background: "var(--c-soft)" }}>
         <div className="relative mx-auto flex max-w-6xl items-center gap-8 px-5 py-8 sm:py-10">
           <div className="min-w-0 flex-1">
             <nav aria-label="Breadcrumb" className="mb-4 flex flex-wrap items-center gap-1 text-sm font-bold text-muted-foreground">
@@ -190,7 +188,7 @@ export default async function FunctionPage({ params }: { params: Promise<{ name:
                 <CatIcon aria-hidden /> {f.category}
               </span>
               {entries.map((e) => (
-                <span key={e.package} className="inline-flex items-center gap-1 rounded-full border-2 border-border bg-card px-2.5 py-0.5 text-sm font-bold">
+                <span key={e.package} className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-0.5 text-sm font-bold">
                   <Package className="size-4 text-muted-foreground" aria-hidden /> package: {e.package}
                 </span>
               ))}
@@ -203,19 +201,19 @@ export default async function FunctionPage({ params }: { params: Promise<{ name:
             </h1>
             {single ? (
               <>
-                <div className="mt-3 max-w-3xl text-lg font-semibold text-muted-foreground">
+                <div className="mt-3 max-w-3xl text-lg text-muted-foreground">
                   <Markdown>{f.purpose}</Markdown>
                 </div>
                 <div className="mt-5 max-w-3xl">
                   <p className="mb-1.5 text-xs font-extrabold uppercase tracking-wider text-muted-foreground">Syntax</p>
-                  <StaticCode code={f.syntax} className="rounded-2xl border-2 border-border shadow-[var(--shadow-card)]" wrap />
+                  <StaticCode code={f.syntax} className="rounded-2xl border border-border shadow-[var(--shadow-card)]" wrap />
                 </div>
                 <div className="mt-4">
                   <BookmarkButton id={`fn:${f.package}:${f.name}`} kind="function" title={`${fnLabel(f.name)}`} href={`/reference/${fnSlug(f.name)}`} />
                 </div>
               </>
             ) : (
-              <p className="mt-3 text-lg font-semibold text-muted-foreground">There are {entries.length} functions with this name, in different packages.</p>
+              <p className="mt-3 text-lg text-muted-foreground">There are {entries.length} functions with this name, in different packages.</p>
             )}
           </div>
           <HeroCard f={f} />
@@ -233,7 +231,7 @@ export default async function FunctionPage({ params }: { params: Promise<{ name:
 
         <aside className="space-y-5 lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
           {related.length > 0 && (
-            <section aria-labelledby="related" className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)]">
+            <section aria-labelledby="related" className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
               <SectionTitle id="related" icon={<Link2 className={INK} />} className="text-lg">
                 Related functions
               </SectionTitle>
@@ -246,7 +244,7 @@ export default async function FunctionPage({ params }: { params: Promise<{ name:
                       <Link
                         href={`/reference/${fnSlug(r)}`}
                         style={candy(rc.color)}
-                        className="press inline-flex items-center gap-1.5 rounded-full border-2 border-transparent bg-[var(--c-soft)] px-3 py-1 font-mono text-sm font-bold [--press-shadow:color-mix(in_srgb,var(--c)_40%,transparent)] hover:border-[var(--c)]"
+                        className="press inline-flex items-center gap-1.5 rounded-full border border-transparent bg-[var(--c-soft)] px-3 py-1 font-mono text-sm font-bold hover:border-[var(--c)]"
                       >
                         <span aria-hidden className="size-2 rounded-full bg-[var(--c)]" />
                         {fnLabel(r)}
@@ -259,7 +257,7 @@ export default async function FunctionPage({ params }: { params: Promise<{ name:
           )}
 
           {sameCategory.length > 0 && (
-            <section aria-labelledby="more" className="rounded-3xl border-2 border-border bg-card p-5 shadow-[var(--shadow-card)]">
+            <section aria-labelledby="more" className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)]">
               <SectionTitle id="more" icon={<Layers className={INK} />} className="text-lg">
                 More {f.category}
               </SectionTitle>

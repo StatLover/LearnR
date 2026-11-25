@@ -34,14 +34,12 @@ export function ProgressBar({
       aria-valuemax={100}
       aria-valuenow={Math.round(v)}
       aria-label={label}
-      className={cn("w-full overflow-hidden rounded-full bg-surface-3", size === "sm" ? "h-2" : size === "lg" ? "h-4" : "h-3", className)}
+      className={cn("w-full overflow-hidden rounded-full bg-surface-3", size === "sm" ? "h-1.5" : size === "lg" ? "h-2.5" : "h-2", className)}
     >
       <div
         className={cn("relative h-full rounded-full transition-[width] duration-700 ease-out", !color && TONES[tone])}
         style={{ width: `${v}%`, background: color }}
-      >
-        {v > 0 && <div className="absolute inset-x-1.5 top-[3px] h-[30%] rounded-full bg-white/35" />}
-      </div>
+      />
     </div>
   );
 }

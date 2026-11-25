@@ -8,11 +8,11 @@ import { exerciseXp } from "@/lib/game/xp";
 import { cn } from "@/lib/utils";
 
 function Stat({ icon, value, label, tone }: { icon: ReactNode; value: ReactNode; label: string; tone: "mint" | "sun" | "tangerine" | "grape" }) {
-  const tile = { mint: "bg-mint text-white", sun: "bg-sun text-[#3b2600]", tangerine: "bg-tangerine text-white", grape: "bg-grape text-white" }[tone];
+  const tile = { mint: "bg-mint text-on-accent", sun: "bg-sun text-on-sun", tangerine: "bg-tangerine text-on-accent", grape: "bg-grape text-on-accent" }[tone];
   const edge = { mint: "[--edge:var(--mint-shadow)]", sun: "[--edge:var(--sun-shadow)]", tangerine: "[--edge:var(--tangerine-shadow)]", grape: "[--edge:var(--grape-shadow)]" }[tone];
   return (
-    <li className="flex items-center gap-3 rounded-2xl border-2 border-border bg-card px-3 py-3 shadow-[var(--shadow-card)] sm:px-4">
-      <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl shadow-[0_3px_0_var(--edge)] [&_svg]:size-5", tile, edge)} aria-hidden>
+    <li className="flex items-center gap-3 rounded-2xl border border-border bg-card px-3 py-3 shadow-[var(--shadow-card)] sm:px-4">
+      <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl [&_svg]:size-5", tile, edge)} aria-hidden>
         {icon}
       </span>
       <span className="min-w-0">
